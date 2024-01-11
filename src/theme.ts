@@ -1,4 +1,4 @@
-import { Roboto } from 'next/font/google';
+import { Roboto, Noto_Sans_KR } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
@@ -7,6 +7,12 @@ export const roboto = Roboto({
   subsets: ['latin'],
   display: 'swap',
 });
+
+// export const notoSansKr = Noto_Sans_KR({
+//   weight: ['300', '400', '500', '600', '700'],
+//   // subsets: [''],
+//   display: 'swap',
+// });
 
 // Create a theme instance.
 const theme = createTheme({
