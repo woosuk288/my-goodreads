@@ -2,10 +2,9 @@ import Login from "../src/component/Login"
 import LoginForm from "../src/component/LoginForm"
 
 
-export default function login() {
+export default function LoginPage() {
   return (
     <div>
-
       <Login />
     </div >
   )

@@ -7,53 +7,17 @@ import { AppBar, Box, Button, IconButton, ListItemText, MenuItem, MenuList, SxPr
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const sxHeader: SxProps = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  height: '50px',
-  backgroundColor: '#F4F1EA',
 
-  "> div[class^=header_]": {
-    display: 'flex'
-  },
+const sxHeader: SxProps<Theme> = (theme) => ({
 
-  ".header_left": {
-    width: '25%',
-    justifyContent: 'start',
-    marginLeft: '16px',
-  },
-
-  ".header_center": {
-    width: '50%',
-    justifyContent: 'center',
-
-  },
-
-  ".header_right": {
-    width: '25%',
-    justifyContent: 'end',
-    marginRight: '16px',
-  },
-
-  "button[aria-label='search']": {
-    marginLeft: '-8px',
-    "> svg": {
-      fontSize: '1.8rem',
-    }
-  },
   "a[aria-label='Goodreads Home']": {
     backgroundImage: 'url(/images/logo-goodreads.svg)',
     backgroundSize: '100%',
 
     width: '140px',
     height: '30px'
-  }
+  },
 
-
-}
-
-const sxAppBar: SxProps<Theme> = (theme) => ({
   boxShadow: 0,
 
   "> .MuiToolbar-root": {
@@ -85,15 +49,9 @@ const sxAppBar: SxProps<Theme> = (theme) => ({
 
   '.MuiList-root': {
     backgroundColor: '#FFFFFF',
-    color: '#333333'
+    color: '#333333',
+    boxShadow: '0 5px 10px rgba(0,0,0,0.15)',
   },
-
-
-  // ".MuiMenuItem-root": {
-  //   '&:active': {
-
-  //   }
-  // }
 })
 
 const BROWSE_MENUS = [
@@ -123,11 +81,11 @@ const BROWSE_MENUS = [
   },
   {
     text: 'Explore',
-    link: '#',
+    link: '/explore',
   },
   {
     text: 'News & Interviews',
-    link: '#',
+    link: '/news',
   },
 ]
 
@@ -146,71 +104,68 @@ const COMMUNITY_MENUS = [
   },
 ]
 
+const TAB_CODES = {
+  MY_BOOKS: "MY_BOOKS",
+  BROWSE: "BROWSE",
+  COMMUNITY: "COMMUNITY"
+}
 
 interface IHeader {
-  leftChild?: React.ReactNode
-  centerChild: React.ReactNode
-  rightChild?: React.ReactNode
 
 }
-export default function Header({ leftChild, centerChild: centerChild, rightChild }: IHeader) {
+export default function Header({ }: IHeader) {
 
-  const [value, setValue] = React.useState(0);
+  const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 0) {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    console.log('handleChange : ', newValue)
+    if (newValue === TAB_CODES.MY_BOOKS) {
       alert('로그인 or 내 서재')
     }
-    setValue(newValue);
+    setTabCode(newValue);
   };
 
+  const handleTabClick = (newValue: string) => () => {
+    if (tabCode === newValue) {
+      setTabCode(false)
+    }
+  }
+
   return (
-    <Box sx={sxHeader}>
-      {/* <div className="header_left">
-        {leftChild}
-      </div>
-      <div className="header_center">
-        {centerChild}
-      </div>
-      <div className="header_right">
-        {rightChild}
-      </div> */}
+    <AppBar sx={sxHeader} color="primary">
+      <Toolbar>
+        <IconButton>
+          <SearchIcon aria-label='search' />
+        </IconButton>
 
-      <AppBar sx={sxAppBar} color="primary">
-        <Toolbar>
-          <IconButton>
-            <SearchIcon aria-label='search' />
-          </IconButton>
+        <a href='/' aria-label='Goodreads Home' title='Goodreads Home'></a>
 
-          {centerChild}
+        <Button variant='contained' color='secondary' size='small'>Sign in</Button>
 
-          {rightChild}
+      </Toolbar>
 
-        </Toolbar>
-
-        <Tabs value={value} onChange={handleChange}
-          variant="fullWidth"
-        >
-          <Tab label="내 서재" />
-          <Tab label="둘러보기" component={Button} endIcon={<ArrowDropDownIcon />} />
-          <Tab label="커뮤니티" component={Button} endIcon={<ArrowDropDownIcon />} />
-        </Tabs>
+      <Tabs value={tabCode} onChange={handleChange} variant="fullWidth">
+        <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
+        <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.BROWSE)} />
+        <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.COMMUNITY)} />
+      </Tabs>
 
 
+      {tabCode && tabCode !== TAB_CODES.MY_BOOKS &&
         <MenuList dense>
-          {value === 1 && BROWSE_MENUS.map(menu =>
-            <MenuItem>
+          {tabCode === TAB_CODES.BROWSE && BROWSE_MENUS.map(menu =>
+            <MenuItem key={menu.link}>
               <ListItemText>{menu.text}</ListItemText>
             </MenuItem>
           )}
-          {value === 2 && COMMUNITY_MENUS.map(menu =>
-            <MenuItem>
+          {tabCode === TAB_CODES.COMMUNITY && COMMUNITY_MENUS.map(menu =>
+            <MenuItem key={menu.link}>
               <ListItemText>{menu.text}</ListItemText>
             </MenuItem>
           )}
         </MenuList>
+      }
 
-      </AppBar>
-    </Box>
+    </AppBar>
   )
 }

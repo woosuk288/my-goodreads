@@ -3,7 +3,6 @@ import { ReactNode } from "react"
 
 const sxMain: SxProps = {
   paddingTop: '100px',
-  height: 'calc(100vh - 100px)'
 }
 
 interface IMain {
