@@ -9,8 +9,11 @@
 - [ ] 사용자 간의 독서 활동 피드
 - [ ] 홈 - 비로그인, 로그인(피드)
 
+``````
 
 
 - 로그인 UI 구현 (손풀기)
-- Header, Footer, Editor로 사용할 공통컴포넌트 (더 확인해보기...)
-- 
+- 사용할 공통컴포넌트 (더 확인해보기...) 
+  [x] Header, Footer, Editor, Drawer
+  [x] SearchBar
+- [ ] 폰트(Noso Sans KR) 및 공통 global css(a tag, layout 구성 위한 header main footer, MUI link 및 버튼 기본 색상) 적용

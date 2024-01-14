@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, CardMedia, Checkbox, CircularProgress, FormControlLabel, FormGroup, List, ListItem, ListItemButton, ListItemText, Rating, SxProps, TextField, Theme, Typography } from "@mui/material"
 
 import { useState } from "react";
-import WantToReadBottomPopup from "./WantToReadBottomPopup";
+import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
 
 
 const sxEditor: SxProps = {
@@ -104,7 +104,7 @@ export default function Editor() {
       </Card>
 
       {/* read status */}
-      <WantToReadBottomPopup />
+      <WantToReadBottomDrawer />
 
       {/* rate */}
       {/* 당신의 평점 (1~5단계 watcha) */}
@@ -138,7 +138,6 @@ export default function Editor() {
           <FormControlLabel control={<Checkbox color="info" />} label={<Typography variant="subtitle2">스포일러?</Typography>} />
         </FormGroup>
         <Typography variant="body2" color="text.secondary">1분전에 마지막으로 수정</Typography>
-
       </div>
 
       <Button color="secondary" variant="contained">게시하기</Button>

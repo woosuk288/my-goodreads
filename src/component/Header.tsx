@@ -6,6 +6,7 @@ import { AppBar, Box, Button, IconButton, ListItemText, MenuItem, MenuList, SxPr
 
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import HeaderNavDrawer from './HeaderNavDrawer';
 
 
 const sxHeader: SxProps<Theme> = (theme) => ({
@@ -139,6 +140,8 @@ export default function Header({ }: IHeader) {
         </IconButton>
 
         <a href='/' aria-label='Goodreads Home' title='Goodreads Home'></a>
+
+        <HeaderNavDrawer />
 
         <Button variant='contained' color='secondary' size='small'>Sign in</Button>
 

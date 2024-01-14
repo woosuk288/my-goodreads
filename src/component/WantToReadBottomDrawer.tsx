@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Box, Button, CircularProgress, Drawer, List, ListItem, ListItemButton, SxProps, Theme } from '@mui/material';
 
-const sxWantToReadBottomPopup: SxProps = {
+const sxWantToReadBottomDrawer: SxProps = {
   margin: '12px 0',
   textAlign: 'center',
 
@@ -51,7 +51,7 @@ const slideUpMenuList: SxProps<Theme> = (theme) => ({
 })
 
 
-const WantToReadBottomPopup = () => {
+const WantToReadBottomDrawer = () => {
   const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ const WantToReadBottomPopup = () => {
   };
 
   return (
-    <Box sx={sxWantToReadBottomPopup}>
+    <Box sx={sxWantToReadBottomDrawer}>
 
       <Button className="wtr_button" variant="contained" color="inherit"
         startIcon={<DoneIcon />}
@@ -113,4 +113,4 @@ const WantToReadBottomPopup = () => {
   );
 };
 
-export default WantToReadBottomPopup
+export default WantToReadBottomDrawer   
