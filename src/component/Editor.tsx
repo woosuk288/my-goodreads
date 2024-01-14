@@ -1,4 +1,8 @@
-import { Box, Card, CardContent, CardMedia, Checkbox, FormControlLabel, FormGroup, List, ListItem, ListItemButton, ListItemText, Rating, SxProps, TextField, Theme, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, CardMedia, Checkbox, CircularProgress, FormControlLabel, FormGroup, List, ListItem, ListItemButton, ListItemText, Rating, SxProps, TextField, Theme, Typography } from "@mui/material"
+
+import { useState } from "react";
+import WantToReadBottomPopup from "./WantToReadBottomPopup";
+
 
 const sxEditor: SxProps = {
   padding: '12px',
@@ -56,30 +60,13 @@ const sxEditor: SxProps = {
 
 }
 
-const slideUpMenuList: SxProps<Theme> = (theme) => ({
-  backgroundColor: theme.palette.primary.main,
-  boxShadow: '0 -3px 4px rgba(0,0,0,0.2)',
-  "> li": {
-    justifyContent: 'center',
-    color: '#000000',
-    boxShadow: '0 -1px 0 0 #bfbfbc',
-    ":first-child": {
-      boxShadow: '0 -3px 4px rgba(0,0,0,0.2)'
-    }
-  },
-  "> li.Mui-selected": {
-    backgroundColor: '#e3e4dd',
-    boxShadow: 'inset 0 0 4px rgba(0,0,0,0.6)',
-    fontWeight: 'bold'
-  }
-})
 
 
 // TODO: form의 기준
 export default function Editor() {
 
 
-  const [rating, setRating] = React.useState<number | null>(0);
+  const [rating, setRating] = useState<number | null>(0);
 
   return (
     <Box sx={sxEditor}>
@@ -117,7 +104,7 @@ export default function Editor() {
       </Card>
 
       {/* read status */}
-      <BottomSheetExample />
+      <WantToReadBottomPopup />
 
       {/* rate */}
       {/* 당신의 평점 (1~5단계 watcha) */}
@@ -159,77 +146,3 @@ export default function Editor() {
     </Box>
   )
 }
-
-
-
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
-
-import DoneIcon from '@mui/icons-material/Done';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Link from "../Link";
-import CloseIcon from '@mui/icons-material/Close';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-
-const sxBottomSheet: SxProps = {
-
-  margin: '12px 0',
-
-  textAlign: 'center',
-
-  ".wtr_button": {
-    width: '160px',
-    justifyContent: 'flex-start',
-
-    "> .MuiButton-endIcon ": {
-      marginLeft: 'auto',
-    }
-  }
-}
-
-const BottomSheetExample = () => {
-  const [open, setOpen] = useState(false);
-
-  const toggleDrawer = (status: boolean) => () => {
-    setOpen(status);
-  };
-
-  return (
-    <Box sx={sxBottomSheet}>
-
-      <Button className="wtr_button" variant="contained" color="inherit"
-        startIcon={<DoneIcon />}
-        endIcon={<ExpandMoreIcon color="disabled" />}
-        onClick={toggleDrawer(true)} >
-        읽음
-      </Button>
-      <Drawer
-        anchor="bottom"
-        open={open}
-        onClose={toggleDrawer(false)}
-      // transitionDuration={500}
-      >
-
-
-        {/* Bottom Sheet 내용 */}
-        {/* Your Bottom Sheet Content Goes Here */}
-        <List sx={slideUpMenuList}>
-          <ListItemButton component="li">읽고 싶어요</ListItemButton>
-          <ListItemButton component="li">현재 읽는 중</ListItemButton>
-          <ListItemButton component="li" selected>읽음</ListItemButton>
-          <ListItemButton component="li">책장에서 빼기</ListItemButton>
-          <ListItem component="li">
-            <Button startIcon={<LibraryBooksIcon />}>
-              <Link href='#' color="secondary">전체 책장 보기</Link>
-            </Button>
-
-
-            <Button color="secondary" startIcon={<CloseIcon />}>닫기</Button>
-
-          </ListItem>
-        </List>
-      </Drawer>
-    </Box>
-  );
-};
