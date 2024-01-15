@@ -1,8 +1,10 @@
 import * as React from 'react';
 
+import NextLink from 'next/link'
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { AppBar, Box, Button, IconButton, ListItemText, MenuItem, MenuList, SxProps, Theme, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Container, IconButton, ListItemText, MenuItem, MenuList, SxProps, Theme, Toolbar } from "@mui/material";
 
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -20,18 +22,6 @@ const sxHeader: SxProps<Theme> = (theme) => ({
   },
 
   boxShadow: 0,
-
-  "> .MuiToolbar-root": {
-    minHeight: '50px',
-    height: '50px',
-    justifyContent: 'space-between',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
-
-    "svg[aria-label='search']": {
-      fontSize: '1.8rem',
-    }
-  },
-
 
   ".MuiTabs-root": {
     height: '50px',
@@ -54,6 +44,17 @@ const sxHeader: SxProps<Theme> = (theme) => ({
     boxShadow: '0 5px 10px rgba(0,0,0,0.15)',
   },
 })
+
+const sxToolbar: SxProps = {
+  minHeight: '50px',
+  height: '50px',
+  justifyContent: 'space-between',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+
+  "svg[aria-label='search']": {
+    fontSize: '1.8rem',
+  }
+}
 
 const BROWSE_MENUS = [
   {
@@ -133,42 +134,43 @@ export default function Header({ }: IHeader) {
   }
 
   return (
-    <AppBar sx={sxHeader} color="primary">
-      <Toolbar>
-        <IconButton>
-          <SearchIcon aria-label='search' />
-        </IconButton>
+    <AppBar sx={sxHeader} color="primary" >
+      <Container maxWidth="lg" disableGutters>
+        <Toolbar sx={sxToolbar}>
+          <IconButton>
+            <SearchIcon aria-label='search' />
+          </IconButton>
 
-        <a href='/' aria-label='Goodreads Home' title='Goodreads Home'></a>
+          <a href='/' aria-label='Goodreads Home' title='Goodreads Home'></a>
 
-        <HeaderNavDrawer />
+          <HeaderNavDrawer />
 
-        <Button variant='contained' color='secondary' size='small'>Sign in</Button>
+          <Button variant='contained' color='secondary' size='small' component={NextLink} href="/login">Sign in</Button>
 
-      </Toolbar>
+        </Toolbar>
 
-      <Tabs value={tabCode} onChange={handleChange} variant="fullWidth">
-        <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
-        <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.BROWSE)} />
-        <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.COMMUNITY)} />
-      </Tabs>
+        <Tabs value={tabCode} onChange={handleChange} variant="fullWidth">
+          <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
+          <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.BROWSE)} />
+          <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.COMMUNITY)} />
+        </Tabs>
 
 
-      {tabCode && tabCode !== TAB_CODES.MY_BOOKS &&
-        <MenuList dense>
-          {tabCode === TAB_CODES.BROWSE && BROWSE_MENUS.map(menu =>
-            <MenuItem key={menu.link}>
-              <ListItemText>{menu.text}</ListItemText>
-            </MenuItem>
-          )}
-          {tabCode === TAB_CODES.COMMUNITY && COMMUNITY_MENUS.map(menu =>
-            <MenuItem key={menu.link}>
-              <ListItemText>{menu.text}</ListItemText>
-            </MenuItem>
-          )}
-        </MenuList>
-      }
-
+        {tabCode && tabCode !== TAB_CODES.MY_BOOKS &&
+          <MenuList dense>
+            {tabCode === TAB_CODES.BROWSE && BROWSE_MENUS.map(menu =>
+              <MenuItem key={menu.link}>
+                <ListItemText>{menu.text}</ListItemText>
+              </MenuItem>
+            )}
+            {tabCode === TAB_CODES.COMMUNITY && COMMUNITY_MENUS.map(menu =>
+              <MenuItem key={menu.link}>
+                <ListItemText>{menu.text}</ListItemText>
+              </MenuItem>
+            )}
+          </MenuList>
+        }
+      </Container>
     </AppBar>
   )
 }
