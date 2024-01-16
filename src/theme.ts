@@ -41,10 +41,23 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          color: '#382110',
+          // color: '#382110',
         }
       }
-    }
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: '12px',
+          paddingRight: '12px',
+        },
+        disableGutters: {
+          paddingLeft: 0,
+          paddingRight: 0,
+        }
+      }
+    },
+
   }
 });
 

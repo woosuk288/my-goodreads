@@ -1,9 +1,8 @@
-import { Box, SxProps } from "@mui/material";
+import { Box, Container, SxProps, Typography } from "@mui/material";
 import LoginForm from "./LoginForm";
 
 
 const sxLogin: SxProps = {
-  textAlign: 'center',
 }
 
 const sxLogoWrapper: SxProps = {
@@ -18,8 +17,14 @@ const sxLogoWrapper: SxProps = {
   },
 }
 
+const authExternalProviders: SxProps = {
+  borderBottom: '2px solid #ccc',
+  marginBottom: '16px',
+}
+
 const sxAppLinkWrapper: SxProps = {
   margin: '24px 0',
+  textAlign: 'center',
 
   "> .text": {
     paddingBottom: '8px'
@@ -28,22 +33,24 @@ const sxAppLinkWrapper: SxProps = {
 
 export default function Login() {
   return (
-    <Box className="Login" sx={sxLogin}>
+    <Container className="Login" sx={sxLogin}>
 
       <Box component={'header'} className="logo_wrapper" sx={sxLogoWrapper}>
 
         <img src="/images/logo-goodreads.svg" alt="goodreads" />
       </Box>
 
-      <LoginForm />
+      <Box sx={authExternalProviders}>
 
-      <Box className="app_link_wrapper" sx={sxAppLinkWrapper}>
-        <div className="text">앱 다운로드 받기</div>
-        <a href="#">
-          <img src="https://s.gr-assets.com/assets/app/badge-android-highres-e46912ad93a09553adffc67550d3b562.png" alt="Download app for Android" width={145} height={44} />
-        </a>
+        <LoginForm />
 
+        <Box className="app_link_wrapper" sx={sxAppLinkWrapper}>
+          <Typography variant="body2" color='black' textAlign='center' sx={{ marginBottom: '8px' }}>앱 다운로드 받기</Typography>
+          <a href="#" rel="noopener noreferrer">
+            <img src="https://s.gr-assets.com/assets/app/badge-android-highres-e46912ad93a09553adffc67550d3b562.png" alt="Download app for Android" width={145} height={44} />
+          </a>
+        </Box>
       </Box>
-    </Box>
+    </Container>
   )
 }

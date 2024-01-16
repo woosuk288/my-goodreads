@@ -18,4 +18,7 @@
   [x] SearchBar
 - [x] 폰트(Noto Sans KR) 및 공통 global css(a tag MUI link 및 버튼 기본 색상, layout 구성 위한 header main footer 길이) 적용
 
-- 화면 개발 ㄱㄱ
+
+``````
+
+- [ ] Home 구현하기

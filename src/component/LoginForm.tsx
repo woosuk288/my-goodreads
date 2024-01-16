@@ -1,11 +1,11 @@
 import { Box, Button, SxProps } from "@mui/material";
-import Link from "next/link";
+import Link from "../Link";
 
 const signin_wrapper: SxProps = {
   display: 'flex', flexDirection: 'column', alignItems: 'center',
 
-  padding: '0 12px',
-  margin: 'auto',
+  // padding: '0 12px',
+  // margin: 'auto',
 
   "> button": {
     width: '100%', maxWidth: '600px', marginBottom: '1rem',
@@ -14,7 +14,6 @@ const signin_wrapper: SxProps = {
 
   "a": {
     color: "#00635D",
-    textDecoration: 'none'
   }
 }
 
