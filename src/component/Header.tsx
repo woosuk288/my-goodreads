@@ -30,7 +30,7 @@ const sxHeader: SxProps<Theme> = (theme) => ({
     position: 'absolute',
     right: 16
   },
-  ".MuiButton-text.MuiTab-root": {
+  "button.MuiTab-root": {
     color: theme.palette.secondary.main,
   },
   ".MuiTab-root.Mui-selected": {

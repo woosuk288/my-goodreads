@@ -1,4 +1,4 @@
-import { Box, Container, InputAdornment, SxProps, TextField, Typography } from "@mui/material"
+import { Avatar, Box, CardHeader, Container, InputAdornment, SxProps, TextField, Typography } from "@mui/material"
 import LoginForm from "./LoginForm"
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,6 +6,7 @@ import AppLinks from "./AppLinks";
 import BookImageList from "./BookImageList";
 import BookTextList from "./BookTextList";
 import Heading from "./Heading";
+import Link from "../Link";
 
 const sxHome: SxProps = {
 
@@ -25,6 +26,17 @@ const sxAuthSignInWrapper: SxProps = {
   margin: '24px 0 24px'
 }
 
+const sxLastAwardsWrapper: SxProps = {
+  marginBottom: '24px',
+
+  ".MuiLink-root": {
+    fontSize: '0.875rem',
+    color: '#00635D',
+  },
+  "img": {
+    maxWidth: '100%'
+  }
+}
 
 export default function Home() {
   return (
@@ -62,7 +74,7 @@ export default function Home() {
           <AppLinks />
         </Box>
 
-        <Box className="bookImageList_wrapper">
+        <Box>
           <Heading heading="이번 주 가장 많이 읽은 책" />
           <BookImageList images={MOCK_BOOK_IMAGES} />
           <Heading heading="이번 달 새로 나온 책" />
@@ -71,15 +83,34 @@ export default function Home() {
           <BookImageList images={MOCK_BOOK_IMAGES} />
         </Box>
 
-        <Box className="bookTextList">
+        <Box>
           <Heading heading="리스트" />
-          <BookTextList />
-
-          quote
+          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
+          <Heading heading="장르" />
+          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
+          <Heading heading="명언" />
+          <CardHeader
+            sx={{ alignItems: 'flex-start' }}
+            avatar={
+              <Avatar
+                variant="rounded"
+                src="https://i.namu.wiki/i/KmQOLESiwHh0axhm-2Cz2YMKqoapHXLtBUPfPci64sJYHRB4NMy8Hh07mNMfV13WqiNhaPyk7e4e_nNslW1Qef6OiYh8nykq8OuxkX4yhI9eJw4OQxwzDNfFn-jyiS6hpwmPX-lmnyxSTnKV33mHBQ.webp"
+                component={Link} href="/author/show/3565.Oscar_Wilde" aria-label="Oscar Wilde">
+              </Avatar>
+            }
+            title={<Typography variant="subtitle2" gutterBottom lineHeight={1.2}>Always forgive your enemies; nothing annoys them so much.</Typography>}
+            subheader={<Typography variant="body2">Oscar Wilde</Typography>}
+          />
+          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
         </Box>
 
-        <Box className="last_awards_wrapper">last_awards_wrapper</Box>
-
+        <Box sx={sxLastAwardsWrapper}>
+          <Heading heading="Goodreads Choice Awards: The Best Books 2023" />
+          <Link href="/choiceawards/best-books-2023">
+            <img alt="Goodreads Choice Awards 2023" src="https://s.gr-assets.com/assets/award/2023/signed-out-hp/bottom-placement-mobile-acefe21335ac3d79ad255d48b88de499.png" />
+          </Link>
+          <Link href="/choiceawards/best-books-2023">See the winners</Link>
+        </Box>
       </Container>
 
     </Box>
@@ -147,5 +178,32 @@ const MOCK_BOOK_IMAGES = [
     title: "Things We Left Behind (Knockemout, #3)",
     pageLink: "/book/show/116536542-things-we-left-behind",
     imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677175478i/116536542._UX187_.jpg",
+  },
+]
+
+const MOCK_BOOK_TEXTS = [
+  {
+    pageLink: "/list/tag/fiction",
+    text: "Fiction book lists",
+  },
+  {
+    pageLink: "/list/show/130.Best_Audiobooks_Ever",
+    text: "Best audiobooks ever",
+  },
+  {
+    pageLink: "/list/show/86.Best_Children_s_Books",
+    text: "Best children’s books",
+  },
+  {
+    pageLink: "/list/show/2681.Time_Magazine_s_All_Time_100_Novels",
+    text: "Best novels of all time",
+  },
+  {
+    pageLink: "/list/tag/romance",
+    text: "Romance book lists",
+  },
+  {
+    pageLink: "/list",
+    text: "See more lists",
   },
 ]
