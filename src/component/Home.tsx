@@ -26,6 +26,26 @@ const sxAuthSignInWrapper: SxProps = {
   margin: '24px 0 24px'
 }
 
+const quoteSection: SxProps = {
+
+
+  "blockquote": {
+    position: 'relative',
+
+    ":before": {
+      position: 'absolute',
+      top: '-4px',
+      left: '-10px',
+      content: '"“"',
+      fontSize: '3em',
+      lineHeight: '0',
+      paddingRight: '10px',
+      verticalAlign: '-20px',
+    }
+
+  }
+}
+
 const sxLastAwardsWrapper: SxProps = {
   marginBottom: '24px',
 
@@ -83,7 +103,7 @@ export default function Home() {
           <BookImageList images={MOCK_BOOK_IMAGES} />
         </Box>
 
-        <Box>
+        <Box sx={quoteSection}>
           <Heading heading="리스트" />
           <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
           <Heading heading="장르" />
@@ -98,7 +118,7 @@ export default function Home() {
                 component={Link} href="/author/show/3565.Oscar_Wilde" aria-label="Oscar Wilde">
               </Avatar>
             }
-            title={<Typography variant="subtitle2" gutterBottom lineHeight={1.2}>Always forgive your enemies; nothing annoys them so much.</Typography>}
+            title={<Typography component="blockquote" variant="subtitle2" gutterBottom lineHeight={1.2}>Always forgive your enemies; nothing annoys them so much.</Typography>}
             subheader={<Typography variant="body2">Oscar Wilde</Typography>}
           />
           <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
