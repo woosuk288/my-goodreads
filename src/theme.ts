@@ -62,3 +62,7 @@ const theme = createTheme({
 });
 
 export default theme;
+
+
+
+export const LINK_BUTTON_COLOR = '#00635D'
