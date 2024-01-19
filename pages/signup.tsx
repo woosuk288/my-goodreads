@@ -1,5 +1,9 @@
+import SignUpEmail from "../src/component/SignUpEmail";
+
 export default function signup() {
   return (
-    <div>signup</div>
+    <div>
+      <SignUpEmail />
+    </div>
   )
 }

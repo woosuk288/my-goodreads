@@ -57,6 +57,17 @@ const theme = createTheme({
         }
       }
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .Mui-focused': {
+            '& fieldset.MuiOutlinedInput-notchedOutline': {
+              borderColor: '#382110',
+            },
+          },
+        },
+      }
+    },
 
   }
 });

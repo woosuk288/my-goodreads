@@ -1,5 +1,5 @@
 import { Box, Container, SxProps, Typography } from "@mui/material";
-import LoginForm from "./LoginForm";
+import LoginForm from "./SocialLoginButtonGroup";
 
 
 const sxLogin: SxProps = {

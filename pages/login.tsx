@@ -1,11 +1,10 @@
-import Login from "../src/component/Login"
-import LoginForm from "../src/component/LoginForm"
+import SocialLogin from "../src/component/SocialLogin"
 
 
 export default function LoginPage() {
   return (
     <div>
-      <Login />
+      <SocialLogin />
     </div >
   )
 }
