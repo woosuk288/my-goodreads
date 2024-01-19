@@ -134,7 +134,7 @@ export default function SignUpEmail({ }: Props) {
       </Box>
 
       <Box sx={sxFormSection} component='form'>
-        <Typography component="h1" variant="h5" fontWeight={600} gutterBottom textAlign='center'>이메일 가입</Typography>
+        <Typography component="h1" fontSize='1.5rem' fontWeight={600} gutterBottom textAlign='center'>이메일 가입</Typography>
         {/* <Button component={Link} href={SIGNIN_  PATH}>비밀번호를 잃어버렸나요?</Button> */}
 
         <TextField
