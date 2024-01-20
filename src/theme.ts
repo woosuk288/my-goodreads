@@ -18,10 +18,14 @@ export const notoSansKr = Noto_Sans_KR({
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#F4F1EA',
+      main: '#382110',
+      light: '#F4F1EA',
+      dark: '#1E1915',
     },
     secondary: {
-      main: '#382110',
+      main: '#3F8363',
+      light: '#EBF0E5',
+      dark: '#00635D'
     },
     error: {
       main: red.A400,
@@ -34,16 +38,10 @@ const theme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          color: '#382110',
+          color: '#00635d',
+          textDecoration: 'none'
         },
       },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          // color: '#382110',
-        }
-      }
     },
     MuiContainer: {
       styleOverrides: {
@@ -57,18 +55,6 @@ const theme = createTheme({
         }
       }
     },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .Mui-focused': {
-            '& fieldset.MuiOutlinedInput-notchedOutline': {
-              borderColor: '#382110',
-            },
-          },
-        },
-      }
-    },
-
   }
 });
 

@@ -77,6 +77,9 @@ const sxFooterSection: SxProps = {
     gap: '16px',
     justifyContent: 'center',
     marginBottom: '8px',
+    "a": {
+      color: 'primary.dark'
+    }
   }
 }
 
@@ -140,7 +143,7 @@ export default function SignInEmail({ }: Props) {
       <Box sx={sxFormSection} component='form'>
         <Typography component="h1" fontSize='1.5rem' fontWeight={600} gutterBottom>이메일 가입</Typography>
         <div className="forgot_password_wrapper">
-          <Link href="/forgotpassword" sx={{ textDecoration: 'underline' }}>비밀번호를 잊었나요?</Link>
+          <Link href="/forgotpassword" sx={{ textDecoration: 'underline', color: 'primary.dark' }}>비밀번호를 잊었나요?</Link>
         </div>
 
         <TextField
@@ -171,7 +174,7 @@ export default function SignInEmail({ }: Props) {
         </div>
 
         <div className="submit_wrapper">
-          <Button variant="contained" color="secondary" fullWidth sx={{ padding: '8px 16px', borderRadius: '24px' }}>로그인</Button>
+          <Button variant="contained" fullWidth sx={{ padding: '8px 16px', borderRadius: '24px', bgcolor: 'primary.dark' }}>로그인</Button>
         </div>
 
         <div className="legal_text_wrapper">
@@ -189,7 +192,7 @@ export default function SignInEmail({ }: Props) {
         </Divider>
 
 
-        <Button variant="outlined" color="secondary" fullWidth sx={{ padding: '7px 15px', borderRadius: '24px' }} component={Link} href={SIGNIN_PATH}>가입하기</Button>
+        <Button variant="outlined" fullWidth sx={{ padding: '7px 15px', borderRadius: '24px' }} component={Link} href={SIGNIN_PATH}>가입하기</Button>
       </Box>
 
       <Box component='footer' sx={sxFooterSection} >

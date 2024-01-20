@@ -1,8 +1,8 @@
-import { Box, Container, Grid, List, ListItem, SxProps, Typography } from "@mui/material";
+import { Box, Container, Grid, List, ListItem, SxProps, Theme, Typography } from "@mui/material";
 import Link from "../Link";
 
-const sxFooter: SxProps = {
-  background: '#f9f8f4',
+const sxFooter: SxProps<Theme> = (theme) => ({
+  background: theme.palette.primary.light,
   paddingBottom: '32px',
   paddingTop: '32px',
 
@@ -21,14 +21,7 @@ const sxFooter: SxProps = {
     paddingBottom: '2px'
   },
   ".footer_linklist a": {
-
-    textDecoration: 'none',
-    "&:visited": {
-      textDecoration: 'none'
-    },
-    "&:hover, &:active": {
-      textDecoration: 'underline'
-    }
+    color: theme.palette.primary.main,
   },
   ".footer_social_link_wrapper": {
     display: 'inline-block',
@@ -43,7 +36,7 @@ const sxFooter: SxProps = {
   ".footer_app_links": {
     paddingLeft: '16px'
   }
-}
+})
 
 export default function Footer() {
   return (

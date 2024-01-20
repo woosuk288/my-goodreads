@@ -12,7 +12,8 @@
 ``````
 
 - [X] Home UI 구현하기
-- [ ] LoginForm 구현하기
+- [X] LoginForm 구현하기
+- [X] SearchBook component 구현하기
 
 
 
@@ -29,7 +30,39 @@
 
 
 
-### 정책
+## 🎨 Color Theme
+
+<table>
+  <tr>
+    <td>
+      <div style="width:50px; height:50px; background-color: #F4F1EA;"></div>
+    </td>
+    <td><b>primary.light </b><br/>#F4F1EA</td>
+    <td>
+      <div style="width:50px; height:50px; background-color: #382110;"></div>
+    </td>
+    <td><b>primary.main </b><br/>#382110</td>
+    <td>
+      <div style="width:50px; height:50px; background-color: #1E1915;"></div>
+    </td>
+    <td><b>primary.dark </b><br/>#1E1915</td>
+  </tr>
+    <tr>
+    <td>
+      <div style="width:50px; height:50px; background-color: #EBF0E5;"></div>
+    </td>
+    <td><b>secondary.light </b><br/>#EBF0E5</td>
+    <td>
+      <div style="width:50px; height:50px; background-color: #3F8363;"></div>
+    </td>
+    <td><b>secondary.main </b><br/>#3F8363</td>
+    <td>
+      <div style="width:50px; height:50px; background-color: #00635D;"></div>
+    </td>
+    <td><b>secondary.dark </b><br/>#00635D</td>
+  </tr>
+</table>
+
 
 ##### style
 - MUI component와 sx 속성을 기본으로 사용한다.

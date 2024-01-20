@@ -12,6 +12,7 @@ import HeaderNavDrawer from './HeaderNavDrawer';
 
 
 const sxHeader: SxProps<Theme> = (theme) => ({
+  backgroundColor: 'primary.light',
 
   "a[aria-label='Goodreads Home']": {
     backgroundImage: 'url(/images/logo-goodreads.svg)',
@@ -30,13 +31,13 @@ const sxHeader: SxProps<Theme> = (theme) => ({
     position: 'absolute',
     right: 16
   },
-  "button.MuiTab-root": {
-    color: theme.palette.secondary.main,
-  },
-  ".MuiTab-root.Mui-selected": {
-    backgroundColor: theme.palette.secondary.main,
-    color: '#FFFFFF'
-  },
+  // "button.MuiTab-root": {
+  //   color: theme.palette.secondary.main,
+  // },
+  // ".MuiTab-root.Mui-selected": {
+  //   backgroundColor: theme.palette.secondary.main,
+  //   color: '#FFFFFF'
+  // },
 
   '.MuiList-root': {
     backgroundColor: '#FFFFFF',
@@ -134,7 +135,7 @@ export default function Header({ }: IHeader) {
   }
 
   return (
-    <AppBar sx={sxHeader} color="primary" >
+    <AppBar sx={sxHeader} >
       <Container maxWidth="lg" disableGutters>
         <Toolbar sx={sxToolbar}>
           <IconButton>
@@ -145,7 +146,7 @@ export default function Header({ }: IHeader) {
 
           <HeaderNavDrawer />
 
-          <Button variant='contained' color='secondary' size='small' component={NextLink} href="/login">Sign in</Button>
+          <Button variant='contained' size='small' component={NextLink} href="/login">Sign in</Button>
 
         </Toolbar>
 

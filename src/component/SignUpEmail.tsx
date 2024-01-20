@@ -73,6 +73,9 @@ const sxFooterSection: SxProps = {
     gap: '16px',
     justifyContent: 'center',
     marginBottom: '8px',
+    "a": {
+      color: 'primary.dark'
+    }
   }
 }
 
@@ -164,7 +167,7 @@ export default function SignUpEmail({ }: Props) {
         </div>
 
         <div className="submit_wrapper">
-          <Button variant="contained" color="secondary" fullWidth sx={{ padding: '8px 16px', borderRadius: '24px' }}>생성하기</Button>
+          <Button variant="contained" fullWidth sx={{ padding: '8px 16px', borderRadius: '24px', bgcolor: 'primary.dark' }}>생성하기</Button>
         </div>
 
         <div className="legal_text_wrapper">
@@ -182,7 +185,7 @@ export default function SignUpEmail({ }: Props) {
         </Divider>
 
 
-        <Button variant="outlined" color="secondary" fullWidth sx={{ padding: '7px 15px', borderRadius: '24px' }} component={Link} href={SIGNIN_PATH}>바로 시작하기</Button>
+        <Button variant="outlined" fullWidth sx={{ padding: '7px 15px', borderRadius: '24px', }} component={Link} href={SIGNIN_PATH}>바로 시작하기</Button>
       </Box>
 
       <Box component='footer' sx={sxFooterSection} >

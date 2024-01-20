@@ -26,6 +26,15 @@ const sxAuthSignInWrapper: SxProps = {
   margin: '24px 0 24px'
 }
 
+const sxAppLinksWrapper: SxProps = {
+  ".app_links": {
+    display: 'flex',
+    gap: '12px',
+    justifyContent: 'center',
+    margin: '24px 0',
+  }
+}
+
 const quoteSection: SxProps = {
 
 
@@ -90,7 +99,7 @@ export default function Home() {
           </TextField>
         </Box>
 
-        <Box sx={{ margin: '24px 0', textAlign: 'center' }}>
+        <Box sx={sxAppLinksWrapper}>
           <AppLinks />
         </Box>
 

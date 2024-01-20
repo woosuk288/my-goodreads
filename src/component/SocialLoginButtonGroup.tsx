@@ -1,5 +1,6 @@
 import { Box, Button, SxProps } from "@mui/material";
 import Link from "../Link";
+import { SIGNIN_PATH, SIGNUP_PATH } from "../constants/routes";
 
 const signin_wrapper: SxProps = {
   display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -7,14 +8,10 @@ const signin_wrapper: SxProps = {
   // padding: '0 12px',
   // margin: 'auto',
 
-  "> button": {
+  "> button, > a": {
     width: '100%', maxWidth: '600px', marginBottom: '1rem',
     height: '48px', lineHeight: 3, fontWeight: 600, fontSize: '1rem',
   },
-
-  "a": {
-    color: "#00635D",
-  }
 }
 
 const KakaoButton: SxProps = {
@@ -67,12 +64,12 @@ export default function LoginForm() {
     <Box className="LoginForm" sx={signin_wrapper}>
       <Button variant="contained" sx={KakaoButton} >카카오로 시작하기</Button>
       <Button variant="contained" sx={NaverButton}  >네이버로 시작하기</Button>
-      <Button variant="contained" sx={EmailButton} >이메일로 로그인하기</Button>
+      <Button variant="contained" sx={EmailButton} component={Link} href={SIGNIN_PATH} >이메일로 로그인하기</Button>
 
 
       <div className="auth_switch_flow">
         {/* 이미 가입하셨나요? <Link href={'/signin'}>로그인하기</Link> */}
-        아직 가입하지 않으셨나요? <Link href={'/signup'}>가입하기</Link>
+        아직 가입하지 않으셨나요? <Link href={SIGNUP_PATH}>가입하기</Link>
       </div>
     </Box >
   )

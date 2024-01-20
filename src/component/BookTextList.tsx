@@ -1,9 +1,9 @@
-import { Box, List, ListItem, SxProps } from "@mui/material";
+import { Box, List, ListItem, SxProps, Theme } from "@mui/material";
 
 import Link from '../Link'
 
 
-const sxBookTextList: SxProps = {
+const sxBookTextList: SxProps<Theme> = (theme) => ({
 
   ".MuiList-root": {
     columnCount: 2,
@@ -11,12 +11,12 @@ const sxBookTextList: SxProps = {
   },
   ".MuiLink-root": {
     fontSize: '0.875rem',
-    color: '#00635D',
+    color: theme.palette.secondary.dark,
   },
   ".MuiListItem-root": {
     padding: '6px 0'
   }
-}
+})
 
 interface Props {
   bookTextData: {
