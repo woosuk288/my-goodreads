@@ -35,6 +35,14 @@ const theme = createTheme({
     fontFamily: notoSansKr.style.fontFamily,
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        ul: {
+          margin: 0,
+          padding: 0,
+        }
+      }
+    },
     MuiLink: {
       styleOverrides: {
         root: {

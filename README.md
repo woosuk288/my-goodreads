@@ -14,6 +14,7 @@
 - [X] Home UI 구현하기
 - [X] LoginForm 구현하기
 - [X] SearchBook component 구현하기
+- [ ] 검색 결과 page UI 구현
 
 
 
@@ -64,7 +65,7 @@
 </table>
 
 
-##### style
+## Style
 - MUI component와 sx 속성을 기본으로 사용한다.
 - sx 속성을 변수로 선언시 변수명 앞에 sx접두사를 붙인다. (ex, sxLoginButton)
 - sx 속성 변수는 component, section, wrapper 단위에서 사용을 권한다.

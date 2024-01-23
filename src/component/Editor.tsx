@@ -90,7 +90,7 @@ export default function Editor() {
             </Typography>
             <div className="book_meta_info">
 
-              <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.01} size="small" />
+              <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
               <Typography variant="body2" color='text.secondary'>3.95</Typography>
               <Typography className="book_rating_count" variant="body2" color='text.secondary'>52,241 평가</Typography>
 
