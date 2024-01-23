@@ -39,7 +39,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: '#00635d',
-          textDecoration: 'none'
+          textDecoration: 'none',
+          ":hover": {
+            textDecoration: 'underline',
+          }
         },
       },
     },

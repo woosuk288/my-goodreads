@@ -27,6 +27,7 @@ const sxEditor: SxProps = {
   ".book_meta_info": {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
     "& > *": {
       fontSize: '0.75rem',
     }

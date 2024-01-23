@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import { Box, SxProps } from '@mui/material';
+import Link from 'next/link';
 
 const sxBookImageList: SxProps = {
   ".swiper-wrapper": {
@@ -39,17 +40,17 @@ export default function BookImageList({ images }: Props) {
       <Swiper
         spaceBetween={20}
         slidesPerView={'auto'}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log('slide change')}
+      // onSwiper={(swiper) => console.log(swiper)}
       >
         {images.map(image =>
 
           <SwiperSlide key={image.id}>
-            <a href={image.pageLink}>
+            <Link href={image.pageLink}>
               <img alt={image.title}
                 title={image.title} itemProp="image" className="bookCoverImage"
                 src={image.imgSrc} />
-            </a>
+            </Link>
           </SwiperSlide>
         )}
       </Swiper>

@@ -24,13 +24,7 @@ const sxHeader: SxProps<Theme> = (theme) => ({
 
   boxShadow: 0,
 
-  ".MuiTabs-root": {
-    height: '50px',
-  },
-  ".MuiTabs-root .MuiButton-endIcon": {
-    position: 'absolute',
-    right: 16
-  },
+
   // "button.MuiTab-root": {
   //   color: theme.palette.secondary.main,
   // },
@@ -55,6 +49,17 @@ const sxToolbar: SxProps = {
   "svg[aria-label='search']": {
     fontSize: '1.8rem',
   }
+}
+
+const sxTabs: SxProps = {
+  // width: '100%',
+  height: '50px',
+  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+
+  ".MuiButton-endIcon": {
+    position: 'absolute',
+    right: 16
+  },
 }
 
 const BROWSE_MENUS = [
@@ -150,7 +155,7 @@ export default function Header({ }: IHeader) {
 
         </Toolbar>
 
-        <Tabs value={tabCode} onChange={handleChange} variant="fullWidth">
+        <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
           <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
           <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.BROWSE)} />
           <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.COMMUNITY)} />

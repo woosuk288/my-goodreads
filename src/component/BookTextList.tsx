@@ -30,7 +30,7 @@ export default function BookTextList({ bookTextData }: Props) {
     <Box sx={sxBookTextList}>
       <List>
         {bookTextData.map(item =>
-          <ListItem >
+          <ListItem key={item.pageLink} >
             <Link href={item.pageLink}>{item.text}</Link>
           </ListItem>
         )}

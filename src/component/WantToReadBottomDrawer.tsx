@@ -25,7 +25,7 @@ const sxWantToReadBottomDrawer: SxProps = {
 
 const slideUpMenuList: SxProps<Theme> = (theme) => ({
   paddingBottom: "0",
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.primary.light,
 
   "> li": {
     height: '48px',
