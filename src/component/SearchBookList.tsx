@@ -36,7 +36,7 @@ export default function SearchBookList() {
               Authorization: "KakaoAK " + process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY
             },
           })
-          const hits: IKaKaoBookSearch = await response.json()
+          const hits: IKakaoBookApiResponse = await response.json()
           console.log('hits : ', hits)
 
           callback(hits.documents)
