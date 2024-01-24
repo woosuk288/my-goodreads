@@ -14,7 +14,8 @@
 - [X] Home UI 구현하기
 - [X] LoginForm 구현하기
 - [X] SearchBook component 구현하기
-- [ ] 검색 결과 page UI 구현
+- [X] 검색 결과 page UI 구현
+- [ ] 도서 상세 정보 및 커뮤니티 리뷰
 
 
 
