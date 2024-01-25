@@ -1,15 +1,14 @@
-import * as React from 'react';
-import { Html, Head, Main, NextScript, DocumentProps } from 'next/document';
-import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter';
-import theme, { notoSansKr } from '../src/theme';
+import * as React from "react";
+import { Html, Head, Main, NextScript, DocumentProps } from "next/document";
+import { DocumentHeadTags, documentGetInitialProps } from "@mui/material-nextjs/v14-pagesRouter";
+import theme, { notoSansKr } from "../src/theme";
 
 // TODO: 타입 오류 해결용 임시 추가
 interface EmotionDocumentProps extends DocumentProps {
-  emotionStyleTags: JSX.Element[]
+  emotionStyleTags: JSX.Element[];
 }
 
 export default function MyDocument(props: EmotionDocumentProps) {
-
   return (
     <Html lang="ko" className={notoSansKr.className}>
       <Head>

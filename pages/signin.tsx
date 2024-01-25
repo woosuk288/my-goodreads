@@ -5,5 +5,5 @@ export default function signin() {
     <div>
       <SignInEmail />
     </div>
-  )
+  );
 }

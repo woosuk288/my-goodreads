@@ -1,35 +1,45 @@
 import { useState } from "react";
-import NextLink from 'next/link'
+import NextLink from "next/link";
 
-import { Avatar, Divider, Drawer, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography, styled } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close'
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import TopicIcon from '@mui/icons-material/Topic';
-import MailIcon from '@mui/icons-material/Mail';
-import GroupsIcon from '@mui/icons-material/Groups';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import {
+  Avatar,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Typography,
+  styled,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import TopicIcon from "@mui/icons-material/Topic";
+import MailIcon from "@mui/icons-material/Mail";
+import GroupsIcon from "@mui/icons-material/Groups";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 
 import Link from "../Link";
 
+const ANCHOR = "right";
 
-const ANCHOR = 'right'
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
 
   ".MuiIconButton-root": {
-    padding: '4px',
-    margin: '8px',
-    backgroundColor: '#BEB2A2',
-    color: '#FFFFFF',
-  }
+    padding: "4px",
+    margin: "8px",
+    backgroundColor: "#BEB2A2",
+    color: "#FFFFFF",
+  },
 }));
-
 
 export default function HeaderNavDrawer() {
   const [open, setOpen] = useState(false);
@@ -50,19 +60,16 @@ export default function HeaderNavDrawer() {
         anchor={ANCHOR}
         open={open}
         onClose={handleDrawerClose}
-        PaperProps={{ sx: { width: '85%', paddingLeft: '8px', paddingRight: '8px' } }}
+        PaperProps={{ sx: { width: "85%", paddingLeft: "8px", paddingRight: "8px" } }}
         slotProps={{
           backdrop: {
-            sx: { backgroundColor: 'rgba(0,0,0,0.7)' },
+            sx: { backgroundColor: "rgba(0,0,0,0.7)" },
             children: (
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{ position: 'absolute', left: 0, top: 0, color: '#FFFFFF' }}
-              >
-                <CloseIcon sx={{ fontSize: '2.5rem' }} />
+              <IconButton onClick={handleDrawerClose} sx={{ position: "absolute", left: 0, top: 0, color: "#FFFFFF" }}>
+                <CloseIcon sx={{ fontSize: "2.5rem" }} />
               </IconButton>
             ),
-          }
+          },
         }}
       >
         <DrawerHeader>
@@ -81,19 +88,27 @@ export default function HeaderNavDrawer() {
         </DrawerHeader>
         <Divider />
 
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          <ListItem >
+        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+          <ListItem>
             <ListItemAvatar>
               {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-              <Avatar sx={{ width: '75px', height: '75px', marginRight: '8px', backgroundColor: '#EFEEE0', }}>
+              <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }}>
                 <Link href="/user/123">
-                  <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: '3.5rem' }} />
+                  <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: "3.5rem" }} />
                 </Link>
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={<Link href="/user/123" color="#333333" variant="subtitle2" fontWeight='bold'>WOOSEOK</Link>}
-              secondary={<Link href="/user/123" color='#000000'>View profile</Link>}
+              primary={
+                <Link href="/user/123" color="#333333" variant="subtitle2" fontWeight="bold">
+                  WOOSEOK
+                </Link>
+              }
+              secondary={
+                <Link href="/user/123" color="#000000">
+                  View profile
+                </Link>
+              }
             />
           </ListItem>
         </List>
@@ -106,7 +121,6 @@ export default function HeaderNavDrawer() {
               </ListItemButton>
             </ListItem>
           ))}
-
         </List>
         <Divider />
         <List dense>
@@ -120,41 +134,41 @@ export default function HeaderNavDrawer() {
         </List>
       </Drawer>
     </div>
-  )
+  );
 }
 
 const NAV_DRAWER_MENUS_01 = [
   {
     link: "/profile",
-    text: "프로필"
+    text: "프로필",
   },
   {
     link: "/friend",
-    text: "친구"
+    text: "친구",
   },
   {
     link: "/group",
-    text: "그룹"
+    text: "그룹",
   },
   {
     link: "/topic",
-    text: "토론"
+    text: "토론",
   },
   {
     link: "/comment",
-    text: "댓글"
+    text: "댓글",
   },
   {
     link: "/challenges",
-    text: "독서 챌린지"
+    text: "독서 챌린지",
   },
   {
     link: "/notes",
-    text: "Kindle Notes & Highlights"
+    text: "Kindle Notes & Highlights",
   },
   {
     link: "/quotes",
-    text: "어록"
+    text: "어록",
   },
   {
     link: "/user-edit-genres",
@@ -162,21 +176,21 @@ const NAV_DRAWER_MENUS_01 = [
   },
   {
     link: "/recommendations",
-    text: "친구들의 추천"
+    text: "친구들의 추천",
   },
-]
+];
 
 const NAV_DRAWER_MENUS_02 = [
   {
     link: "/account-settings",
-    text: "계정설정"
+    text: "계정설정",
   },
   {
     link: "/help",
-    text: "도움받기"
+    text: "도움받기",
   },
   {
     link: "/sign-out",
-    text: "로그아웃"
+    text: "로그아웃",
   },
-]
+];

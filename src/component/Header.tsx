@@ -1,29 +1,27 @@
-import * as React from 'react';
+import * as React from "react";
 
-import NextLink from 'next/link'
+import NextLink from "next/link";
 
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import { AppBar, Box, Button, Container, IconButton, ListItemText, MenuItem, MenuList, SxProps, Theme, Toolbar } from "@mui/material";
 
-import SearchIcon from '@mui/icons-material/Search';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import HeaderNavDrawer from './HeaderNavDrawer';
-
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import HeaderNavDrawer from "./HeaderNavDrawer";
 
 const sxHeader: SxProps<Theme> = (theme) => ({
-  backgroundColor: 'primary.light',
+  backgroundColor: "primary.light",
 
   "a[aria-label='Goodreads Home']": {
-    backgroundImage: 'url(/images/logo-goodreads.svg)',
-    backgroundSize: '100%',
+    backgroundImage: "url(/images/logo-goodreads.svg)",
+    backgroundSize: "100%",
 
-    width: '140px',
-    height: '30px'
+    width: "140px",
+    height: "30px",
   },
 
   boxShadow: 0,
-
 
   // "button.MuiTab-root": {
   //   color: theme.palette.secondary.main,
@@ -33,150 +31,161 @@ const sxHeader: SxProps<Theme> = (theme) => ({
   //   color: '#FFFFFF'
   // },
 
-  '.MuiList-root': {
-    backgroundColor: '#FFFFFF',
-    color: '#333333',
-    boxShadow: '0 5px 10px rgba(0,0,0,0.15)',
+  ".MuiList-root": {
+    backgroundColor: "#FFFFFF",
+    color: "#333333",
+    boxShadow: "0 5px 10px rgba(0,0,0,0.15)",
   },
-})
+});
 
 const sxToolbar: SxProps = {
-  minHeight: '50px',
-  height: '50px',
-  justifyContent: 'space-between',
-  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+  minHeight: "50px",
+  height: "50px",
+  justifyContent: "space-between",
+  boxShadow: "0 1px 2px rgba(0,0,0,0.15)",
 
   "svg[aria-label='search']": {
-    fontSize: '1.8rem',
-  }
-}
+    fontSize: "1.8rem",
+  },
+};
 
 const sxTabs: SxProps = {
   // width: '100%',
-  height: '50px',
-  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+  height: "50px",
+  boxShadow: "0 1px 2px rgba(0,0,0,0.15)",
 
   ".MuiButton-endIcon": {
-    position: 'absolute',
-    right: 16
+    position: "absolute",
+    right: 16,
   },
-}
+};
 
 const BROWSE_MENUS = [
   {
-    text: '추천',
-    link: '/recommendations',
+    text: "추천",
+    link: "/recommendations",
   },
   {
-    text: 'Choice Awards',
-    link: '/choiceawards',
+    text: "Choice Awards",
+    link: "/choiceawards",
   },
   {
-    text: '장르',
-    link: '/genres',
+    text: "장르",
+    link: "/genres",
   },
   {
-    text: '혜택',
-    link: '/giveaways',
+    text: "혜택",
+    link: "/giveaways",
   },
   {
-    text: '인기',
-    link: '/book/pupular-by-date/2024/1',
+    text: "인기",
+    link: "/book/pupular-by-date/2024/1",
   },
   {
-    text: 'Lists',
-    link: '/list',
+    text: "Lists",
+    link: "/list",
   },
   {
-    text: 'Explore',
-    link: '/explore',
+    text: "Explore",
+    link: "/explore",
   },
   {
-    text: 'News & Interviews',
-    link: '/news',
+    text: "News & Interviews",
+    link: "/news",
   },
-]
+];
 
 const COMMUNITY_MENUS = [
   {
-    text: '그룹',
-    link: '/group',
+    text: "그룹",
+    link: "/group",
   },
   {
-    text: '어록',
-    link: '/quotes',
+    text: "어록",
+    link: "/quotes",
   },
   {
-    text: '저자에게 묻기',
-    link: '/ask-the-author',
+    text: "저자에게 묻기",
+    link: "/ask-the-author",
   },
-]
+];
 
 const TAB_CODES = {
   MY_BOOKS: "MY_BOOKS",
   BROWSE: "BROWSE",
-  COMMUNITY: "COMMUNITY"
-}
+  COMMUNITY: "COMMUNITY",
+};
 
-interface IHeader {
-
-}
-export default function Header({ }: IHeader) {
-
+interface IHeader {}
+export default function Header({}: IHeader) {
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log('handleChange : ', newValue)
+    console.log("handleChange : ", newValue);
     if (newValue === TAB_CODES.MY_BOOKS) {
-      alert('로그인 or 내 서재')
+      alert("로그인 or 내 서재");
     }
     setTabCode(newValue);
   };
 
   const handleTabClick = (newValue: string) => () => {
     if (tabCode === newValue) {
-      setTabCode(false)
+      setTabCode(false);
     }
-  }
+  };
 
   return (
-    <AppBar sx={sxHeader} >
+    <AppBar sx={sxHeader}>
       <Container maxWidth="lg" disableGutters>
         <Toolbar sx={sxToolbar}>
           <IconButton>
-            <SearchIcon aria-label='search' />
+            <SearchIcon aria-label="search" />
           </IconButton>
 
-          <a href='/' aria-label='Goodreads Home' title='Goodreads Home'></a>
+          <a href="/" aria-label="Goodreads Home" title="Goodreads Home"></a>
 
           <HeaderNavDrawer />
 
-          <Button variant='contained' size='small' component={NextLink} href="/login">Sign in</Button>
-
+          <Button variant="contained" size="small" component={NextLink} href="/login">
+            Sign in
+          </Button>
         </Toolbar>
 
         <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
           <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
-          <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.BROWSE)} />
-          <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} onClick={handleTabClick(TAB_CODES.COMMUNITY)} />
+          <Tab
+            label="둘러보기"
+            value={TAB_CODES.BROWSE}
+            component={Button}
+            endIcon={<ArrowDropDownIcon />}
+            onClick={handleTabClick(TAB_CODES.BROWSE)}
+          />
+          <Tab
+            label="커뮤니티"
+            value={TAB_CODES.COMMUNITY}
+            component={Button}
+            endIcon={<ArrowDropDownIcon />}
+            onClick={handleTabClick(TAB_CODES.COMMUNITY)}
+          />
         </Tabs>
 
-
-        {tabCode && tabCode !== TAB_CODES.MY_BOOKS &&
+        {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
           <MenuList dense>
-            {tabCode === TAB_CODES.BROWSE && BROWSE_MENUS.map(menu =>
-              <MenuItem key={menu.link}>
-                <ListItemText>{menu.text}</ListItemText>
-              </MenuItem>
-            )}
-            {tabCode === TAB_CODES.COMMUNITY && COMMUNITY_MENUS.map(menu =>
-              <MenuItem key={menu.link}>
-                <ListItemText>{menu.text}</ListItemText>
-              </MenuItem>
-            )}
+            {tabCode === TAB_CODES.BROWSE &&
+              BROWSE_MENUS.map((menu) => (
+                <MenuItem key={menu.link}>
+                  <ListItemText>{menu.text}</ListItemText>
+                </MenuItem>
+              ))}
+            {tabCode === TAB_CODES.COMMUNITY &&
+              COMMUNITY_MENUS.map((menu) => (
+                <MenuItem key={menu.link}>
+                  <ListItemText>{menu.text}</ListItemText>
+                </MenuItem>
+              ))}
           </MenuList>
-        }
+        )}
       </Container>
     </AppBar>
-  )
+  );
 }

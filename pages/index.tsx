@@ -3,14 +3,13 @@
 // import Link from '../src/Link';
 // import ProTip from '../src/ProTip';
 // import Copyright from '../src/Copyright';
-import Header from '../src/component/Header';
-import Footer from '../src/component/Footer';
-import Main from '../src/component/Main';
-import Home from '../src/component/Home';
+import Header from "../src/component/Header";
+import Footer from "../src/component/Footer";
+import Main from "../src/component/Main";
+import Home from "../src/component/Home";
 
 export default function HomePage() {
   return (
-
     <>
       <Header />
 
@@ -19,7 +18,6 @@ export default function HomePage() {
       </Main>
 
       <Footer />
-
 
       {/*       
       <Box

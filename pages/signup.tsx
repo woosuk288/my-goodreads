@@ -5,5 +5,5 @@ export default function signup() {
     <div>
       <SignUpEmail />
     </div>
-  )
+  );
 }

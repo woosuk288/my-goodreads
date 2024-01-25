@@ -2,51 +2,69 @@ import { css } from "@emotion/react";
 import SearchBookList from "../src/component/SearchBookList";
 import { Button, TextField } from "@mui/material";
 
-
-
 export default function test() {
   return (
-    <div css={css`
+    <div
+      css={css`
+        .menu {
+          padding: 0;
+          border-bottom: 1px solid black;
+        }
+        .menu > li {
+          display: inline-block;
+          text-align: center;
+        }
+        .menu > li > a {
+          display: inline-block;
+          width: 80px;
+          padding: 10px;
+          text-decoration: none;
+        }
+        a:hover,
+        a:focus {
+          color: white;
+          background-color: gray;
+        }
+        a:active {
+          color: white;
+          background-color: black;
+        }
 
-    .menu{
-      padding: 0;
-      border-bottom: 1px solid black;
-    }
-    .menu > li{
-      display: inline-block;
-      text-align: center;
-    }
-    .menu > li > a{
-      display: inline-block;
-      width: 80px;
-      padding: 10px;
-      text-decoration: none;
-    }
-    a:hover, a:focus{ color: white; background-color: gray; }
-    a:active{ color: white; background-color: black; }
-    
-      input:disabled{
-        background-color: gray;
-      }
-      input:checked{
-        height: 20px;
-        width: 20px;
-      }
-      input:checked + label{
-        font-weight: 900;
-      }
-    `}>
-
+        input:disabled {
+          background-color: gray;
+        }
+        input:checked {
+          height: 20px;
+          width: 20px;
+        }
+        input:checked + label {
+          font-weight: 900;
+        }
+      `}
+    >
       <SearchBookList />
 
-
-      <TextField sx={{ '& .MuiOutlinedInput-root': { '&:hover fieldset': { borderColor: 'red' }, '&.Mui-focused fieldset': { borderColor: 'blue' } } }}>testtesttest</TextField>
+      <TextField
+        sx={{
+          "& .MuiOutlinedInput-root": { "&:hover fieldset": { borderColor: "red" }, "&.Mui-focused fieldset": { borderColor: "blue" } },
+        }}
+      >
+        testtesttest
+      </TextField>
 
       <ul className="menu">
-        <li><a href="#">사전</a></li>
-        <li><a href="#">뉴스</a></li>
-        <li><a href="#">증권</a></li>
-        <li><a href="#">지도</a></li>
+        <li>
+          <a href="#">사전</a>
+        </li>
+        <li>
+          <a href="#">뉴스</a>
+        </li>
+        <li>
+          <a href="#">증권</a>
+        </li>
+        <li>
+          <a href="#">지도</a>
+        </li>
       </ul>
 
       <form method="post" action="fake_server.php">
@@ -68,9 +86,6 @@ export default function test() {
           <input type="number" id="age" name="age" disabled />
         </fieldset>
       </form>
-
     </div>
-  )
+  );
 }
-
-

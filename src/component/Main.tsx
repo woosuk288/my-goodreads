@@ -1,20 +1,16 @@
-import { Box, SxProps, Theme } from "@mui/material"
-import { ReactNode } from "react"
+import { Box, SxProps, Theme } from "@mui/material";
+import { ReactNode } from "react";
 
 const sxMain: SxProps<Theme> = (theme) => ({
-  paddingTop: '100px',
+  paddingTop: "100px",
   maxWidth: theme.breakpoints.values.sm,
   margin: "0 auto",
-})
+});
 
 interface IMain {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function Main({ children }: IMain) {
-  return (
-
-
-    <Box sx={sxMain}>{children}</Box>
-  )
+  return <Box sx={sxMain}>{children}</Box>;
 }

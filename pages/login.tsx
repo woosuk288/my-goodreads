@@ -1,10 +1,9 @@
-import SocialLogin from "../src/component/SocialLogin"
-
+import SocialLogin from "../src/component/SocialLogin";
 
 export default function LoginPage() {
   return (
     <div>
       <SocialLogin />
-    </div >
-  )
+    </div>
+  );
 }

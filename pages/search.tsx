@@ -15,5 +15,5 @@ export default function SearchPage() {
       </Main>
       <Footer />
     </>
-  )
+  );
 }
