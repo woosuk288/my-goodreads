@@ -5,7 +5,7 @@ import "swiper/css";
 import { Box, SxProps } from "@mui/material";
 import Link from "next/link";
 
-const sxBookImageList: SxProps = {
+const sxHomeImageList: SxProps = {
   ".swiper-wrapper": {
     margin: "8px",
   },
@@ -33,9 +33,9 @@ interface IBookImageItem {
   imgSrc: string;
 }
 
-export default function BookImageList({ images }: Props) {
+export default function HomeImageList({ images }: Props) {
   return (
-    <Box sx={sxBookImageList}>
+    <Box sx={sxHomeImageList}>
       <Swiper
         spaceBetween={20}
         slidesPerView={"auto"}

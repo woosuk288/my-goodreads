@@ -3,8 +3,8 @@ import SocialLoginButtonGroup from "./SocialLoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppLinks from "./AppLinks";
-import BookImageList from "./BookImageList";
-import BookTextList from "./BookTextList";
+import HomeImageList from "./HomeImageList";
+import HomeTextList from "./HomeTextList";
 import Heading from "./Heading";
 import Link from "../Link";
 
@@ -111,18 +111,18 @@ export default function Home() {
 
         <Box>
           <Heading heading="이번 주 가장 많이 읽은 책" />
-          <BookImageList images={MOCK_BOOK_IMAGES} />
+          <HomeImageList images={MOCK_BOOK_IMAGES} />
           <Heading heading="이번 달 새로 나온 책" />
-          <BookImageList images={MOCK_BOOK_IMAGES} />
+          <HomeImageList images={MOCK_BOOK_IMAGES} />
           <Heading heading="20세기 최고의 책" />
-          <BookImageList images={MOCK_BOOK_IMAGES} />
+          <HomeImageList images={MOCK_BOOK_IMAGES} />
         </Box>
 
         <Box sx={quoteSection}>
           <Heading heading="리스트" />
-          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
+          <HomeTextList bookTextData={MOCK_BOOK_TEXTS} />
           <Heading heading="장르" />
-          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
+          <HomeTextList bookTextData={MOCK_BOOK_TEXTS} />
           <Heading heading="명언" />
           <CardHeader
             sx={{ alignItems: "flex-start" }}
@@ -142,7 +142,7 @@ export default function Home() {
             }
             subheader={<Typography variant="body2">Oscar Wilde</Typography>}
           />
-          <BookTextList bookTextData={MOCK_BOOK_TEXTS} />
+          <HomeTextList bookTextData={MOCK_BOOK_TEXTS} />
         </Box>
 
         <Box sx={sxLastAwardsWrapper}>

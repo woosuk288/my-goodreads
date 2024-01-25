@@ -2,7 +2,7 @@ import { Box, List, ListItem, SxProps, Theme } from "@mui/material";
 
 import Link from "../Link";
 
-const sxBookTextList: SxProps<Theme> = (theme) => ({
+const sxHomeTextList: SxProps<Theme> = (theme) => ({
   ".MuiList-root": {
     columnCount: 2,
     paddingTop: 0,
@@ -23,9 +23,9 @@ interface Props {
   }[];
 }
 
-export default function BookTextList({ bookTextData }: Props) {
+export default function HomeTextList({ bookTextData }: Props) {
   return (
-    <Box sx={sxBookTextList}>
+    <Box sx={sxHomeTextList}>
       <List>
         {bookTextData.map((item) => (
           <ListItem key={item.pageLink}>
