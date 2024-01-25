@@ -19,17 +19,31 @@ import {
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import StoreIcon from "@mui/icons-material/Store";
+import ShareIcon from "@mui/icons-material/Share";
 
 const sxBookInfo: SxProps = {
   padding: "12px",
   ".book_cover_wrapper": {
-    margin: "auto",
-    width: "35%",
-  },
-  ".book_cover_image": {
-    filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
-    img: {
-      width: "100%",
+    position: "relative",
+    height: "200px",
+    width: "calc(100% + 24px)",
+    left: "-12px",
+    top: "-12px",
+    padding: "12px",
+    backgroundColor: "whitesmoke",
+    ".book_cover_image": {
+      width: "35%",
+      height: "100%",
+      margin: "auto",
+      filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
+      img: {
+        height: "100%",
+      },
+    },
+    ".book_share_wrapper": {
+      position: "absolute",
+      right: 0,
+      bottom: 0,
     },
   },
   ".contributors_wrapper": {
@@ -74,6 +88,9 @@ const sxBookInfo: SxProps = {
   },
   ".edit_date_wrapper": {
     margin: "24px 0",
+    ".MuiListItemText-root": {
+      flex: "0 0 auto",
+    },
   },
 
   ".external_book_link_list": {
@@ -102,9 +119,11 @@ export default function BookInfo() {
             alt="give and take book_cover"
           />
         </div>
-      </div>
-      <div className="book_share_wrapper">
-        <IconButton>shareIcon</IconButton>
+        <div className="book_share_wrapper">
+          <IconButton>
+            <ShareIcon /* sx={{ color: "white" }} */ />
+          </IconButton>
+        </div>
       </div>
       <div className="book_metadata">
         <div className="title_wrapper">
@@ -207,6 +226,8 @@ export default function BookInfo() {
           </div> */}
           <Divider />
         </div>
+
+        <div className="description_wrapper"></div>
       </div>
     </Box>
   );
