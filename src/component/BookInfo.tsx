@@ -24,6 +24,8 @@ import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import StoreIcon from "@mui/icons-material/Store";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BookPageHeading02 from "./BookPageHeading02";
+import BookRatingStats from "./BookRatingStats";
 
 const sxBookInfo: SxProps = {
   padding: "12px",
@@ -55,28 +57,11 @@ const sxBookInfo: SxProps = {
     textAlign: "center",
   },
   ".rating_stats_wrapper": {
-    display: "flex",
-    // alignItems: "center",
-    justifyContent: "center",
     paddingTop: "8px",
     paddingBottom: "8px",
     marginBottom: "8px",
     borderTop: "1px solid #CECECE",
     borderBottom: "1px solid #CECECE",
-
-    ".rating_stats_col": {
-      ".static_stars": {
-        marginRight: "4px",
-      },
-      display: "flex",
-      alignItems: "center",
-      ":not(:first-child)": {
-        ":before": { padding: "4px", content: '"\\B7"' },
-      },
-      ".MuiTypography-root": {
-        fontSize: "0.75rem",
-      },
-    },
   },
   ".actions_warpper": {
     display: "flex",
@@ -112,7 +97,11 @@ const sxBookInfo: SxProps = {
 
   ".description_wrapper": {
     position: "relative",
+    ".description_heading_wrapper": {
+      margin: "40px 0 32px",
+    },
   },
+
   ".desciption-show-more-button__overlay": {
     position: "absolute",
     bottom: "0",
@@ -167,16 +156,7 @@ export default function BookInfo() {
           </Typography>
         </div>
         <div className="rating_stats_wrapper">
-          <div className="rating_stats_col">
-            <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
-            <Typography>3.95</Typography>
-          </div>
-          <div className="rating_stats_col">
-            <Typography>348,897 ratings</Typography>
-          </div>
-          <div className="rating_stats_col">
-            <Typography>8,786 reviews</Typography>
-          </div>
+          <BookRatingStats ratingValue={3.95} userRatingCount={348897} userReviewCount={8786} />
         </div>
         <div className="actions_warpper">
           <div className="wtr_button">
@@ -257,7 +237,9 @@ export default function BookInfo() {
         </div>
 
         <div className="description_wrapper">
-          <BookPageHeading02 title="BOOK DESCRIPTION" />
+          <div className="description_heading_wrapper">
+            <BookPageHeading02 title="BOOK DESCRIPTION" />
+          </div>
 
           <Collapse in={show} collapsedSize={160}>
             <div className="description_paragraph">
@@ -312,28 +294,3 @@ export default function BookInfo() {
     </Box>
   );
 }
-
-const BookPageHeading02 = ({ title }: { title: string }) => {
-  return (
-    <Box
-      className="book_page_heading02"
-      sx={{
-        position: "relative",
-        margin: "40px 0 32px",
-        ":after": {
-          content: '""',
-          display: "block",
-          position: "absolute",
-          left: "50%",
-          transform: "translate(-50%, 10px)",
-          width: "140px",
-          borderTop: "2px solid #D8D8D8",
-        },
-      }}
-    >
-      <Typography component="h2" align="center" fontSize="1.125rem" fontWeight={700}>
-        {title}
-      </Typography>
-    </Box>
-  );
-};
