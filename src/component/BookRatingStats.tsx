@@ -11,7 +11,7 @@ const sxBookRatingStats: SxProps = {
     },
     display: "flex",
     alignItems: "center",
-    ":not(:first-child)": {
+    ":not(:first-of-type)": {
       ":before": { padding: "4px", content: '"\\B7"' },
     },
   },
@@ -28,7 +28,7 @@ export default function BookRatingStats({ ratingValue, userRatingCount, userRevi
     <Box sx={sxBookRatingStats}>
       {ratingValue && (
         <div className="rating_stats_col">
-          <Rating className="static_stars" name="read-only" value={1} max={1} readOnly precision={0.1} size="small" />
+          <Rating className="static_stars" name="read-only" value={1} max={1} readOnly size="small" />
           <Typography>{ratingValue}</Typography>
         </div>
       )}

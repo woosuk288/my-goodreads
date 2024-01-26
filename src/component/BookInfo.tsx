@@ -9,7 +9,6 @@ import {
   Chip,
   Collapse,
   Divider,
-  Fade,
   IconButton,
   List,
   ListItem,
@@ -23,9 +22,10 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import StoreIcon from "@mui/icons-material/Store";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import BookPageHeading02 from "./BookPageHeading02";
 import BookRatingStats from "./BookRatingStats";
+import ExpandMoreBar from "./ExpandMoreBar";
 
 const sxBookInfo: SxProps = {
   padding: "12px",
@@ -95,19 +95,8 @@ const sxBookInfo: SxProps = {
     },
   },
 
-  ".description_wrapper": {
-    position: "relative",
-    ".description_heading_wrapper": {
-      margin: "40px 0 32px",
-    },
-  },
-
-  ".desciption-show-more-button__overlay": {
-    position: "absolute",
-    bottom: "0",
-    width: "100%",
-    paddingTop: "24px",
-    background: "linear-gradient(to bottom,rgba(255,255,255,0),#fff 16px)",
+  ".description_heading_wrapper": {
+    margin: "40px 0 32px",
   },
 
   ".genres_wrapper": {
@@ -264,18 +253,7 @@ export default function BookInfo() {
               innovation: it starts by learning to ask the questions that lead you to find value in unexpected places.
             </div>
           </Collapse>
-          <div className="desciption-show-more-button__wrapper">
-            <div className="desciption-show-more-button__overlay">
-              <Button
-                type="button"
-                sx={{ marginLeft: "-8px", color: "primary.dark", fontWeight: 600 }}
-                onClick={handleShowMore}
-                endIcon={<ExpandMoreIcon sx={{ transform: show ? "rotate(-180deg)" : "none" }} />}
-              >
-                {show ? "숨기기" : "더 보기"}
-              </Button>
-            </div>
-          </div>
+          <ExpandMoreBar show={show} onShowMore={handleShowMore} />
         </div>
       </div>
 

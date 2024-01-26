@@ -1,6 +1,9 @@
-import { Box, LinearProgress, Rating, SxProps, Typography } from "@mui/material";
+import { Box, Button, Divider, LinearProgress, Rating, SxProps, Typography } from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+
 import BookPageHeading02 from "./BookPageHeading02";
 import BookRatingStats from "./BookRatingStats";
+import BookReviewItem from "./BookReviewItem";
 
 const sxBookReviewList: SxProps = {
   padding: "0 12px",
@@ -17,6 +20,17 @@ const sxBookReviewList: SxProps = {
 
   ".review_section_heading_wrapper": {
     margin: "40px 0 32px",
+  },
+  ".user_review_list_wrapper": {
+    margin: "0 -12px",
+  },
+  ".review_more_button_wrapper": {
+    margin: "24px 0",
+    textAlign: "center",
+  },
+
+  ".book_review_item": {
+    marginTop: "1px",
   },
 };
 
@@ -41,7 +55,19 @@ export default function BookReviewList() {
 
       <div className="review_section">
         <div className="review_section_heading_wrapper">
-          <BookPageHeading02 title="RATING DETAILS" />
+          <BookPageHeading02 title="COMMUNITY REVIEWS" />
+        </div>
+        <div className="user_review_list_wrapper">
+          <BookReviewItem />
+          <BookReviewItem />
+          <BookReviewItem />
+        </div>
+        <div className="review_more_button_wrapper">
+          <Divider>
+            <Button href="/book/show" endIcon={<NavigateNextIcon />}>
+              More community reviews
+            </Button>
+          </Divider>
         </div>
       </div>
     </Box>
