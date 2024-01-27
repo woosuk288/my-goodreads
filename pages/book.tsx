@@ -1,3 +1,4 @@
+import BookCarouselList from "../src/component/BookCarouselList";
 import BookInfo from "../src/component/BookInfo";
 import BookReviewList from "../src/component/BookReviewList";
 import Footer from "../src/component/Footer";
@@ -11,6 +12,7 @@ export default function BookPage() {
       <Main>
         <BookInfo />
         <BookReviewList />
+        <BookCarouselList />
       </Main>
       <Footer />
     </>

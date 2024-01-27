@@ -24,6 +24,9 @@ const sxBookReviewList: SxProps = {
   ".user_review_list_wrapper": {
     margin: "0 -12px",
   },
+  ".shadow_bottom_cover": {
+    borderTop: "1px solid #FFFFFF",
+  },
   ".review_more_button_wrapper": {
     margin: "24px 0",
     textAlign: "center",
@@ -31,6 +34,9 @@ const sxBookReviewList: SxProps = {
 
   ".book_review_item": {
     marginTop: "1px",
+    ":last-of-type": {
+      boxShadow: "0 1px 3px 0 white",
+    },
   },
 };
 
@@ -61,10 +67,11 @@ export default function BookReviewList() {
           <BookReviewItem />
           <BookReviewItem />
           <BookReviewItem />
+          <div className="shadow_bottom_cover"></div>
         </div>
         <div className="review_more_button_wrapper">
           <Divider>
-            <Button href="/book/show" endIcon={<NavigateNextIcon />}>
+            <Button variant="outlined" href="/book/show" endIcon={<NavigateNextIcon />}>
               More community reviews
             </Button>
           </Divider>

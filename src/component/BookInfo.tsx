@@ -29,7 +29,7 @@ import ExpandMoreBar from "./ExpandMoreBar";
 
 const sxBookInfo: SxProps = {
   padding: "12px",
-  ".book_cover_wrapper": {
+  ".book_cover_section": {
     position: "relative",
     height: "200px",
     width: "calc(100% + 24px)",
@@ -37,20 +37,23 @@ const sxBookInfo: SxProps = {
     top: "-12px",
     padding: "12px",
     backgroundColor: "whitesmoke",
-    ".book_cover_image": {
-      width: "35%",
+  },
+  ".book_cover_wrapper": {
+    width: "35%",
+    height: "100%",
+    margin: "auto",
+    filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
+    img: {
       height: "100%",
-      margin: "auto",
-      filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
-      img: {
-        height: "100%",
-      },
     },
-    ".book_share_wrapper": {
-      position: "absolute",
-      right: 0,
-      bottom: 0,
-    },
+  },
+  ".book_cover_image": {
+    borderRadius: "0 8px 8px 0",
+  },
+  ".book_share_wrapper": {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
   },
   ".contributors_wrapper": {
     margin: "8px 0 16px",
@@ -119,9 +122,10 @@ export default function BookInfo() {
 
   return (
     <Box sx={sxBookInfo}>
-      <div className="book_cover_wrapper">
-        <div className="book_cover_image">
+      <div className="book_cover_section">
+        <div className="book_cover_wrapper">
           <img
+            className="book_cover_image"
             src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1356136579i/16158498.jpg"
             alt="give and take book_cover"
           />
