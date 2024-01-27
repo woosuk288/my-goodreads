@@ -31,36 +31,10 @@
 
 ## 🎨 Color Theme
 
-<table>
-  <tr>
-    <td>
-      <div style="width:50px; height:50px; background-color: #F4F1EA;"></div>
-    </td>
-    <td><b>primary.light </b><br/>#F4F1EA</td>
-    <td>
-      <div style="width:50px; height:50px; background-color: #382110;"></div>
-    </td>
-    <td><b>primary.main </b><br/>#382110</td>
-    <td>
-      <div style="width:50px; height:50px; background-color: #1E1915;"></div>
-    </td>
-    <td><b>primary.dark </b><br/>#1E1915</td>
-  </tr>
-    <tr>
-    <td>
-      <div style="width:50px; height:50px; background-color: #EBF0E5;"></div>
-    </td>
-    <td><b>secondary.light </b><br/>#EBF0E5</td>
-    <td>
-      <div style="width:50px; height:50px; background-color: #3F8363;"></div>
-    </td>
-    <td><b>secondary.main </b><br/>#3F8363</td>
-    <td>
-      <div style="width:50px; height:50px; background-color: #00635D;"></div>
-    </td>
-    <td><b>secondary.dark </b><br/>#00635D</td>
-  </tr>
-</table>
+| ![primary.light](https://via.placeholder.com/50/F4F1EA/000000?text=+) | **primary.light**<br/>#F4F1EA | ![primary.main](https://via.placeholder.com/50/382110/000000?text=+) | **primary.main**<br/>#382110 | ![primary.dark](https://via.placeholder.com/50/1E1915/000000?text=+) | **primary.dark**<br/>#1E1915 |
+| --- | --- | --- | --- | --- | --- |
+| ![secondary.light](https://via.placeholder.com/50/EBF0E5/000000?text=+) | **secondary.light**<br/>#EBF0E5 | ![secondary.main](https://via.placeholder.com/50/3F8363/000000?text=+) | **secondary.main**<br/>#3F8363 | ![secondary.dark](https://via.placeholder.com/50/00635D/000000?text=+) | **secondary.dark**<br/>#00635D |
+
 
 ## Style
 
