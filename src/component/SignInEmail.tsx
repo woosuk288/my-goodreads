@@ -1,3 +1,5 @@
+import NextLink from "next/link";
+
 import {
   Box,
   Button,
@@ -6,15 +8,14 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
+  Link,
   SxProps,
   TextField,
   Typography,
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-import Link from "../Link";
 import { HOME_PATH, SIGNIN_PATH } from "../constants/routes";
 import { useState } from "react";
 import { IUserCredentials } from "LOGIN_MODULE";
@@ -138,7 +139,7 @@ export default function SignInEmail({}: Props) {
   return (
     <Box className="SignInEmail">
       <Box sx={sxLogoSection}>
-        <Link href={HOME_PATH}>
+        <Link href={HOME_PATH} component={NextLink}>
           <img src="/images/logo-goodreads.svg" alt="Goodreads" />
         </Link>
       </Box>
@@ -148,7 +149,7 @@ export default function SignInEmail({}: Props) {
           이메일 가입
         </Typography>
         <div className="forgot_password_wrapper">
-          <Link href="/forgotpassword" sx={{ textDecoration: "underline", color: "primary.dark" }}>
+          <Link href="/forgotpassword" sx={{ textDecoration: "underline", color: "primary.dark" }} component={NextLink}>
             비밀번호를 잊었나요?
           </Link>
         </div>
@@ -187,8 +188,14 @@ export default function SignInEmail({}: Props) {
 
         <div className="legal_text_wrapper">
           <Typography>
-            By creating an account, you agree to the Goodreads <Link href="https://www.goodreads.com/about/terms">Terms of Service</Link>{" "}
-            and <Link href="https://www.goodreads.com/about/privacy">Privacy Policy</Link>
+            By creating an account, you agree to the Goodreads{" "}
+            <Link href="https://www.goodreads.com/about/terms" component={NextLink}>
+              Terms of Service
+            </Link>
+            and{" "}
+            <Link href="https://www.goodreads.com/about/privacy" component={NextLink}>
+              Privacy Policy
+            </Link>
           </Typography>
         </div>
 
@@ -203,9 +210,15 @@ export default function SignInEmail({}: Props) {
 
       <Box component="footer" sx={sxFooterSection}>
         <div className="terms_wrapper">
-          <Link href="/about/terms">서비스 약관</Link>
-          <Link href="/about/privacy">개인 정보 보호</Link>
-          <Link href="/help">도움말</Link>
+          <Link href="/about/terms" component={NextLink}>
+            서비스 약관
+          </Link>
+          <Link href="/about/privacy" component={NextLink}>
+            개인 정보 보호
+          </Link>
+          <Link href="/help" component={NextLink}>
+            도움말
+          </Link>
         </div>
 
         <Typography variant="body2" align="center">

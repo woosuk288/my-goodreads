@@ -1,5 +1,3 @@
-"use client";
-
 import { Box, Container, Grid, Link, List, ListItem, SxProps, Theme, Typography } from "@mui/material";
 import NextLink from "next/link";
 

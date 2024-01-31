@@ -1,7 +1,6 @@
 import NextLink from "next/link";
-import Link from "../Link";
 
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Rating, SxProps, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, SxProps, Typography } from "@mui/material";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 const sxSearchItem: SxProps = {
@@ -105,7 +104,10 @@ export default function SearchItem() {
               <Typography className="book_publication_date" color="text.secondary" component="span" marginRight="12px">
                 Published 2013
               </Typography>
-              <Link href="https://www.goodreads.com/work/editions/21998914-give-and-take-a-revolutionary-approach-to-success">
+              <Link
+                href="https://www.goodreads.com/work/editions/21998914-give-and-take-a-revolutionary-approach-to-success"
+                component={NextLink}
+              >
                 80 Editions
               </Link>
             </div>

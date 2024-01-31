@@ -1,6 +1,6 @@
-import Link from "../Link";
-import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
 import { useState } from "react";
+import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
+import NextLink from "next/link";
 
 import {
   Avatar,
@@ -10,6 +10,7 @@ import {
   Collapse,
   Divider,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -145,7 +146,9 @@ export default function BookInfo() {
 
         <div className="contributors_wrapper">
           <Typography component="h3">
-            <Link href="#">Adam M. Grant</Link>
+            <Link href="#" component={NextLink}>
+              Adam M. Grant
+            </Link>
           </Typography>
         </div>
         <div className="rating_stats_wrapper">
@@ -188,7 +191,7 @@ export default function BookInfo() {
               <ListItemText
                 // sx={{ flex: 0 }}
                 primary={
-                  <Link href="#" fontSize="0.875rem" fontWeight={600}>
+                  <Link href="#" fontSize="0.875rem" fontWeight={600} component={NextLink}>
                     Add or edit dates read &#10132;
                   </Link>
                 }
@@ -202,7 +205,7 @@ export default function BookInfo() {
           <Divider />
           <List sx={{}} className="external_book_link_list">
             <ListItem>
-              <Link href="#" className="external_book_link">
+              <Link href="#" className="external_book_link" component={NextLink}>
                 <Avatar sx={{ bgcolor: "#000" }}>
                   <MenuBookOutlinedIcon />
                 </Avatar>
@@ -212,7 +215,7 @@ export default function BookInfo() {
               </Link>
             </ListItem>
             <ListItem>
-              <Link href="#" className="external_book_link">
+              <Link href="#" className="external_book_link" component={NextLink}>
                 <Avatar sx={{ bgcolor: "#000" }}>
                   <StoreIcon />
                 </Avatar>

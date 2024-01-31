@@ -1,10 +1,10 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import { Box, SxProps, Typography } from "@mui/material";
+import { Box, Link, SxProps, Typography } from "@mui/material";
 import BookRatingStats from "./BookRatingStats";
 
-import Link from "../Link";
+import NextLink from "next/link";
 
 const sxBookCarouselVerticalItem: SxProps = {
   ".swiper-wrapper": {
@@ -65,7 +65,7 @@ export default function BookCarouselVerticalItem() {
       >
         {itemData.map((item) => (
           <SwiperSlide key={item.title}>
-            <Link className="book_cover_link_block" href={item.img}>
+            <Link className="book_cover_link_block" href={item.img} component={NextLink}>
               <img
                 className="book_cover_image"
                 alt={item.title}

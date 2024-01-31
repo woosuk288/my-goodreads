@@ -1,3 +1,5 @@
+import NextLink from "next/link";
+
 import {
   Box,
   Button,
@@ -6,6 +8,7 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
+  Link,
   SxProps,
   TextField,
   Typography,
@@ -14,7 +17,6 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-import Link from "../Link";
 import { HOME_PATH, SIGNIN_PATH } from "../constants/routes";
 import { useState } from "react";
 import { IUserCredentials } from "LOGIN_MODULE";
@@ -134,7 +136,7 @@ export default function SignUpEmail({}: Props) {
   return (
     <Box className="SignUpEmail">
       <Box sx={sxLogoSection}>
-        <Link href={HOME_PATH}>
+        <Link component={NextLink} href={HOME_PATH}>
           <img src="/images/logo-goodreads.svg" alt="Goodreads" />
         </Link>
       </Box>
@@ -187,8 +189,14 @@ export default function SignUpEmail({}: Props) {
 
         <div className="legal_text_wrapper">
           <Typography>
-            By creating an account, you agree to the Goodreads <Link href="https://www.goodreads.com/about/terms">Terms of Service</Link>{" "}
-            and <Link href="https://www.goodreads.com/about/privacy">Privacy Policy</Link>
+            By creating an account, you agree to the Goodreads{" "}
+            <Link component={NextLink} href="https://www.goodreads.com/about/terms">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link component={NextLink} href="https://www.goodreads.com/about/privacy">
+              Privacy Policy
+            </Link>
           </Typography>
         </div>
 
@@ -203,9 +211,15 @@ export default function SignUpEmail({}: Props) {
 
       <Box component="footer" sx={sxFooterSection}>
         <div className="terms_wrapper">
-          <Link href="/about/terms">서비스 약관</Link>
-          <Link href="/about/privacy">개인 정보 보호</Link>
-          <Link href="/help">도움말</Link>
+          <Link component={NextLink} href="/about/terms">
+            서비스 약관
+          </Link>
+          <Link component={NextLink} href="/about/privacy">
+            개인 정보 보호
+          </Link>
+          <Link component={NextLink} href="/help">
+            도움말
+          </Link>
         </div>
 
         <Typography variant="body2" align="center">

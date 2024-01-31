@@ -6,6 +6,7 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -20,8 +21,6 @@ import TopicIcon from "@mui/icons-material/Topic";
 import MailIcon from "@mui/icons-material/Mail";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-
-import Link from "../Link";
 
 const ANCHOR = "right";
 
@@ -93,19 +92,19 @@ export default function HeaderNavDrawer() {
             <ListItemAvatar>
               {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
               <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }}>
-                <Link href="/user/123">
+                <Link href="/user/123" component={NextLink}>
                   <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: "3.5rem" }} />
                 </Link>
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Link href="/user/123" color="#333333" variant="subtitle2" fontWeight="bold">
+                <Link href="/user/123" color="#333333" variant="subtitle2" fontWeight="bold" component={NextLink}>
                   WOOSEOK
                 </Link>
               }
               secondary={
-                <Link href="/user/123" color="#000000">
+                <Link href="/user/123" color="#000000" component={NextLink}>
                   View profile
                 </Link>
               }
