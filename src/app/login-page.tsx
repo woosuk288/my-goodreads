@@ -1,5 +1,7 @@
+"use client";
+
 import { Box, Container, SxProps, Typography } from "@mui/material";
-import LoginForm from "./SocialLoginButtonGroup";
+import LoginButtonGroup from "../component/LoginButtonGroup";
 
 const sxLogin: SxProps = {};
 
@@ -29,7 +31,7 @@ const sxAppLinkWrapper: SxProps = {
   },
 };
 
-export default function Login() {
+export default function LoginPage() {
   return (
     <Container className="Login" sx={sxLogin}>
       <Box component={"header"} className="logo_wrapper" sx={sxLogoWrapper}>
@@ -37,7 +39,7 @@ export default function Login() {
       </Box>
 
       <Box sx={authExternalProviders}>
-        <LoginForm />
+        <LoginButtonGroup />
 
         <Box className="app_link_wrapper" sx={sxAppLinkWrapper}>
           <Typography textAlign="center" sx={{ marginBottom: "8px" }}>

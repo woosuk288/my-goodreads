@@ -1,3 +1,9 @@
-export default function LoginPage() {
-  return <div>LoginPage</div>;
+import LoginPage from "../login-page";
+
+export default function Page() {
+  return (
+    <div>
+      <LoginPage />
+    </div>
+  );
 }

@@ -1,9 +1,9 @@
-import SocialLogin from "@/component/SocialLogin";
+import Login from "@/app/login-page";
 
 export default function page() {
   return (
     <div>
-      <SocialLogin />
+      <Login />
     </div>
   );
 }

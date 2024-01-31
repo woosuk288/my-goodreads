@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Typography } from "@mui/material";
-import SocialLoginButtonGroup from "./SocialLoginButtonGroup";
+import LoginButtonGroup from "./LoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppLinks from "./AppLinks";
@@ -85,7 +85,7 @@ export default function Home() {
           <Typography variant="body2" sx={{ margin: "15px 10px 24px" }}>
             Find and read more books you’ll love. Be part of Goodreads, the world’s largest community for readers like you.
           </Typography>
-          <SocialLoginButtonGroup />
+          <LoginButtonGroup />
         </Box>
 
         <Box className="serachBar" sx={{ margin: "10px" }}>
