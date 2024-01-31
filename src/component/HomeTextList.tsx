@@ -1,6 +1,6 @@
-import { Box, List, ListItem, SxProps, Theme } from "@mui/material";
+import { Box, Link, List, ListItem, SxProps, Theme } from "@mui/material";
 
-import Link from "../Link";
+import NextLink from "next/link";
 
 const sxHomeTextList: SxProps<Theme> = (theme) => ({
   ".MuiList-root": {
@@ -29,7 +29,9 @@ export default function HomeTextList({ bookTextData }: Props) {
       <List>
         {bookTextData.map((item) => (
           <ListItem key={item.pageLink}>
-            <Link href={item.pageLink}>{item.text}</Link>
+            <Link href={item.pageLink} component={NextLink}>
+              {item.text}
+            </Link>
           </ListItem>
         ))}
       </List>

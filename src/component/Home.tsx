@@ -1,4 +1,6 @@
-import { Avatar, Box, CardHeader, Container, InputAdornment, SxProps, TextField, Typography } from "@mui/material";
+"use client";
+
+import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Typography } from "@mui/material";
 import SocialLoginButtonGroup from "./SocialLoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -6,7 +8,7 @@ import AppLinks from "./AppLinks";
 import HomeImageList from "./HomeImageList";
 import HomeTextList from "./HomeTextList";
 import Heading from "./Heading";
-import Link from "../Link";
+import NextLink from "next/link";
 
 const sxHome: SxProps = {};
 
@@ -147,13 +149,15 @@ export default function Home() {
 
         <Box sx={sxLastAwardsWrapper}>
           <Heading heading="Goodreads Choice Awards: The Best Books 2023" />
-          <Link href="/choiceawards/best-books-2023">
+          <Link href="/choiceawards/best-books-2023" component={NextLink}>
             <img
               alt="Goodreads Choice Awards 2023"
               src="https://s.gr-assets.com/assets/award/2023/signed-out-hp/bottom-placement-mobile-acefe21335ac3d79ad255d48b88de499.png"
             />
           </Link>
-          <Link href="/choiceawards/best-books-2023">See the winners</Link>
+          <Link href="/choiceawards/best-books-2023" component={NextLink}>
+            See the winners
+          </Link>
         </Box>
       </Container>
     </Box>

@@ -1,5 +1,7 @@
-import { Box, Container, Grid, List, ListItem, SxProps, Theme, Typography } from "@mui/material";
-import Link from "../Link";
+"use client";
+
+import { Box, Container, Grid, Link, List, ListItem, SxProps, Theme, Typography } from "@mui/material";
+import NextLink from "next/link";
 
 const sxFooter: SxProps<Theme> = (theme) => ({
   background: theme.palette.primary.light,
@@ -51,37 +53,41 @@ export default function Footer() {
                 </Typography>
                 <List className="footer_linklist">
                   <ListItem className="footer_linklist_item">
-                    <Link href="/about" color="secondary">
+                    <Link href="/about" color="secondary" component={NextLink}>
                       About us
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/jobs">
+                    <Link color="secondary" href="/jobs" component={NextLink}>
                       Careers
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/about/terms">
+                    <Link color="secondary" href="/about/terms" component={NextLink}>
                       Terms
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/about/privacy">
+                    <Link color="secondary" href="/about/privacy" component={NextLink}>
                       Privacy
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="https://help.goodreads.com/s/article/Goodreads-Interest-Based-Ads-Notice">
+                    <Link
+                      color="secondary"
+                      href="https://help.goodreads.com/s/article/Goodreads-Interest-Based-Ads-Notice"
+                      component={NextLink}
+                    >
                       Interest Based Ads
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/adprefs">
+                    <Link color="secondary" href="/adprefs" component={NextLink}>
                       Ad Preferences
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/help/list/mobile_website">
+                    <Link color="secondary" href="/help/list/mobile_website" component={NextLink}>
                       Help
                     </Link>
                   </ListItem>
@@ -94,22 +100,22 @@ export default function Footer() {
                 </Typography>
                 <List dense className="footer_linklist">
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/author/program">
+                    <Link color="secondary" href="/author/program" component={NextLink}>
                       Authors
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/advertisers">
+                    <Link color="secondary" href="/advertisers" component={NextLink}>
                       Advertise
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/news?content_type=author_blogs">
+                    <Link color="secondary" href="/news?content_type=author_blogs" component={NextLink}>
                       Authors &amp; ads blog
                     </Link>
                   </ListItem>
                   <ListItem className="footer_linklist_item">
-                    <Link color="secondary" href="/api">
+                    <Link color="secondary" href="/api" component={NextLink}>
                       API
                     </Link>
                   </ListItem>
@@ -174,7 +180,7 @@ export default function Footer() {
             <List className="footer_linklist">
               <ListItem className="footer_linklist_item"> © 2024 Goodreads, Inc.</ListItem>
               <ListItem className="footer_linklist_item">
-                <Link href="/toggle_mobile" color="secondary">
+                <Link href="/toggle_mobile" color="secondary" component={NextLink}>
                   Desktop version
                 </Link>
               </ListItem>
