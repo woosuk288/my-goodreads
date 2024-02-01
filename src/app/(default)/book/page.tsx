@@ -1,25 +1,16 @@
-import BookCarouselList from "../src/component/BookCarouselList";
-import BookInfo from "../src/component/BookInfo";
-import BookReviewList from "../src/component/BookReviewList";
-import Footer from "../src/component/Footer";
-import Header from "../src/component/Header";
-import Main from "../src/component/Main";
+import BookCarouselList from "@/component/BookCarouselList";
+import BookInfo from "@/component/BookInfo";
+import BookReviewList from "@/component/BookReviewList";
 
-export default function BookPage() {
+export default function page() {
   return (
     <>
-      <Header />
-      <Main>
-        <BookInfo />
-        <BookReviewList />
-        <BookCarouselList />
-      </Main>
-      <Footer />
+      <BookInfo />
+      <BookReviewList />
+      <BookCarouselList />
     </>
   );
 }
-
-const MOCK_BOOK_DATA = {};
 
 const HITS = {
   documents: [

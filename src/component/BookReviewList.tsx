@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, Divider, LinearProgress, Rating, SxProps, Typography } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 

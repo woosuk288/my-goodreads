@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, List, ListItem, SxProps, Typography } from "@mui/material";
 import SearchItem from "./SearchItem";
 

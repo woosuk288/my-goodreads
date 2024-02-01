@@ -8,7 +8,7 @@ import Avatar from "@mui/material/Avatar";
 
 import debounce from "lodash/debounce";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { SEARCH_PATH } from "../constants/routes";
 import { Button } from "@mui/material";
 import { LINK_BUTTON_COLOR } from "../theme";
@@ -35,7 +35,7 @@ export default function SearchBookList() {
 
         callback(hits.documents);
       }, 500),
-    [],
+    []
   );
 
   React.useEffect(() => {

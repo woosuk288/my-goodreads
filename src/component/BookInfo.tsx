@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
 import NextLink from "next/link";
@@ -27,6 +29,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import BookPageHeading02 from "./BookPageHeading02";
 import BookRatingStats from "./BookRatingStats";
 import ExpandMoreBar from "./ExpandMoreBar";
+import { REVIEW_EDIT_PATH } from "@/constants/routes";
 
 const sxBookInfo: SxProps = {
   padding: "12px",
@@ -174,7 +177,7 @@ export default function BookInfo() {
                 }}
               />
             </div>
-            <Button variant="outlined" sx={{ width: "160px" }}>
+            <Button variant="outlined" sx={{ width: "160px" }} href={REVIEW_EDIT_PATH} component={NextLink}>
               리뷰 쓰기
             </Button>
           </div>

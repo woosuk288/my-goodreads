@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Button,
@@ -5,13 +7,8 @@ import {
   CardContent,
   CardMedia,
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   FormGroup,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Rating,
   SxProps,
   TextField,

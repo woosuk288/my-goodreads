@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, SxProps } from "@mui/material";
 import BookPageHeading02 from "./BookPageHeading02";
 import BookCarouselVerticalItem from "./BookCarouselVerticalItem";

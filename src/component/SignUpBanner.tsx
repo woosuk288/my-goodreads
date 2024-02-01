@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { SIGNUP_EMAIL_PATH } from "../constants/routes";
 import CloseIcon from "@mui/icons-material/Close";
