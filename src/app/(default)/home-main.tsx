@@ -1,13 +1,13 @@
 "use client";
 
 import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Typography } from "@mui/material";
-import LoginButtonGroup from "../../component/LoginButtonGroup";
+import LoginButtonGroup from "../../components/LoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
-import AppLinks from "../../component/AppLinks";
-import HomeImageList from "../../component/HomeImageList";
-import HomeTextList from "../../component/HomeTextList";
-import Heading from "../../component/Heading";
+import AppLinks from "../../components/AppLinks";
+import HomeImageList from "../../components/HomeImageList";
+import HomeTextList from "../../components/HomeTextList";
+import Heading from "../../components/Heading";
 import NextLink from "next/link";
 
 const sxHome: SxProps = {};

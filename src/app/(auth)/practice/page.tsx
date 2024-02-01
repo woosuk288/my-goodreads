@@ -2,7 +2,7 @@
 
 import "./practice.css";
 
-import SearchBookList from "@/component/SearchBookList";
+import SearchBookList from "@/components/SearchBookList";
 import { TextField } from "@mui/material";
 
 export default function test() {

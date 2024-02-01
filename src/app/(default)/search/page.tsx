@@ -1,5 +1,5 @@
-import SearchList from "../../../component/SearchList";
-import SignUpBanner from "../../../component/SignUpBanner";
+import SearchList from "../../../components/SearchList";
+import SignUpBanner from "../../../components/SignUpBanner";
 
 export default function Page() {
   return (

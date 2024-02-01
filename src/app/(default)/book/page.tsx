@@ -1,6 +1,6 @@
-import BookCarouselList from "@/component/BookCarouselList";
-import BookInfo from "@/component/BookInfo";
-import BookReviewList from "@/component/BookReviewList";
+import BookCarouselList from "@/components/BookCarouselList";
+import BookInfo from "@/components/BookInfo";
+import BookReviewList from "@/components/BookReviewList";
 
 export default function page() {
   return (
