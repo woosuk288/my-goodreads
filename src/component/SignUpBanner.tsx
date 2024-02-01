@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { SIGNUP_PATH } from "../constants/routes";
+import { SIGNUP_EMAIL_PATH } from "../constants/routes";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function SignUpBanner() {
@@ -13,7 +13,7 @@ export default function SignUpBanner() {
           <Typography component="h3" color="text.secondary" marginBottom="12px">
             and meet your next favorite book!
           </Typography>
-          <Button variant="outlined" href={SIGNUP_PATH} sx={{ textTransform: "capitalize" }}>
+          <Button variant="outlined" href={SIGNUP_EMAIL_PATH} sx={{ textTransform: "capitalize" }}>
             Sign Up Now
           </Button>
           <IconButton sx={{ position: "absolute", top: 0, right: 0 }}>

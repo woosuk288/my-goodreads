@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, SxProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -12,5 +14,9 @@ interface IMain {
 }
 
 export default function Main({ children }: IMain) {
-  return <Box sx={sxMain}>{children}</Box>;
+  return (
+    <Box sx={sxMain} component="main">
+      {children}
+    </Box>
+  );
 }

@@ -5,11 +5,12 @@ export const metadata: Metadata = {
 };
 
 // Import your Client Component
-import HomePage from "./home-page";
+import HomeMain from "./home-main";
 
 async function getPosts() {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   const posts = await res.json();
+  console.log("posts : ", posts);
   return posts;
 }
 
@@ -17,5 +18,5 @@ export default async function Page() {
   // Fetch data directly in a Server Component
   const recentPosts = await getPosts();
   // Forward fetched data to your Client Component
-  return <HomePage recentPosts={recentPosts} />;
+  return <HomeMain />;
 }

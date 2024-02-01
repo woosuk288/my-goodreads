@@ -1,3 +1,5 @@
+"use client";
+
 import NextLink from "next/link";
 
 import {
@@ -17,7 +19,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-import { HOME_PATH, SIGNIN_PATH } from "../constants/routes";
+import { HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
 import { useState } from "react";
 import { IUserCredentials } from "LOGIN_MODULE";
 
@@ -89,7 +91,7 @@ const sxFooterSection: SxProps = {
 
 interface Props {}
 
-export default function SignUpEmail({}: Props) {
+export default function SignUpEmailPage({}: Props) {
   const [userCredentials, setUserCredentials] = useState<IUserCredentials>({
     displayName: "",
     email: "",
@@ -204,7 +206,7 @@ export default function SignUpEmail({}: Props) {
           <Typography align="center">이미 계정이 있으신가요?</Typography>
         </Divider>
 
-        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_PATH}>
+        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_EMAIL_PATH}>
           바로 시작하기
         </Button>
       </Box>

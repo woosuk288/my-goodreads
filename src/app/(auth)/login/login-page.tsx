@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Container, SxProps, Typography } from "@mui/material";
-import LoginButtonGroup from "../component/LoginButtonGroup";
+import LoginButtonGroup from "../../../component/LoginButtonGroup";
 
 const sxLogin: SxProps = {};
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Typography } from "@mui/material";
-import LoginButtonGroup from "./LoginButtonGroup";
+import LoginButtonGroup from "../../component/LoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
-import AppLinks from "./AppLinks";
-import HomeImageList from "./HomeImageList";
-import HomeTextList from "./HomeTextList";
-import Heading from "./Heading";
+import AppLinks from "../../component/AppLinks";
+import HomeImageList from "../../component/HomeImageList";
+import HomeTextList from "../../component/HomeTextList";
+import Heading from "../../component/Heading";
 import NextLink from "next/link";
 
 const sxHome: SxProps = {};
@@ -64,7 +64,7 @@ const sxLastAwardsWrapper: SxProps = {
   },
 };
 
-export default function Home() {
+export default function HomeMain() {
   return (
     <Box className="Home">
       <Box sx={sxHomepagePromotionWrapper}>

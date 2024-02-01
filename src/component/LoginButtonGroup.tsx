@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Link, SxProps } from "@mui/material";
-import { SIGNIN_PATH, SIGNUP_PATH } from "../constants/routes";
+import { SIGNIN_EMAIL_PATH, SIGNUP_EMAIL_PATH } from "../constants/routes";
 
 import NextLink from "next/link";
 
@@ -78,14 +78,14 @@ export default function LoginForm() {
       <Button variant="contained" sx={NaverButton}>
         네이버로 시작하기
       </Button>
-      <Button variant="contained" sx={EmailButton} component={NextLink} href={SIGNIN_PATH}>
+      <Button variant="contained" sx={EmailButton} component={NextLink} href={SIGNIN_EMAIL_PATH}>
         이메일로 로그인하기
       </Button>
 
       <div className="auth_switch_flow">
         {/* 이미 가입하셨나요? <Link href={'/signin'}>로그인하기</Link> */}
         아직 가입하지 않으셨나요?{" "}
-        <Link href={SIGNUP_PATH} component={NextLink}>
+        <Link href={SIGNUP_EMAIL_PATH} component={NextLink}>
           가입하기
         </Link>
       </div>

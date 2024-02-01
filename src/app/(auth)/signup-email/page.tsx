@@ -1,9 +1,9 @@
-import LoginPage from "../login-page";
+import SignUpEmailPage from "./signup-email";
 
 export default function Page() {
   return (
     <div>
-      <LoginPage />
+      <SignUpEmailPage />
     </div>
   );
 }

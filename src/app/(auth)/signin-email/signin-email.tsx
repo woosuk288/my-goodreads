@@ -1,3 +1,5 @@
+"use client";
+
 import NextLink from "next/link";
 
 import {
@@ -16,7 +18,7 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { HOME_PATH, SIGNIN_PATH } from "../constants/routes";
+import { HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
 import { useState } from "react";
 import { IUserCredentials } from "LOGIN_MODULE";
 
@@ -92,7 +94,7 @@ const sxFooterSection: SxProps = {
 
 interface Props {}
 
-export default function SignInEmail({}: Props) {
+export default function SignInEmailPage({}: Props) {
   const [userCredentials, setUserCredentials] = useState<IUserCredentials>({
     displayName: "",
     email: "",
@@ -203,7 +205,7 @@ export default function SignInEmail({}: Props) {
           <Typography align="center">Goodreads가 처음이신가요?</Typography>
         </Divider>
 
-        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_PATH}>
+        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_EMAIL_PATH}>
           가입하기
         </Button>
       </Box>
