@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Home",
 };
@@ -10,7 +12,7 @@ import HomeMain from "./home-main";
 async function getPosts() {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   const posts = await res.json();
-  console.log("posts : ", posts);
+  console.log("posts : ", posts.length);
   return posts;
 }
 

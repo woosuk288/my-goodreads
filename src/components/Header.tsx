@@ -11,6 +11,9 @@ import { AppBar, Box, Button, Container, IconButton, ListItemText, MenuItem, Men
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HeaderNavDrawer from "./HeaderNavDrawer";
+import { onAuthStateChanged, signInWithGoogle } from "@/lib/firebase/auth";
+import { useRouter } from "next/navigation";
+import { User } from "firebase/auth";
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
@@ -118,8 +121,41 @@ const TAB_CODES = {
   COMMUNITY: "COMMUNITY",
 };
 
-interface IHeader {}
-export default function Header({}: IHeader) {
+// getUser
+function useUserSession(initialUser: User | null | undefined) {
+  // The initialUser comes from the server via a server component
+  const [user, setUser] = React.useState(initialUser);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged((authUser) => {
+      setUser(authUser);
+    });
+
+    return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    onAuthStateChanged((authUser) => {
+      if (user === undefined) return;
+
+      // refresh when user changed to ease testing
+      if (user?.email !== authUser?.email) {
+        router.refresh();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  return user;
+}
+
+interface IHeader {
+  initialUser: User | undefined | null;
+}
+export default function Header({ initialUser }: IHeader) {
+  const user = useUserSession(initialUser);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -136,6 +172,11 @@ export default function Header({}: IHeader) {
     }
   };
 
+  const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    signInWithGoogle();
+  };
+
   return (
     <AppBar sx={sxHeader}>
       <Container maxWidth="lg" disableGutters>
@@ -144,13 +185,15 @@ export default function Header({}: IHeader) {
             <SearchIcon aria-label="search" />
           </IconButton>
 
-          <a href="/" aria-label="Goodreads Home" title="Goodreads Home"></a>
+          <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          <HeaderNavDrawer />
-
-          <Button variant="contained" size="small" component={NextLink} href="/login">
-            Sign in
-          </Button>
+          {!user ? (
+            <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
+              Sign in
+            </Button>
+          ) : (
+            <HeaderNavDrawer />
+          )}
         </Toolbar>
 
         <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">

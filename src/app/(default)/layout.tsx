@@ -7,7 +7,13 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Main from "@/components/Main";
 
-export default function RootLayout(props: { children: React.ReactNode }) {
+import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase";
+import { User } from "firebase/auth";
+
+export const dynamic = "force-dynamic";
+
+export default async function RootLayout(props: { children: React.ReactNode }) {
+  const { currentUser } = await getAuthenticatedAppForUser();
   return (
     <html lang="ko">
       <body>
@@ -15,7 +21,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <Header />
+            <Header initialUser={currentUser?.toJSON() as User | undefined | null} />
             <Main>{props.children}</Main>
             <Footer />
           </ThemeProvider>
