@@ -17,10 +17,13 @@
     "@mui/material": "5.15.3",
     "@mui/material-nextjs": "5.15.3",
     "clsx": "^2.1.0",
+    "firebase": "^10.3.1",
+    "firebase-admin": "^11.10.1",
     "lodash": "^4.17.21",
     "next": "14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "request": "^2.88.2",
     "swiper": "^11.0.5"
   },
   "devDependencies": {
@@ -31,5 +34,13 @@
     "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
     "typescript": "5.3.3"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "child_process": false,
+    "net": false,
+    "tls": false
   }
 }
