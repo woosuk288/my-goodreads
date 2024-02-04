@@ -21,6 +21,7 @@ import TopicIcon from "@mui/icons-material/Topic";
 import MailIcon from "@mui/icons-material/Mail";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import { signOut } from "@/lib/firebase/auth";
 
 const ANCHOR = "right";
 
@@ -51,9 +52,20 @@ export default function HeaderNavDrawer() {
     setOpen(false);
   };
 
+  const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    signOut();
+  };
+
   return (
     <div>
-      <IconButton onClick={handleDrawerOpen}>{ANCHOR}</IconButton>
+      <IconButton
+        onClick={handleDrawerOpen}
+        size="small"
+        sx={{ marginRight: "3px", backgroundColor: "#EFEEE0", border: "1px solid #DBD3BF" }}
+      >
+        <LocalLibraryIcon sx={{ fontSize: "1.5rem" }} />
+      </IconButton>
 
       <Drawer
         anchor={ANCHOR}
@@ -123,9 +135,9 @@ export default function HeaderNavDrawer() {
         </List>
         <Divider />
         <List dense>
-          {NAV_DRAWER_MENUS_02.map(({ link, text }, index) => (
+          {NAV_DRAWER_MENUS_02.map(({ link, text, onClick }, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton component={NextLink} href={link}>
+              <ListItemButton component={NextLink} href={link} onClick={onClick && handleSignOut}>
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
@@ -191,5 +203,6 @@ const NAV_DRAWER_MENUS_02 = [
   {
     link: "/sign-out",
     text: "로그아웃",
+    onClick: true as const,
   },
 ];
