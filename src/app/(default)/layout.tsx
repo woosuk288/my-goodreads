@@ -17,7 +17,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body>
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+        <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
