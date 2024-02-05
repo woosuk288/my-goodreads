@@ -1,0 +1,56 @@
+@baseUrl = http://data4library.kr/api
+@authKey = authKey=7a3eed60e5c2e017d86530d6092a2f6c94f6b9aa28f67f84156367c24a017151
+
+# 1. 정보공개 도서관 조회
+GET {{baseUrl}}/libSrch?{{authKey}}&format=json&region=11
+
+###
+
+# 2. 도서관별 장서/대출 데이터 조회
+GET {{baseUrl}}/itemSrch?{{authKey}}&format=json&libCode=111347&startDt=2024-01-01&endDt=2024-02-01
+
+###
+
+# 3. 인기대출도서 조회
+GET {{baseUrl}}/loanItemSrch?{{authKey}}&format=json&pageNo=1&pageSize=10&startDt=2023-1-1&endDt=2024-01-01
+
+###
+
+# 4. 마니아를 위한 추천도서 조회
+GET {{baseUrl}}/recommandList?{{authKey}}&format=json&isbn13=9788983922571;9788983921475;9788983921994
+
+###
+
+# 5. 다독자를 위한 추천도서 조회
+GET {{baseUrl}}/recommandList?{{authKey}}&format=json&&type=reader&isbn13=9788983922571;9788983921475;9788983921994
+
+###
+
+# 8. 도서별 이용 분석
+GET {{baseUrl}}/usageAnalysisList?{{authKey}}&format=json&isbn13=9788934972464
+
+###
+
+# 9. 도서관/지역별 인기대출 도서 조회
+# 10. 도서관별 대출반납추이
+
+###
+
+# 11. 도서관별 도서 소장여부 및 대출 가능여부 조회
+GET {{baseUrl}}/bookExist?{{authKey}}&format=json&libCode=111456&isbn13=9788983922571
+
+###
+
+# 12. 대출 급상승 도서
+GET {{baseUrl}}/hotTrend?{{authKey}}&format=json&searchDt=2024-01-01
+
+###
+
+# 13. 도서 소장 도서관 조회
+# 14. 도서관별 통합정보
+# 15. 도서관별 인기대출도서 통합
+
+###
+
+# 16. 도서 검색
+GET {{baseUrl}}/srchBooks?{{authKey}}&format=json&keyword=사피엔스&pageNo=1&pageSize=10

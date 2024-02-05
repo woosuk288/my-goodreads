@@ -8,6 +8,8 @@ export const metadata: Metadata = {
 
 // Import your Client Component
 import HomeMain from "./home-main";
+import { fetchPopularBooks } from "@/lib/data4library";
+import { getFormattedPreviousDate } from "@/lib/utils";
 
 async function getPosts() {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -18,7 +20,7 @@ async function getPosts() {
 
 export default async function Page() {
   // Fetch data directly in a Server Component
-  const recentPosts = await getPosts();
+  const popularBooks = await fetchPopularBooks({ pageNo: 1, pageSize: 10, startDt: getFormattedPreviousDate("month") });
   // Forward fetched data to your Client Component
-  return <HomeMain />;
+  return <HomeMain popularBooksResponse={popularBooks} />;
 }
