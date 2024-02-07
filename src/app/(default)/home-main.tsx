@@ -60,11 +60,43 @@ const sxLastAwardsWrapper: SxProps = {
     color: "#00635D",
   },
   img: {
+    width: "100%",
     maxWidth: "100%",
   },
 };
 
-export default function HomeMain() {
+interface Props {
+  popularBooksResponse: IPopularLoanBooksResponse;
+  newSepcialBooksResponse: IAladinItemListResponse;
+  bloggerBestSellerResponse: IAladinItemListResponse;
+  // hotTrendBooksResponse: IHotTrendBooksResponse;
+}
+
+export default function HomeMain({
+  popularBooksResponse,
+  newSepcialBooksResponse,
+  bloggerBestSellerResponse,
+}: // hotTrendBooksResponse,
+Props) {
+  const popularBooksForImageList = popularBooksResponse.docs.map((item) => ({
+    id: item.doc.isbn13,
+    title: item.doc.bookname,
+    pageLink: item.doc.bookDtlUrl, // TODO: 주소 수정
+    imgSrc: item.doc.bookImageURL,
+  }));
+  const newSepcialBooksForImageList = newSepcialBooksResponse.item.map((item) => ({
+    id: item.itemId.toString(),
+    title: item.title,
+    pageLink: item.link,
+    imgSrc: item.cover,
+  }));
+  const bloggerBestSellerForImageList = bloggerBestSellerResponse.item.map((item) => ({
+    id: item.itemId.toString(),
+    title: item.title,
+    pageLink: item.link,
+    imgSrc: item.cover,
+  }));
+
   return (
     <Box className="Home">
       <Box sx={sxHomepagePromotionWrapper}>
@@ -113,11 +145,11 @@ export default function HomeMain() {
 
         <Box>
           <Heading heading="이번 주 가장 많이 읽은 책" />
-          <HomeImageList images={MOCK_BOOK_IMAGES} />
-          <Heading heading="이번 달 새로 나온 책" />
-          <HomeImageList images={MOCK_BOOK_IMAGES} />
-          <Heading heading="20세기 최고의 책" />
-          <HomeImageList images={MOCK_BOOK_IMAGES} />
+          <HomeImageList images={popularBooksForImageList} />
+          <Heading heading="주목할 만한 신간" />
+          <HomeImageList images={newSepcialBooksForImageList} />
+          <Heading heading="블로거 추천 베스트셀러" />
+          <HomeImageList images={bloggerBestSellerForImageList} />
         </Box>
 
         <Box sx={quoteSection}>

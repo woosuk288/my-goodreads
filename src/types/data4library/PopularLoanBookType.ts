@@ -1,4 +1,4 @@
-interface IPopularLoanBookRequest {
+interface IPopularLoanBooksRequest {
   authKey?: string; // 인증키 (필수)
   startDt?: string; // 검색시작일자 (선택)
   endDt?: string; // 검색종료일자 (선택)
@@ -18,7 +18,7 @@ interface IPopularLoanBookRequest {
 }
 
 // 응답 메시지 명세를 기반으로 한 도서 정보 인터페이스
-interface IPopularLoanBookDoc {
+interface IPopularLoanBooksDoc {
   no: number;
   ranking: number;
   bookname: string;
@@ -36,9 +36,9 @@ interface IPopularLoanBookDoc {
 }
 
 // 응답 메시지 명세를 기반으로 한 API 응답 인터페이스
-interface IPopularLoanBookResponse {
-  request: IPopularLoanBookRequest;
+interface IPopularLoanBooksResponse {
+  request: IPopularLoanBooksRequest;
   resultNum: number;
   numFound: number;
-  docs: { doc: IPopularLoanBookDoc }[];
+  docs: { doc: IPopularLoanBooksDoc }[];
 }

@@ -8,8 +8,9 @@ export const metadata: Metadata = {
 
 // Import your Client Component
 import HomeMain from "./home-main";
-import { fetchPopularBooks } from "@/lib/data4library";
-import { getFormattedPreviousDate } from "@/lib/utils";
+import { fetchHotTrendBooks, fetchPopularBooks } from "@/lib/data4library";
+import { getCurrentDate, getFormattedPreviousDate } from "@/lib/utils";
+import { fetchAladinItemList } from "@/lib/aladin";
 
 async function getPosts() {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
@@ -20,7 +21,31 @@ async function getPosts() {
 
 export default async function Page() {
   // Fetch data directly in a Server Component
-  const popularBooks = await fetchPopularBooks({ pageNo: 1, pageSize: 10, startDt: getFormattedPreviousDate("month") });
+  const popularBooksReponse = await fetchPopularBooks({ pageNo: 1, pageSize: 30, startDt: getFormattedPreviousDate("month") });
+  const newSepcialBooksResponse = await fetchAladinItemList({
+    QueryType: "ItemNewSpecial",
+    MaxResults: 30,
+    Start: 1,
+    SearchTarget: "Book",
+    Version: "20131101",
+    Cover: "Big",
+  });
+  const bloggerBestSellerResponse = await fetchAladinItemList({
+    QueryType: "Bestseller",
+    MaxResults: 30,
+    Start: 1,
+    SearchTarget: "Book",
+    Version: "20131101",
+    Cover: "Big",
+  });
+  // const hotTrendBooksResponse = await fetchHotTrendBooks({ startDt: getCurrentDate() });
   // Forward fetched data to your Client Component
-  return <HomeMain popularBooksResponse={popularBooks} />;
+  return (
+    <HomeMain
+      popularBooksResponse={popularBooksReponse}
+      newSepcialBooksResponse={newSepcialBooksResponse}
+      bloggerBestSellerResponse={bloggerBestSellerResponse}
+      // hotTrendBooksResponse={hotTrendBooksResponse}
+    />
+  );
 }

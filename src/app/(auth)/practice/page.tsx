@@ -3,20 +3,15 @@
 import "./practice.css";
 
 import SearchBookList from "@/components/SearchBookList";
-import { TextField } from "@mui/material";
 
 export default function test() {
   return (
     <div>
+      <br />
+
       <SearchBookList />
 
-      <TextField
-        sx={{
-          "& .MuiOutlinedInput-root": { "&:hover fieldset": { borderColor: "red" }, "&.Mui-focused fieldset": { borderColor: "blue" } },
-        }}
-      >
-        testtesttest
-      </TextField>
+      <br />
 
       <ul className="menu">
         <li>
@@ -32,6 +27,8 @@ export default function test() {
           <a href="#">지도</a>
         </li>
       </ul>
+
+      <br />
 
       <form method="post" action="fake_server.php">
         <fieldset>
