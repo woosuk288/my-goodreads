@@ -9,6 +9,7 @@ import HomeImageList from "../../components/HomeImageList";
 import HomeTextList from "../../components/HomeTextList";
 import Heading from "../../components/Heading";
 import NextLink from "next/link";
+import useUserSession from "@/hooks/useUserSession";
 
 const sxHome: SxProps = {};
 
@@ -78,6 +79,8 @@ export default function HomeMain({
   bloggerBestSellerResponse,
 }: // hotTrendBooksResponse,
 Props) {
+  const user = useUserSession();
+
   const popularBooksForImageList = popularBooksResponse.docs.map((item) => ({
     id: item.doc.isbn13,
     title: item.doc.bookname,
@@ -101,24 +104,24 @@ Props) {
     <Box className="Home">
       <Box sx={sxHomepagePromotionWrapper}>
         <a href="https://www.goodreads.com/challenges/11634?ref=rc_jan_24_soh">
-          <img
-            srcSet="https://www.goodreads.com/assets/home/homepage_promos/reading_challenge_2024/HomepageMasthead_Mobile@2x.png 2x"
-            src="https://s.gr-assets.com/images/home/homepage_promos/reading_challenge_2024/HomepageMasthead_Mobile.png"
-            alt="Homepagemasthead mobile"
-          />
+          <img src="https://th.bing.com/th/id/OIG1.f1YthwVioxwac3YabSPH?pid=ImgGn" alt="Homepagemasthead mobile" />
         </a>
       </Box>
 
       <Container>
-        <Box sx={sxAuthSignInWrapper}>
-          <Typography component="h2" fontSize="22px" fontWeight="bold" lineHeight={1} sx={{ marginBottom: "10px" }}>
-            Meet your next favorite book.
-          </Typography>
-          <Typography variant="body2" sx={{ margin: "15px 10px 24px" }}>
-            Find and read more books you’ll love. Be part of Goodreads, the world’s largest community for readers like you.
-          </Typography>
-          <LoginButtonGroup />
-        </Box>
+        {!user && (
+          <Box sx={sxAuthSignInWrapper}>
+            <Typography component="h2" fontSize="22px" fontWeight="bold" lineHeight={1} sx={{ marginBottom: "10px" }}>
+              Meet your next favorite book.
+              {/* 다음으로 사랑하게 될 책을 만나보세요 */}
+            </Typography>
+            <Typography variant="body2" sx={{ margin: "15px 10px 24px" }}>
+              Find and read more books you’ll love. Be part of Goodreads, the world’s largest community for readers like you.
+              {/* 더 많은 책을 찾아보고, 새로운 이야기에 빠져보세요. 세계 최대 독서 커뮤니티인 Goodreads에서 같은 책을 사랑하는 독자들과 함께하세요. */}
+            </Typography>
+            <LoginButtonGroup />
+          </Box>
+        )}
 
         <Box className="serachBar" sx={{ margin: "10px" }}>
           <TextField
@@ -195,69 +198,6 @@ Props) {
     </Box>
   );
 }
-
-const MOCK_BOOK_IMAGES = [
-  {
-    id: "001",
-    title: "Divine Rivals (Letters of Enchantment, #1)",
-    pageLink: "/book/show/60784546-divine-rivals",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655928079i/60784546._UX187_.jpg",
-  },
-  {
-    id: "002",
-    title: "Crown of Midnight (Throne of Glass, #2)",
-    pageLink: "/book/show/76705490-crown-of-midnight",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673566594i/76705490._UX187_.jpg",
-  },
-  {
-    id: "003",
-    title: "It Ends with Us (It Ends with Us, #1)",
-    pageLink: "/book/show/27362503-it-ends-with-us",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688011813i/27362503._UX187_.jpg",
-  },
-  {
-    id: "004",
-    title: "The Heaven &amp; Earth Grocery Store",
-    pageLink: "/book/show/65678550-the-heaven-earth-grocery-store",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685350945i/65678550._UX187_.jpg",
-  },
-  {
-    id: "005",
-    title: "Hello Beautiful",
-    pageLink: "/book/show/61771675-hello-beautiful",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687803098i/61771675._UX187_.jpg",
-  },
-  {
-    id: "006",
-    title: "Same Time Next Year",
-    pageLink: "/book/show/199334767-same-time-next-year",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696902360i/199334767._UX187_.jpg",
-  },
-  {
-    id: "007",
-    title: "The Housemaid's Secret (The Housemaid, #2)",
-    pageLink: "/book/show/62848145-the-housemaid-s-secret",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664729357i/62848145._UX187_.jpg",
-  },
-  {
-    id: "008",
-    title: "Iron Flame (The Empyrean, #2)",
-    pageLink: "/book/show/90202302-iron-flame",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687463048i/90202302._UX187_.jpg",
-  },
-  {
-    id: "009",
-    title: "A Court of Frost and Starlight (A Court of Thorns and Roses, #3.5)",
-    pageLink: "/book/show/50659471-a-court-of-frost-and-starlight",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585622963i/50659471._UX187_.jpg",
-  },
-  {
-    id: "010",
-    title: "Things We Left Behind (Knockemout, #3)",
-    pageLink: "/book/show/116536542-things-we-left-behind",
-    imgSrc: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677175478i/116536542._UX187_.jpg",
-  },
-];
 
 const MOCK_BOOK_TEXTS = [
   {

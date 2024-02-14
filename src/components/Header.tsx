@@ -11,9 +11,10 @@ import { AppBar, Box, Button, Container, IconButton, ListItemText, MenuItem, Men
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HeaderNavDrawer from "./HeaderNavDrawer";
-import { onAuthStateChanged, signInWithGoogle } from "@/lib/firebase/auth";
-import { useRouter } from "next/navigation";
+import { signInWithGoogle } from "@/lib/firebase/auth";
 import { User } from "firebase/auth";
+import useUserSession from "@/hooks/useUserSession";
+import SearchBookList from "./SearchBookList";
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
@@ -44,7 +45,7 @@ const sxHeader: SxProps<Theme> = (theme) => ({
 });
 
 const sxToolbar: SxProps = {
-  minHeight: "50px",
+  // minHeight: "50px",
   height: "50px",
   justifyContent: "space-between",
   boxShadow: "0 1px 2px rgba(0,0,0,0.15)",
@@ -63,6 +64,12 @@ const sxTabs: SxProps = {
     position: "absolute",
     right: 16,
   },
+};
+
+const sxSearchListWrapper: SxProps = {
+  position: "absolute",
+  width: "100%",
+  zIndex: "800",
 };
 
 const BROWSE_MENUS = [
@@ -121,41 +128,13 @@ const TAB_CODES = {
   COMMUNITY: "COMMUNITY",
 };
 
-// getUser
-function useUserSession(initialUser: User | null | undefined) {
-  // The initialUser comes from the server via a server component
-  const [user, setUser] = React.useState(initialUser);
-  const router = useRouter();
-
-  React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged((authUser) => {
-      setUser(authUser);
-    });
-
-    return () => unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  React.useEffect(() => {
-    onAuthStateChanged((authUser) => {
-      if (user === undefined) return;
-
-      // refresh when user changed to ease testing
-      if (user?.email !== authUser?.email) {
-        router.refresh();
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  return user;
-}
-
 interface IHeader {
   initialUser: User | undefined | null;
 }
 export default function Header({ initialUser }: IHeader) {
   const user = useUserSession(initialUser);
+
+  const [openSearchList, setOpenSearchList] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -177,11 +156,19 @@ export default function Header({ initialUser }: IHeader) {
     signInWithGoogle();
   };
 
+  const handleSearchIconClick = () => {
+    setOpenSearchList(!openSearchList);
+  };
+
+  const handleSearchListClose = () => {
+    setOpenSearchList(false);
+  };
+
   return (
     <AppBar sx={sxHeader}>
       <Container maxWidth="lg" disableGutters>
-        <Toolbar sx={sxToolbar}>
-          <IconButton>
+        <Toolbar sx={sxToolbar} variant="dense">
+          <IconButton onClick={handleSearchIconClick}>
             <SearchIcon aria-label="search" />
           </IconButton>
 
@@ -195,6 +182,12 @@ export default function Header({ initialUser }: IHeader) {
             <HeaderNavDrawer />
           )}
         </Toolbar>
+
+        {openSearchList && (
+          <Box sx={sxSearchListWrapper}>
+            <SearchBookList onClose={handleSearchListClose} />
+          </Box>
+        )}
 
         <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
           <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
