@@ -2,10 +2,12 @@ import BookCarouselList from "@/components/BookCarouselList";
 import BookInfo from "@/components/BookInfo";
 import BookReviewList from "@/components/BookReviewList";
 
-export default function page() {
+export default function page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+  console.log("searchParams : ", searchParams);
+
   return (
     <>
-      <BookInfo />
+      <BookInfo kakaobookInfo={searchParams as unknown as IKakaoBook} />
       <BookReviewList />
       <BookCarouselList />
     </>

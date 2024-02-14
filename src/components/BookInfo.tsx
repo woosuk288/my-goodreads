@@ -47,6 +47,7 @@ const sxBookInfo: SxProps = {
     height: "100%",
     margin: "auto",
     filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
+    textAlign: "center",
     img: {
       height: "100%",
     },
@@ -116,9 +117,15 @@ const sxBookInfo: SxProps = {
   },
 };
 
-export default function BookInfo() {
+interface Props {
+  kakaobookInfo: IKakaoBook;
+}
+
+export default function BookInfo({ kakaobookInfo }: Props) {
   const [rating, setRating] = useState<number | null>(0);
   const [show, setShow] = useState(false);
+
+  const { title, thumbnail, authors, contents } = kakaobookInfo;
 
   const handleShowMore = () => {
     setShow(!show);
@@ -128,11 +135,7 @@ export default function BookInfo() {
     <Box sx={sxBookInfo}>
       <div className="book_cover_section">
         <div className="book_cover_wrapper">
-          <img
-            className="book_cover_image"
-            src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1356136579i/16158498.jpg"
-            alt="give and take book_cover"
-          />
+          <img className="book_cover_image" src={thumbnail} alt={title + "book_cover"} />
         </div>
         <div className="book_share_wrapper">
           <IconButton>
@@ -143,14 +146,14 @@ export default function BookInfo() {
       <div className="book_metadata">
         <div className="title_wrapper">
           <Typography component="h1" align="center" fontSize="1.5rem" fontWeight={500}>
-            Give and Take: A Revolutionary Approach to Success
+            {title}
           </Typography>
         </div>
 
         <div className="contributors_wrapper">
           <Typography component="h3">
             <Link href="#" component={NextLink}>
-              Adam M. Grant
+              {Array.isArray(authors) ? authors.join(",") : authors}
             </Link>
           </Typography>
         </div>
@@ -241,27 +244,7 @@ export default function BookInfo() {
           </div>
 
           <Collapse in={show} collapsedSize={160}>
-            <div className="description_paragraph">
-              If you want to build a better future, you must believe in secrets.
-              <br />
-              <br />
-              The great secret of our time is that there are still uncharted frontiers to explore and new inventions to create. In Zero to
-              One, legendary entrepreneur and investor Peter Thiel shows how we can find singular ways to create those new things. <br />
-              <br />
-              Thiel begins with the contrarian premise that we live in an age of technological stagnation, even if we’re too distracted by
-              shiny mobile devices to notice. Information technology has improved rapidly, but there is no reason why progress should be
-              limited to computers or Silicon Valley. Progress can be achieved in any industry or area of business. It comes from the most
-              important skill that every leader must master: learning to think for yourself.
-              <br />
-              <br />
-              Doing what someone else already knows how to do takes the world from 1 to n, adding more of something familiar. But when you
-              do something new, you go from 0 to 1. The next Bill Gates will not build an operating system. The next Larry Page or Sergey
-              Brin won’t make a search engine. Tomorrow’s champions will not win by competing ruthlessly in today’s marketplace. They will
-              escape competition altogether, because their businesses will be unique. <br />
-              <br />
-              Zero to One presents at once an optimistic view of the future of progress in America and a new way of thinking about
-              innovation: it starts by learning to ask the questions that lead you to find value in unexpected places.
-            </div>
+            <div className="description_paragraph">{contents.slice(-1) === "." ? contents : contents + "..."}</div>
           </Collapse>
           <ExpandMoreBar show={show} onShowMore={handleShowMore} />
         </div>

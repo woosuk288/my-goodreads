@@ -12,6 +12,9 @@ const sxExpandMoreBar: SxProps = {
     paddingTop: "24px",
     background: "linear-gradient(to bottom,rgba(255,255,255,0),#fff 16px)",
   },
+  ".expand_more_bar__overlay--open": {
+    position: "static",
+  },
 };
 
 interface IExpandMoreBar {
@@ -21,7 +24,7 @@ interface IExpandMoreBar {
 export default function ExpandMoreBar({ show, onShowMore }: IExpandMoreBar) {
   return (
     <Box sx={sxExpandMoreBar}>
-      <div className="expand_more_bar__overlay">
+      <div className={`expand_more_bar__overlay${show && "--open"}`}>
         <Button
           type="button"
           sx={{ marginLeft: "-8px", color: "primary.dark", fontWeight: 600 }}

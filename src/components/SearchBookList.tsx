@@ -9,11 +9,14 @@ import Avatar from "@mui/material/Avatar";
 import debounce from "lodash/debounce";
 
 import { useRouter } from "next/navigation";
-import { SEARCH_PATH } from "../constants/routes";
+import { BOOK_PATH, SEARCH_PATH } from "../constants/routes";
 import { Button } from "@mui/material";
 import { LINK_BUTTON_COLOR } from "../theme";
 
-export default function SearchBookList() {
+interface Props {
+  onClose: () => void;
+}
+export default function SearchBookList({ onClose }: Props) {
   const [value, setValue] = React.useState<IKakaoBook | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState<readonly IKakaoBook[]>([]);
@@ -86,8 +89,10 @@ export default function SearchBookList() {
       onChange={(event: any, newValue: IKakaoBook | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        onClose();
 
-        router.push(`${SEARCH_PATH}/query=${newValue}`);
+        const params = new URLSearchParams(newValue as unknown as Record<string, string>);
+        router.push(`${BOOK_PATH}?query=${inputValue}&${params.toString()}`);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -108,7 +113,9 @@ export default function SearchBookList() {
             size="small"
             sx={{ "& .MuiOutlinedInput-root": { "&.Mui-focused fieldset": { borderColor: "text.primary" } } }}
           />
-          <Button sx={{ color: LINK_BUTTON_COLOR }}>취소</Button>
+          <Button sx={{ color: LINK_BUTTON_COLOR }} onClick={onClose}>
+            취소
+          </Button>
         </Box>
       )}
       open={!!inputValue}
@@ -117,7 +124,7 @@ export default function SearchBookList() {
       noOptionsText={"결과 없음"}
       renderOption={(props, option) => {
         return (
-          <li {...props}>
+          <li {...props} key={option.isbn}>
             <Grid container alignItems="center">
               <Grid item>
                 <Box sx={{ color: "text.secondary", mr: 2 }}>
