@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, connectAuthEmulator, signInWithCustomToken } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -23,7 +25,7 @@ export async function getAuthenticatedAppForUser(session: string | undefined | n
 
   if (typeof window !== "undefined") {
     // client
-    console.log("client: ", firebaseApp);
+    console.log("client: ", firebaseApp.name);
 
     // return { app: firebaseApp, user: auth.currentUser?.toJSON() };
     return { app: firebaseApp, currentUser: auth.currentUser };
@@ -53,12 +55,15 @@ export async function getAuthenticatedAppForUser(session: string | undefined | n
   if (!session) {
     // if no session cookie was passed, try to get from next/headers for app router
     session = await getAppRouterSession();
-    console.log("getAppRouterSession : ", session);
+    console.log("getAppRouterSession : ", session?.slice(0, 10));
 
     if (!session) return noSessionReturn;
   }
 
-  const decodedIdToken = await adminAuth.verifySessionCookie(session);
+  const decodedIdToken = await adminAuth.verifySessionCookie(session).catch((e) => console.error(e.message));
+  if (!decodedIdToken) {
+    redirect("/login");
+  }
 
   const app = initializeAuthenticatedApp(decodedIdToken.uid);
   const clientAuth = getAuth(app);
@@ -76,7 +81,7 @@ export async function getAuthenticatedAppForUser(session: string | undefined | n
 
     await signInWithCustomToken(clientAuth, customToken);
   }
-  console.log("server: ", app);
+  console.log("server: ", app.name);
   return { app, currentUser: clientAuth.currentUser };
 }
 
