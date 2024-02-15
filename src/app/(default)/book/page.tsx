@@ -3,8 +3,6 @@ import BookInfo from "@/components/BookInfo";
 import BookReviewList from "@/components/BookReviewList";
 
 export default function page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  console.log("searchParams : ", searchParams);
-
   return (
     <>
       <BookInfo kakaobookInfo={searchParams as unknown as IKakaoBook} />

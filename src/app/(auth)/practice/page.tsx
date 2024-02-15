@@ -9,7 +9,7 @@ export default function test() {
     <div>
       <br />
 
-      <SearchBookList />
+      <SearchBookList onClose={() => {}} />
 
       <br />
 

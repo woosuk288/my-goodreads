@@ -1,0 +1,27 @@
+# https://jsonplaceholder.typicode.com/
+
+
+# /posts	100 posts
+https://jsonplaceholder.typicode.com/posts
+
+###
+
+# /comments	500 comments
+https://jsonplaceholder.typicode.com/comments
+
+###
+# /albums	100 albums
+https://jsonplaceholder.typicode.com/albums
+
+###
+# /photos	5000 photos
+https://jsonplaceholder.typicode.com/photos
+
+###
+
+# /todos	200 todos
+https://jsonplaceholder.typicode.com/todos
+
+###
+# /users	10 users
+https://jsonplaceholder.typicode.com/users
