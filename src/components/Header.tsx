@@ -66,11 +66,12 @@ const sxTabs: SxProps = {
   },
 };
 
-const sxSearchListWrapper: SxProps = {
+const sxSearchListWrapper: SxProps<Theme> = (theme) => ({
   position: "absolute",
   width: "100%",
+  maxWidth: theme.breakpoints.values.lg,
   zIndex: "800",
-};
+});
 
 const BROWSE_MENUS = [
   {
