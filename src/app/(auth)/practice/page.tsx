@@ -2,14 +2,14 @@
 
 import "./practice.css";
 
-import SearchBookList from "@/components/SearchBookList";
+import SearchBookAutocomplete from "@/components/SearchBookAutocomplete";
 
 export default function test() {
   return (
     <div>
       <br />
 
-      <SearchBookList onClose={() => {}} />
+      <SearchBookAutocomplete onClose={() => {}} />
 
       <br />
 

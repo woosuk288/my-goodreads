@@ -14,7 +14,7 @@ import HeaderNavDrawer from "./HeaderNavDrawer";
 import { signInWithGoogle } from "@/lib/firebase/auth";
 import { User } from "firebase/auth";
 import useUserSession from "@/hooks/useUserSession";
-import SearchBookList from "./SearchBookList";
+import SearchBookAutocomplete from "./SearchBookAutocomplete";
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
@@ -66,7 +66,7 @@ const sxTabs: SxProps = {
   },
 };
 
-const sxSearchListWrapper: SxProps<Theme> = (theme) => ({
+const sxAutoCompleteWrapper: SxProps<Theme> = (theme) => ({
   position: "absolute",
   width: "100%",
   maxWidth: theme.breakpoints.values.lg,
@@ -135,7 +135,7 @@ interface IHeader {
 export default function Header({ initialUser }: IHeader) {
   const user = useUserSession(initialUser);
 
-  const [openSearchList, setOpenSearchList] = React.useState(false);
+  const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -158,11 +158,11 @@ export default function Header({ initialUser }: IHeader) {
   };
 
   const handleSearchIconClick = () => {
-    setOpenSearchList(!openSearchList);
+    setOpenAutoComplete(!openAutoComplete);
   };
 
-  const handleSearchListClose = () => {
-    setOpenSearchList(false);
+  const handleAutoCompleteClose = () => {
+    setOpenAutoComplete(false);
   };
 
   return (
@@ -184,9 +184,9 @@ export default function Header({ initialUser }: IHeader) {
           )}
         </Toolbar>
 
-        {openSearchList && (
-          <Box sx={sxSearchListWrapper}>
-            <SearchBookList onClose={handleSearchListClose} />
+        {openAutoComplete && (
+          <Box sx={sxAutoCompleteWrapper}>
+            <SearchBookAutocomplete onClose={handleAutoCompleteClose} />
           </Box>
         )}
 

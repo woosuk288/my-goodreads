@@ -3,21 +3,25 @@ import NextLink from "next/link";
 import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, SxProps, Typography } from "@mui/material";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
-const sxSearchItem: SxProps = {
+const sxSearchBookItem: SxProps = {
   display: "flex",
   padding: "16px 12px",
 
   ".book_cover": {
+    width: "25%",
     alignSelf: "start",
   },
 
   ".MuiCardMedia-root": {
     objectFit: "contain",
     alignSelf: "flex-start",
+    maxHeight: "180px",
   },
 };
 
 const sxBookInfoColumn: SxProps = {
+  width: "75%",
+
   ".book_info": {
     paddingRight: 0,
     paddingTop: 0,
@@ -63,27 +67,25 @@ const sxBookUserShelfAction: SxProps = {
   },
 };
 
-interface Props {}
+interface Props {
+  kakaoBook: IKakaoBook;
+}
 
-export default function SearchItem() {
+export default function SearchBookItem({ kakaoBook }: Props) {
+  const { thumbnail, title, authors, datetime } = kakaoBook;
   return (
-    <Card sx={sxSearchItem} component="li">
+    <Card sx={sxSearchBookItem} component="li">
       <NextLink className="book_cover" href="/book/show/16158498-give-and-take?from_search=true&from_srp=true&qid=1FYMujJ2R2&rank=1">
-        <CardMedia
-          component="img"
-          sx={{ width: 75 }}
-          image="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445791874i/25614523._UX75_.jpg"
-          alt="Book cover for Originals: How Non-Conformists Move the World"
-        />
+        <CardMedia component="img" image={thumbnail} alt={`Book cover for ${title}`} />
       </NextLink>
 
       <Box sx={sxBookInfoColumn}>
         <CardContent className="book_info">
           <Typography className="book_title" component="div">
-            Originals: How Non-Conformists Move the World
+            {title}
           </Typography>
           <Typography variant="subtitle1" component="div">
-            by Adam M. Grant
+            {authors.join(",")}
           </Typography>
           <div className="book_meta_info">
             <div className="book_rating">
@@ -102,14 +104,14 @@ export default function SearchItem() {
             </div>
             <div className="book_supplemental_info">
               <Typography className="book_publication_date" color="text.secondary" component="span" marginRight="12px">
-                Published 2013
+                Published {new Date(datetime).toLocaleDateString()}
               </Typography>
-              <Link
+              {/* <Link
                 href="https://www.goodreads.com/work/editions/21998914-give-and-take-a-revolutionary-approach-to-success"
                 component={NextLink}
               >
                 80 Editions
-              </Link>
+              </Link> */}
             </div>
           </div>
         </CardContent>
