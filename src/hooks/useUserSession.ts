@@ -7,7 +7,7 @@ import React from "react";
 export default function useUserSession(initialUser: User | null | undefined = undefined) {
   // The initialUser comes from the server via a server component
   const [user, setUser] = React.useState(initialUser);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const router = useRouter();
 
   React.useEffect(() => {
@@ -35,5 +35,5 @@ export default function useUserSession(initialUser: User | null | undefined = un
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  return { user, isLoading, loadedUser: isLoading === false && user ? user : null };
+  return { user, isLoading, loadedUser: user && isLoading === false ? user : null };
 }
