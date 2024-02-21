@@ -3,10 +3,13 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { SIGNUP_EMAIL_PATH } from "../constants/routes";
 import CloseIcon from "@mui/icons-material/Close";
+import useUserSession from "@/hooks/useUserSession";
 
 export default function SignUpBanner() {
-  return (
-    <div>
+  const { loadedUser } = useUserSession();
+
+  if (!loadedUser) {
+    return (
       <Box className="site_banner" bgcolor="primary.light">
         <Box className="site_banner_content" position="relative" textAlign="center" padding="24px 32px">
           <Typography component="h2" fontWeight="bold">
@@ -23,6 +26,8 @@ export default function SignUpBanner() {
           </IconButton>
         </Box>
       </Box>
-    </div>
-  );
+    );
+  }
+
+  return null;
 }
