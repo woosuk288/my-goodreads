@@ -6,7 +6,20 @@ import NextLink from "next/link";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { AppBar, Box, Button, Container, IconButton, ListItemText, MenuItem, MenuList, SxProps, Theme, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  SxProps,
+  Theme,
+  Toolbar,
+} from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -133,7 +146,7 @@ interface IHeader {
   initialUser: User | undefined | null;
 }
 export default function Header({ initialUser }: IHeader) {
-  const user = useUserSession(initialUser);
+  const { user, isLoading } = useUserSession(initialUser);
 
   const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
@@ -175,7 +188,9 @@ export default function Header({ initialUser }: IHeader) {
 
           <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          {!user ? (
+          {!user && isLoading ? (
+            <CircularProgress size={32} />
+          ) : !user ? (
             <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
               Sign in
             </Button>
