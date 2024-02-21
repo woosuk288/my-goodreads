@@ -42,3 +42,24 @@ export const getFormattedPreviousDate = (interval: "week" | "month" | "year"): s
   const previousDate = getPreviousDate(today, interval);
   return formatDate(previousDate);
 };
+
+// isbn13을 우선적으로 가져오고, 없으면 isbn10 return
+export const extractISBN = (input: string): string => {
+  const isbnList = input.split(/\s+/); // 공백으로 분리된 ISBN 리스트
+  for (const isbn of isbnList) {
+    if (isbn.length === 13 && /^\d+$/.test(isbn)) {
+      return isbn; // ISBN-13 값이면 반환
+    }
+  }
+  // ISBN-13 값이 없는 경우 ISBN-10 값을 반환
+  for (const isbn of isbnList) {
+    if (isbn.length === 10 && /^\d{9}[\dX]$/.test(isbn)) {
+      return isbn; // ISBN-10 값이면 반환
+    }
+  }
+  return ""; // ISBN이 없는 경우 빈 문자열 반환
+};
+
+export async function findBookReadStatus(booksWant: string[], booksReading: string[], booksRead: string[]) {
+  // return want, reading, read
+}
