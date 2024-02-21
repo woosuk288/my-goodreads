@@ -25,9 +25,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import HeaderNavDrawer from "./HeaderNavDrawer";
 import { signInWithGoogle } from "@/lib/firebase/auth";
-import { User } from "firebase/auth";
-import useUserSession from "@/hooks/useUserSession";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
+import { useAuth } from "./AuthProvider";
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
@@ -143,10 +142,10 @@ const TAB_CODES = {
 };
 
 interface IHeader {
-  initialUser: User | undefined | null;
+  // initialUser: User | undefined | null;
 }
-export default function Header({ initialUser }: IHeader) {
-  const { user, isLoading } = useUserSession(initialUser);
+export default function Header({}: /* initialUser */ IHeader) {
+  const authState = useAuth();
 
   const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
@@ -188,9 +187,9 @@ export default function Header({ initialUser }: IHeader) {
 
           <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          {!user && isLoading ? (
+          {authState.state === "loading" ? (
             <CircularProgress size={32} />
-          ) : !user ? (
+          ) : authState.state === "loaded" && !authState.user ? (
             <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
               Sign in
             </Button>

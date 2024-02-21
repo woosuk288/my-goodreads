@@ -3,12 +3,12 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { SIGNUP_EMAIL_PATH } from "../constants/routes";
 import CloseIcon from "@mui/icons-material/Close";
-import useUserSession from "@/hooks/useUserSession";
+import { useAuth } from "./AuthProvider";
 
 export default function SignUpBanner() {
-  const { loadedUser } = useUserSession();
+  const authState = useAuth();
 
-  if (!loadedUser) {
+  if (authState.state === "loaded" && !authState.isAuthentication) {
     return (
       <Box className="site_banner" bgcolor="primary.light">
         <Box className="site_banner_content" position="relative" textAlign="center" padding="24px 32px">

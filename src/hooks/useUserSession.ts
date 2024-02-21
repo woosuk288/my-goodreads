@@ -24,7 +24,6 @@ export default function useUserSession(initialUser: User | null | undefined = un
 
   React.useEffect(() => {
     onAuthStateChanged((authUser) => {
-      console.log("authUser2 : ", authUser);
       if (user === undefined) return;
 
       // refresh when user changed to ease testing
