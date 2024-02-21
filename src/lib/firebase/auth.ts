@@ -8,10 +8,13 @@ export function onAuthStateChanged(cb: NextOrObserver<User>) {
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
 
   try {
     const userCredential = await signInWithPopup(auth, provider);
     const idToken = await userCredential.user.getIdToken();
+
+    // TODO: users에 document 추가
 
     const response = await fetch("/api/auth/sign-in", {
       method: "POST",
