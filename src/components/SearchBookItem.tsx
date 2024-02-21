@@ -2,6 +2,11 @@ import NextLink from "next/link";
 
 import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, SxProps, Typography } from "@mui/material";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import { addBookToShelf } from "@/lib/firebase/firestore";
+import { useTransition } from "react";
+import { extractISBN } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { LOGIN_PATH } from "@/constants/routes";
 
 const sxSearchBookItem: SxProps = {
   display: "flex",
@@ -69,10 +74,21 @@ const sxBookUserShelfAction: SxProps = {
 
 interface Props {
   kakaoBook: IKakaoBook;
+  readStatus: boolean;
+  isLoggedIn: boolean;
 }
 
-export default function SearchBookItem({ kakaoBook }: Props) {
+export default function SearchBookItem({ kakaoBook, readStatus, isLoggedIn }: Props) {
   const { thumbnail, title, authors, datetime } = kakaoBook;
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleBookStatusSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await addBookToShelf(extractISBN(kakaoBook.isbn), kakaoBook);
+  };
+
   return (
     <Card sx={sxSearchBookItem} component="li">
       <NextLink className="book_cover" href="/book/show/16158498-give-and-take?from_search=true&from_srp=true&qid=1FYMujJ2R2&rank=1">
@@ -85,7 +101,7 @@ export default function SearchBookItem({ kakaoBook }: Props) {
             {title}
           </Typography>
           <Typography variant="subtitle1" component="div">
-            {authors.join(",")}
+            {authors.join(", ")}
           </Typography>
           <div className="book_meta_info">
             <div className="book_rating">
@@ -117,9 +133,29 @@ export default function SearchBookItem({ kakaoBook }: Props) {
         </CardContent>
         <Box sx={sxBookUserShelfAction}>
           <div className="wtr_wrapper">
-            <Box component="form">
-              <Button type="submit" variant="contained" color="secondary" sx={{ width: "120px", borderRadius: "4px 0 0 4px" }}>
-                읽고 싶어요
+            <Box
+              component="form"
+              onSubmit={
+                isLoggedIn === false
+                  ? () => {
+                      router.push(LOGIN_PATH);
+                    }
+                  : (e) =>
+                      startTransition(() => {
+                        handleBookStatusSubmit(e);
+                      })
+              }
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                sx={{ width: "120px", borderRadius: "4px 0 0 4px" }}
+                disabled={isPending}
+              >
+                {isPending && readStatus === false ? "저장중..." : readStatus ? "읽음" : "읽고싶어요"}
+                {/* {isPending === false && readStatus && "읽음"}
+                {isPending === false && readStatus === false && "읽고 싶어요"} */}
               </Button>
             </Box>
             <IconButton
