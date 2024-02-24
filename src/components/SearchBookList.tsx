@@ -1,11 +1,13 @@
 "use client";
 
-import { Box, Button, List, ListItem, SxProps, Typography } from "@mui/material";
+import { Box, Button, SxProps, Typography } from "@mui/material";
 import SearchBookItem from "./SearchBookItem";
 import { useState, useTransition } from "react";
 import { getKakaoBooks } from "@/actions/getKakaoBooks";
-import { extractISBN } from "@/lib/utils";
-import useUserSession from "@/hooks/useUserSession";
+import { extractISBN, getReadStatus } from "@/lib/utils";
+import { useAuth } from "./AuthProvider";
+import useSWR from "swr";
+import { getProfile } from "@/lib/firebase/firestore";
 
 const sxSearchBookList: SxProps = {
   "li.MuiCard-root:last-child": {
@@ -24,10 +26,10 @@ interface Props {
 
 const PAGE_OFFSET = 2;
 const SIZE_PER_PAGE = 10;
+
 export default function SearchBookList({ query, kakaoBooksResult }: Props) {
-  const booksRead = ["9788947547567"];
-  const { loadedUser } = useUserSession();
-  // const userProfile = currentUser && (await getProfile());
+  const { state, isLoggedIn } = useAuth();
+  const { data: userData } = useSWR(state === "loaded" && isLoggedIn && "user", getProfile);
 
   const initialKakaoBooks = kakaoBooksResult.documents;
   const [nextPage, setNextPage] = useState(PAGE_OFFSET);
@@ -49,10 +51,10 @@ export default function SearchBookList({ query, kakaoBooksResult }: Props) {
       <ul>
         {kakaoBooks.map((doc) => (
           <SearchBookItem
-            kakaoBook={doc}
             key={doc.isbn + doc.datetime}
-            readStatus={!!booksRead?.includes(extractISBN(doc.isbn))}
-            isLoggedIn={!!loadedUser}
+            kakaoBook={doc}
+            readStatus={getReadStatus(extractISBN(doc.isbn), userData)}
+            authState={{ state, isLoggedIn }}
           />
         ))}
       </ul>

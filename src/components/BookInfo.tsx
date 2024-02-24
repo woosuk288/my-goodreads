@@ -30,102 +30,23 @@ import BookPageHeading02 from "./BookPageHeading02";
 import BookRatingStats from "./BookRatingStats";
 import ExpandMoreBar from "./ExpandMoreBar";
 import { REVIEW_EDIT_PATH } from "@/constants/routes";
-
-const sxBookInfo: SxProps = {
-  padding: "12px",
-  ".book_cover_section": {
-    position: "relative",
-    height: "200px",
-    width: "calc(100% + 24px)",
-    left: "-12px",
-    top: "-12px",
-    padding: "12px",
-    backgroundColor: "whitesmoke",
-  },
-  ".book_cover_wrapper": {
-    width: "35%",
-    height: "100%",
-    margin: "auto",
-    filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
-    textAlign: "center",
-    img: {
-      height: "100%",
-    },
-  },
-  ".book_cover_image": {
-    borderRadius: "0 8px 8px 0",
-  },
-  ".book_share_wrapper": {
-    position: "absolute",
-    right: 0,
-    bottom: 0,
-  },
-  ".contributors_wrapper": {
-    margin: "8px 0 16px",
-    textAlign: "center",
-  },
-  ".rating_stats_wrapper": {
-    paddingTop: "8px",
-    paddingBottom: "8px",
-    marginBottom: "8px",
-    borderTop: "1px solid #CECECE",
-    borderBottom: "1px solid #CECECE",
-  },
-  ".actions_warpper": {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-    ".wtr_button": {
-      margin: "12px 0",
-    },
-    ".user_rating_stars_wrapper": {
-      margin: "8px 0 12px",
-    },
-  },
-  ".edit_date_wrapper": {
-    margin: "24px 0",
-    ".MuiListItemText-root": {
-      flex: "0 0 auto",
-    },
-  },
-
-  ".external_book_link_list": {
-    display: "flex",
-    " > li": {
-      justifyContent: "center",
-    },
-    ".external_book_link": {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "8px",
-    },
-  },
-
-  ".description_heading_wrapper": {
-    margin: "40px 0 32px",
-  },
-
-  ".genres_wrapper": {
-    margin: "12px 0",
-  },
-  ".genres_list": {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "8px",
-  },
-};
+import { useAuth } from "./AuthProvider";
+import useSWR from "swr";
+import { getProfile } from "@/lib/firebase/firestore";
+import { extractISBN, getReadStatus } from "@/lib/utils";
 
 interface Props {
-  kakaobookInfo: IKakaoBook;
+  kakaobook: IKakaoBook;
 }
 
-export default function BookInfo({ kakaobookInfo }: Props) {
+export default function BookInfo({ kakaobook }: Props) {
+  const { state, isLoggedIn } = useAuth();
+  const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn && "user", getProfile);
+
   const [rating, setRating] = useState<number | null>(0);
   const [show, setShow] = useState(false);
 
-  const { title, thumbnail, authors, contents } = kakaobookInfo;
+  const { title, thumbnail, authors, contents } = kakaobook;
 
   const handleShowMore = () => {
     setShow(!show);
@@ -162,7 +83,7 @@ export default function BookInfo({ kakaobookInfo }: Props) {
         </div>
         <div className="actions_warpper">
           <div className="wtr_button">
-            <WantToReadBottomDrawer />
+            <WantToReadBottomDrawer kakaoBook={kakaobook} readStatus={getReadStatus(extractISBN(kakaobook.isbn), userData)} authState={{ state, isLoggedIn }} />
           </div>
           <div className="user_rating">
             <Typography component="legend" variant="subtitle2">
@@ -265,3 +186,89 @@ export default function BookInfo({ kakaobookInfo }: Props) {
     </Box>
   );
 }
+
+const sxBookInfo: SxProps = {
+  padding: "12px",
+  ".book_cover_section": {
+    position: "relative",
+    height: "200px",
+    width: "calc(100% + 24px)",
+    left: "-12px",
+    top: "-12px",
+    padding: "12px",
+    backgroundColor: "whitesmoke",
+  },
+  ".book_cover_wrapper": {
+    width: "35%",
+    height: "100%",
+    margin: "auto",
+    filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
+    textAlign: "center",
+    img: {
+      height: "100%",
+    },
+  },
+  ".book_cover_image": {
+    borderRadius: "0 8px 8px 0",
+  },
+  ".book_share_wrapper": {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+  },
+  ".contributors_wrapper": {
+    margin: "8px 0 16px",
+    textAlign: "center",
+  },
+  ".rating_stats_wrapper": {
+    paddingTop: "8px",
+    paddingBottom: "8px",
+    marginBottom: "8px",
+    borderTop: "1px solid #CECECE",
+    borderBottom: "1px solid #CECECE",
+  },
+  ".actions_warpper": {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    ".wtr_button": {
+      margin: "12px 0",
+    },
+    ".user_rating_stars_wrapper": {
+      margin: "8px 0 12px",
+    },
+  },
+  ".edit_date_wrapper": {
+    margin: "24px 0",
+    ".MuiListItemText-root": {
+      flex: "0 0 auto",
+    },
+  },
+
+  ".external_book_link_list": {
+    display: "flex",
+    " > li": {
+      justifyContent: "center",
+    },
+    ".external_book_link": {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "8px",
+    },
+  },
+
+  ".description_heading_wrapper": {
+    margin: "40px 0 32px",
+  },
+
+  ".genres_wrapper": {
+    margin: "12px 0",
+  },
+  ".genres_list": {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px",
+  },
+};

@@ -8,7 +8,7 @@ import { useAuth } from "./AuthProvider";
 export default function SignUpBanner() {
   const authState = useAuth();
 
-  if (authState.state === "loaded" && !authState.isAuthentication) {
+  if (authState.state === "loaded" && !authState.isLoggedIn) {
     return (
       <Box className="site_banner" bgcolor="primary.light">
         <Box className="site_banner_content" position="relative" textAlign="center" padding="24px 32px">

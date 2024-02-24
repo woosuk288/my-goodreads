@@ -20,7 +20,6 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import { HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
 import { useState } from "react";
-import { IUserCredentials } from "LOGIN_MODULE";
 
 const sxLogoSection: SxProps = {
   display: "flex",

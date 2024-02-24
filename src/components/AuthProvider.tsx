@@ -1,26 +1,27 @@
 import { auth } from "@/lib/firebase/firebase";
+import { AuthState } from "@/types/exportType";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
-type AuthState =
-  | { state: "loading" }
-  | { state: "loaded"; isAuthentication: true; user: User }
-  | { state: "loaded"; isAuthentication: false; user: null }
-  | { state: "error"; error: Error };
+// | { state: "loading" }
+// | { state: "loaded"; isAuthentication: true; user: User }
+// | { state: "loaded"; isAuthentication: false; user: null }
+// | { state: "error"; error: Error };
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authState, setAuthState] = useState<AuthState>({ state: "loading" });
+  const [authState, setAuthState] = useState<AuthState>({ state: "loading", isLoggedIn: false });
 
   const onChange = (user: User | null) => {
+    console.log("onChange User : ", user);
     if (user) {
-      setAuthState({ state: "loaded", isAuthentication: true, user });
+      setAuthState({ state: "loaded", isLoggedIn: true, user });
     } else {
-      setAuthState({ state: "loaded", isAuthentication: false, user });
+      setAuthState({ state: "loaded", isLoggedIn: false, user });
     }
   };
-  const setError = (error: Error) => setAuthState({ state: "error", error });
+  const setError = (error: Error) => setAuthState({ ...authState, state: "error", error });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, onChange, setError);

@@ -1,3 +1,5 @@
+import { READ_STATUS } from "@/constants/values";
+
 export const getCurrentDate = (): string => {
   const today = new Date();
   const year = today.getFullYear();
@@ -60,6 +62,15 @@ export const extractISBN = (input: string): string => {
   return ""; // ISBN이 없는 경우 빈 문자열 반환
 };
 
-export async function findBookReadStatus(booksWant: string[], booksReading: string[], booksRead: string[]) {
-  // return want, reading, read
-}
+export const getReadStatus = (bookId: string, userData?: IUser) => {
+  if (!userData) return READ_STATUS.unread;
+
+  const readStatus = userData.booksRead?.includes(bookId)
+    ? READ_STATUS.read
+    : userData.booksReading?.includes(bookId)
+    ? READ_STATUS.reading
+    : userData.booksWant?.includes(bookId)
+    ? READ_STATUS.want
+    : READ_STATUS.unread;
+  return readStatus;
+};

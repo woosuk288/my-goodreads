@@ -9,7 +9,8 @@ export async function POST(request: NextRequest) {
   console.log("reqBody : ", reqBody);
   const idToken = reqBody.idToken;
 
-  const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
+  const expiresIn = 60 * 60 * 3 * 1000; // 3 hour
+  // const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
 
   const sessionCookie = await createSessionCookie(idToken, { expiresIn });
 
