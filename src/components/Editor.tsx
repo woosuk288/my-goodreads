@@ -1,5 +1,7 @@
 "use client";
 
+import { getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
+import { extractISBN } from "@/lib/utils";
 import {
   Box,
   Button,
@@ -17,7 +19,120 @@ import {
 } from "@mui/material";
 
 import { useState } from "react";
-import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
+import useSWR from "swr";
+import { useAuth } from "./AuthProvider";
+import LoadingProgress from "./LoadingProgress";
+import useSWRMutation from "swr/mutation";
+
+// TODO: form의 기준
+interface Props {
+  kakaoBook: IKakaoBook;
+}
+
+export default function Editor({ kakaoBook }: Props) {
+  const authState = useAuth();
+  const { title, isbn, authors, thumbnail } = kakaoBook;
+  // const isbn = kakaoBook.isbn ?? "";
+  const bookId = extractISBN(isbn);
+  const uid = authState.user?.uid;
+  const { data: reviewData, isLoading } = useSWR(isbn && uid ? `api/reviews/${bookId}/${uid}` : null, (_) =>
+    getReviewByBookAndUser(bookId, uid!)
+  );
+
+  const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
+    `api/reviews/${bookId}/${uid}`,
+    (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
+  );
+
+  const [rating, setRating] = useState<number | null>(0);
+
+  const handleRatingChange = (_: any, newValue: number | null) => {
+    console.log("newValue : ", newValue);
+    setRating(newValue);
+
+    updateRatingTrigger({ bookId, rating: newValue });
+  };
+
+  if (authState.state === "loading" || isLoading) {
+    return <LoadingProgress />;
+  }
+
+  console.log("reviewData : ", reviewData);
+
+  return (
+    <Box sx={sxEditor}>
+      <Card>
+        <CardMedia component="img" sx={{ width: 75 }} image={thumbnail} alt={`Book cover for ${title}`} />
+
+        <Box component="form">
+          <CardContent className="book_info">
+            <Typography className="book_title" component="h2">
+              {title}
+            </Typography>
+            <Typography variant="subtitle1" component="div">
+              {Array.isArray(authors) ? authors.join(", ") : authors}
+            </Typography>
+            <div className="book_meta_info">
+              <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
+              <Typography variant="body2" color="text.secondary">
+                3.95
+              </Typography>
+              <Typography className="book_rating_count" variant="body2" color="text.secondary">
+                52,241 평가
+              </Typography>
+
+              <Typography variant="body2" color="text.secondary">
+                <meta content="3430" itemProp="reviewCount" />
+                3,430 리뷰
+              </Typography>
+              {/* <span className="bookMetaInfo__reviewCount">
+              </span> */}
+            </div>
+          </CardContent>
+        </Box>
+      </Card>
+
+      {/* rate */}
+      {/* 당신의 평점 (1~5단계 watcha) */}
+      <div className="user_rating">
+        <Typography component="legend">평가하기</Typography>
+        <Rating
+          className="user_rating_stars"
+          name="user-rating"
+          size="large"
+          precision={0.5}
+          value={rating}
+          onChange={handleRatingChange}
+          disabled={isMutating}
+        />
+      </div>
+
+      {/* write a review */}
+      <TextField
+        id="outlined-multiline-static"
+        // label="Multiline"
+        multiline
+        rows={7}
+        fullWidth
+        placeholder="리뷰를 써보세요 (선택)"
+      />
+
+      {/* spoilers checkbox */}
+      <div className="spoiler_wrapper">
+        <FormGroup>
+          <FormControlLabel control={<Checkbox color="info" />} label={<Typography variant="subtitle2">스포일러?</Typography>} />
+        </FormGroup>
+        <Typography variant="body2" color="text.secondary">
+          1분전에 마지막으로 수정
+        </Typography>
+      </div>
+
+      <Button color="secondary" variant="contained">
+        게시하기
+      </Button>
+    </Box>
+  );
+}
 
 const sxEditor: SxProps = {
   padding: "12px",
@@ -36,6 +151,7 @@ const sxEditor: SxProps = {
     paddingTop: 0,
   },
   ".book_title": {
+    fontSize: "1.125rem",
     fontWeight: "bold",
   },
 
@@ -74,93 +190,3 @@ const sxEditor: SxProps = {
     margin: "8px 0",
   },
 };
-
-// TODO: form의 기준
-export default function Editor() {
-  const [rating, setRating] = useState<number | null>(0);
-
-  return (
-    <Box sx={sxEditor}>
-      <Card>
-        <CardMedia
-          component="img"
-          sx={{ width: 75 }}
-          image="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445791874i/25614523._UX75_.jpg"
-          alt="Book cover for Originals: How Non-Conformists Move the World"
-        />
-
-        <Box component="form">
-          <CardContent className="book_info">
-            <Typography className="book_title" component="div" variant="h5">
-              Originals: How Non-Conformists Move the World
-            </Typography>
-            <Typography variant="subtitle1" component="div">
-              by Adam M. Grant
-            </Typography>
-            <div className="book_meta_info">
-              <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
-              <Typography variant="body2" color="text.secondary">
-                3.95
-              </Typography>
-              <Typography className="book_rating_count" variant="body2" color="text.secondary">
-                52,241 평가
-              </Typography>
-
-              <Typography variant="body2" color="text.secondary">
-                <meta content="3430" itemProp="reviewCount" />
-                3,430 리뷰
-              </Typography>
-              {/* <span className="bookMetaInfo__reviewCount">
-              </span> */}
-            </div>
-          </CardContent>
-        </Box>
-      </Card>
-
-      {/* read status */}
-      <WantToReadBottomDrawer />
-
-      {/* rate */}
-      {/* 당신의 평점 (1~5단계 watcha) */}
-      <div className="user_rating">
-        <Typography component="legend" variant="subtitle2">
-          평가해 보세요
-        </Typography>
-        <Rating
-          className="user_rating_stars"
-          name="user-rating"
-          size="large"
-          precision={0.5}
-          value={rating}
-          onChange={(event, newValue) => {
-            setRating(newValue);
-          }}
-        />
-      </div>
-
-      {/* write a review */}
-      <TextField
-        id="outlined-multiline-static"
-        // label="Multiline"
-        multiline
-        rows={7}
-        fullWidth
-        placeholder="리뷰를 써보세요 (선택)"
-      />
-
-      {/* spoilers checkbox */}
-      <div className="spoiler_wrapper">
-        <FormGroup>
-          <FormControlLabel control={<Checkbox color="info" />} label={<Typography variant="subtitle2">스포일러?</Typography>} />
-        </FormGroup>
-        <Typography variant="body2" color="text.secondary">
-          1분전에 마지막으로 수정
-        </Typography>
-      </div>
-
-      <Button color="secondary" variant="contained">
-        게시하기
-      </Button>
-    </Box>
-  );
-}

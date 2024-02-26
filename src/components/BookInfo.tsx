@@ -36,17 +36,20 @@ import { getProfile } from "@/lib/firebase/firestore";
 import { extractISBN, getReadStatus } from "@/lib/utils";
 
 interface Props {
-  kakaobook: IKakaoBook;
+  kakaoBook: IKakaoBook;
 }
 
-export default function BookInfo({ kakaobook }: Props) {
+export default function BookInfo({ kakaoBook }: Props) {
+  const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
+  const bookDetailLink = `${REVIEW_EDIT_PATH}?${params.toString()}`;
+
   const { state, isLoggedIn } = useAuth();
   const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn && "user", getProfile);
 
   const [rating, setRating] = useState<number | null>(0);
   const [show, setShow] = useState(false);
 
-  const { title, thumbnail, authors, contents } = kakaobook;
+  const { title, thumbnail, authors, contents } = kakaoBook;
 
   const handleShowMore = () => {
     setShow(!show);
@@ -74,7 +77,7 @@ export default function BookInfo({ kakaobook }: Props) {
         <div className="contributors_wrapper">
           <Typography component="h3">
             <Link href="#" component={NextLink}>
-              {Array.isArray(authors) ? authors.join(",") : authors}
+              {Array.isArray(authors) ? authors.join(", ") : authors}
             </Link>
           </Typography>
         </div>
@@ -83,7 +86,11 @@ export default function BookInfo({ kakaobook }: Props) {
         </div>
         <div className="actions_warpper">
           <div className="wtr_button">
-            <WantToReadBottomDrawer kakaoBook={kakaobook} readStatus={getReadStatus(extractISBN(kakaobook.isbn), userData)} authState={{ state, isLoggedIn }} />
+            <WantToReadBottomDrawer
+              kakaoBook={kakaoBook}
+              readStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)}
+              authState={{ state, isLoggedIn }}
+            />
           </div>
           <div className="user_rating">
             <Typography component="legend" variant="subtitle2">
@@ -101,7 +108,7 @@ export default function BookInfo({ kakaobook }: Props) {
                 }}
               />
             </div>
-            <Button variant="outlined" sx={{ width: "160px" }} href={REVIEW_EDIT_PATH} component={NextLink}>
+            <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink}>
               리뷰 쓰기
             </Button>
           </div>

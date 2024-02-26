@@ -86,9 +86,8 @@ const WantToReadBottomDrawer = ({ kakaoBook, readStatus, authState }: Props) => 
         </Box>
       ) : (
         <Button
-          className="wtr_button"
+          className="wtr_button btn_read_status btn_drawer_border"
           variant="contained"
-          color="inherit"
           startIcon={<DoneIcon />}
           endIcon={isMutating ? <CircularProgress size={20} color="inherit" /> : <ExpandMoreIcon color="action" />}
           onClick={toggleDrawer(true)}
@@ -152,6 +151,10 @@ const sxWantToReadBottomDrawer: SxProps = {
     },
     "&.btn_drawer_border > .MuiButton-endIcon": {
       borderLeft: "1px solid #555",
+    },
+    "&.btn_read_status": {
+      bgcolor: "primary.light",
+      color: "#333333",
     },
   },
 };

@@ -18,6 +18,9 @@ import {
   CollectionReference,
   arrayRemove,
   writeBatch,
+  limit,
+  Transaction,
+  DocumentReference,
 } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase/firebase";
@@ -28,10 +31,11 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 const COL_USERS = createCollection<IUser>("users");
-const COL_BOOKS = createCollection<IKakaoBook>("books");
-const COL_SHELVS = createCollection<IKakaoBookTest>("shelves");
-const COL_REVIEWS = "reviews";
+const COL_BOOKS = createCollection<IBook>("books");
+// const COL_SHELVS = createCollection<IShelf>("shelves");
+// const COL_REVIEWS = createCollection<IRating>("reviews");
 const COL_SHELF_BOOKS = (shelfId: string) => createCollection<IKakaoBook>("shelves/" + shelfId + "/books");
+const COL_BOOK_RATINGS = (bookId: string) => createCollection<IRating>("books/" + bookId + "/ratings");
 
 /**
  * 로그인시 관리자단 유저 있는지 확인해서 users에 문서 추가
@@ -78,6 +82,121 @@ export async function updateBookFromShelf(bookId: string, bookStatus: IBookReadS
  * 컬렉션 - shelves
  * 문서 ID - 고유 id 생성 (책장 없으면 책 전체 조회)
  */
+
+/**
+ * 리뷰(review)
+ */
+export async function getReviewById(reviewId: string) {}
+
+/**
+ * TODO: 리뷰 작성할 때만 가지고 오는거니 bookId만 사용해도 되려나?
+ */
+export async function getReviewByBookAndUser(bookId: string, uid: string): Promise<IRating | null> {
+  const q = query(COL_BOOK_RATINGS(bookId), where("uid", "==", uid), limit(1));
+
+  const results = await getDocs(q);
+  if (results.empty) {
+    return null;
+  }
+
+  return results.docs[0].data();
+}
+
+/**
+ * 책 평가하기
+ */
+
+export async function updateRating(bookId: string, rating: number | null) {
+  const uid = auth.currentUser?.uid;
+  console.log("bookId : ", bookId);
+  console.log("rating : ", rating);
+  const bookDocRef = doc(COL_BOOKS, bookId);
+  const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), uid);
+
+  console.log("bookDocRef : ", bookDocRef);
+  console.log("newRatingDocRef : ", ratingDocRef);
+
+  await runTransaction(db, async (transaction) => {
+    const bookSnap = await transaction.get(bookDocRef);
+    const ratingSnap = await transaction.get(ratingDocRef);
+
+    const bookData = bookSnap.data();
+    let newNumRatings = bookData?.numRatings ? bookData.numRatings + 1 : 1;
+    let newSumRating = (bookData?.sumRating || 0) + Number(rating);
+    // rating이 기존에 있었으면 누적안되도록 이전 평점 빼주기
+    if (ratingSnap.exists()) {
+      newNumRatings = newNumRatings - 1;
+      newSumRating = newSumRating - (ratingSnap.data().rating ?? 0);
+    }
+    const newAverage = newSumRating / newNumRatings;
+
+    transaction.set(
+      bookDocRef,
+      {
+        numRatings: newNumRatings,
+        sumRating: newSumRating,
+        avgRating: newAverage,
+      },
+      { merge: true }
+    );
+
+    transaction.set(
+      ratingDocRef,
+      {
+        rating,
+        uid: auth.currentUser?.uid,
+        // timestamp: Timestamp.fromDate(new Date()),
+      },
+      { merge: true }
+    );
+  });
+}
+
+// const updateWithRating = async (
+//   transaction: Transaction,
+//   docRef: DocumentReference,
+//   newRatingDocument: DocumentReference,
+//   review: IRating
+// ) => {
+//   const restaurant = await transaction.get(docRef);
+//   const data = restaurant.data();
+//   const newNumRatings = data?.numRatings ? data.numRatings + 1 : 1;
+//   const newSumRating = (data?.sumRating || 0) + Number(review.rating);
+//   const newAverage = newSumRating / newNumRatings;
+
+//   transaction.update(docRef, {
+//     numRatings: newNumRatings,
+//     sumRating: newSumRating,
+//     avgRating: newAverage,
+//   });
+
+//   transaction.set(newRatingDocument, {
+//     ...review,
+//     timestamp: Timestamp.fromDate(new Date()),
+//   });
+// };
+
+// export async function addReviewToBook(bookId: string, review: IRating) {
+//   // 현재는 일단 안씀
+//   if (!bookId) {
+//     throw new Error("No restaurant ID has been provided.");
+//   }
+
+//   if (!review) {
+//     throw new Error("A valid review has not been provided.");
+//   }
+
+//   try {
+//     const docRef = doc(COL_BOOKS, bookId);
+//     const newRatingDocument = doc(COL_BOOK_RATINGS(bookId));
+
+//     // corrected line
+//     await runTransaction(db, (transaction) => updateWithRating(transaction, docRef, newRatingDocument, review));
+//   } catch (error) {
+//     console.error("There was an error adding the rating to the restaurant", error);
+//     throw error;
+//   }
+// }
 
 // export async function getRestaurants(filters = {}) {
 //   let q = query(collection(db, "restaurants"));

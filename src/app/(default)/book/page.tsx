@@ -5,7 +5,7 @@ import BookReviewList from "@/components/BookReviewList";
 export default function page({ searchParams }: { searchParams: IKakaoBook }) {
   return (
     <>
-      <BookInfo kakaobook={searchParams} />
+      <BookInfo kakaoBook={searchParams} />
       <BookReviewList />
       <BookCarouselList />
     </>

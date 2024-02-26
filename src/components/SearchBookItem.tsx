@@ -4,6 +4,7 @@ import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, Sx
 import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
 import { READ_STATUS } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
+import { BOOK_PATH } from "@/constants/routes";
 
 interface Props {
   kakaoBook: IKakaoBook;
@@ -14,15 +15,18 @@ interface Props {
 export default function SearchBookItem({ kakaoBook, readStatus, authState }: Props) {
   const { thumbnail, title, authors, datetime } = kakaoBook;
 
+  const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
+  const bookDetailLink = `${BOOK_PATH}?${params.toString()}`;
+
   return (
     <Card sx={sxSearchBookItem} component="li">
-      <NextLink className="book_cover" href="/book/show/16158498-give-and-take?from_search=true&from_srp=true&qid=1FYMujJ2R2&rank=1">
+      <NextLink className="book_cover" href={bookDetailLink}>
         <CardMedia component="img" image={thumbnail} alt={`Book cover for ${title}`} />
       </NextLink>
 
       <Box sx={sxBookInfoColumn}>
         <CardContent className="book_info">
-          <Typography className="book_title" component="div">
+          <Typography className="book_title" component={NextLink} href={bookDetailLink}>
             {title}
           </Typography>
           <Typography variant="subtitle1" component="div">
@@ -60,14 +64,14 @@ export default function SearchBookItem({ kakaoBook, readStatus, authState }: Pro
           <div className="wtr_wrapper">
             <WantToReadBottomDrawer kakaoBook={kakaoBook} readStatus={readStatus} authState={authState} />
           </div>
-          <div className="purchase_wrapper">
+          {/* <div className="purchase_wrapper">
             <Button
               variant="contained"
               sx={{ width: "160px", bgcolor: "primary.light", color: "#333333", ":hover": { bgcolor: "primary.light" } }}
             >
               구입하기
             </Button>
-          </div>
+          </div> */}
           <form></form>
         </Box>
       </Box>
@@ -99,7 +103,13 @@ const sxBookInfoColumn: SxProps = {
     paddingTop: 0,
   },
   ".book_title": {
+    fontSize: "1.125rem",
     fontWeight: "bold",
+    color: "inherit",
+    textDecoration: "none",
+    ":hover, :focus": {
+      textDecoration: "underline",
+    },
   },
 
   ".book_meta_info": {
