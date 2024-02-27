@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authState, setAuthState] = useState<AuthState>({ state: "loading", isLoggedIn: false });
 
   const onChange = (user: User | null) => {
-    console.log("onChange User : ", user);
     if (user) {
       setAuthState({ state: "loaded", isLoggedIn: true, user });
     } else {

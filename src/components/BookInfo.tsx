@@ -32,27 +32,41 @@ import ExpandMoreBar from "./ExpandMoreBar";
 import { REVIEW_EDIT_PATH } from "@/constants/routes";
 import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
-import { getProfile } from "@/lib/firebase/firestore";
+import { getProfile, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
 import { extractISBN, getReadStatus } from "@/lib/utils";
+import useSWRMutation from "swr/mutation";
 
 interface Props {
   kakaoBook: IKakaoBook;
 }
 
 export default function BookInfo({ kakaoBook }: Props) {
+  const { title, thumbnail, authors, contents, isbn } = kakaoBook;
+
   const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
   const bookDetailLink = `${REVIEW_EDIT_PATH}?${params.toString()}`;
 
-  const { state, isLoggedIn } = useAuth();
-  const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn && "user", getProfile);
+  const { state, isLoggedIn, user } = useAuth();
+  const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn ? "user" : null, getProfile);
 
-  const [rating, setRating] = useState<number | null>(0);
+  const bookId = extractISBN(isbn);
+  const uid = user?.uid;
+  const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `api/reviews/${bookId}/${uid}` : null, (_) =>
+    getReviewByBookAndUser(bookId, uid!)
+  );
+  const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
+    `api/ratings/${bookId}/${uid}`,
+    (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
+  );
+
   const [show, setShow] = useState(false);
-
-  const { title, thumbnail, authors, contents } = kakaoBook;
 
   const handleShowMore = () => {
     setShow(!show);
+  };
+
+  const handleRatingChange = (_: any, newValue: number | null) => {
+    updateRatingTrigger({ bookId, rating: newValue });
   };
 
   return (
@@ -102,15 +116,18 @@ export default function BookInfo({ kakaoBook }: Props) {
                 name="user-rating"
                 size="large"
                 precision={0.5}
-                value={rating}
-                onChange={(event, newValue) => {
-                  setRating(newValue);
-                }}
+                value={reviewData?.rating ?? null}
+                onChange={handleRatingChange}
+                disabled={isLoading || isReviewLoading || isMutating}
               />
             </div>
-            <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink}>
-              리뷰 쓰기
-            </Button>
+            {reviewData?.reviewText?.trim().length ? (
+              <div>{reviewData.reviewText}</div>
+            ) : (
+              <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink}>
+                리뷰 쓰기
+              </Button>
+            )}
           </div>
         </div>
         <div className="edit_date_wrapper">
