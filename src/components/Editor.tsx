@@ -1,6 +1,6 @@
 "use client";
 
-import { getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
+import { addReviewToBook, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
 import { extractISBN } from "@/lib/utils";
 import {
   Box,
@@ -18,11 +18,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import useSWR from "swr";
 import { useAuth } from "./AuthProvider";
 import LoadingProgress from "./LoadingProgress";
 import useSWRMutation from "swr/mutation";
+import { useRouter } from "next/navigation";
+import { BOOK_PATH } from "@/constants/routes";
 
 // TODO: form의 기준
 interface Props {
@@ -30,31 +32,64 @@ interface Props {
 }
 
 export default function Editor({ kakaoBook }: Props) {
+  const router = useRouter();
   const authState = useAuth();
   const { title, isbn, authors, thumbnail } = kakaoBook;
+  const [formReview, setFormReview] = useState({ reviewText: "", isSpoiler: false });
+
   // const isbn = kakaoBook.isbn ?? "";
   const bookId = extractISBN(isbn);
   const uid = authState.user?.uid;
-  const { data: reviewData, isLoading } = useSWR(isbn && uid ? `api/reviews/${bookId}/${uid}` : null, (_) =>
-    getReviewByBookAndUser(bookId, uid!)
+
+  const { data: reviewData, isLoading } = useSWR(
+    isbn && uid ? `api/ratings/${bookId}/${uid}` : null,
+    (_) => getReviewByBookAndUser(bookId, uid!),
+    {
+      onSuccess(data) {
+        setFormReview({ reviewText: data?.reviewText!, isSpoiler: data?.isSpoiler! });
+      },
+    }
   );
 
   const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
-    `api/reviews/${bookId}/${uid}`,
+    `api/ratings/${bookId}/${uid}`,
     (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
+  );
+  const { trigger: updateReviewTrigger, isMutating: isReviewMutating } = useSWRMutation(
+    `api/ratings/${bookId}/${uid}`,
+    (key: any, { arg }: { arg: { bookId: string; reviewText: string; isSpoiler?: boolean } }) =>
+      addReviewToBook(arg.bookId, arg.reviewText, arg.isSpoiler)
   );
 
   const handleRatingChange = (_: any, newValue: number | null) => {
-    console.log("newValue : ", newValue);
-
     updateRatingTrigger({ bookId, rating: newValue });
+  };
+
+  const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormReview({
+      ...formReview,
+      [e.target.name]: e.target.name === "isSpoiler" ? e.target.checked : e.target.value,
+    });
+  };
+
+  const handleReviewSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    updateReviewTrigger(
+      { bookId, ...formReview },
+      {
+        onSuccess() {
+          const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
+          const bookDetailLink = `${BOOK_PATH}?${params.toString()}`;
+          router.replace(bookDetailLink);
+        },
+      }
+    );
   };
 
   if (authState.state === "loading" || isLoading) {
     return <LoadingProgress />;
   }
-
-  console.log("reviewData : ", reviewData);
 
   return (
     <Box sx={sxEditor}>
@@ -105,28 +140,38 @@ export default function Editor({ kakaoBook }: Props) {
       </div>
 
       {/* write a review */}
-      <TextField
-        id="outlined-multiline-static"
-        // label="Multiline"
-        multiline
-        rows={7}
-        fullWidth
-        placeholder="리뷰를 써보세요 (선택)"
-      />
+      <div className="form_text">
+        <form onSubmit={handleReviewSubmit}>
+          <TextField
+            id="outlined-multiline-static"
+            name="reviewText"
+            // label="Multiline"
+            multiline
+            rows={7}
+            fullWidth
+            placeholder="리뷰를 써보세요 (선택)"
+            value={formReview.reviewText}
+            onChange={handleFormChange}
+          />
 
-      {/* spoilers checkbox */}
-      <div className="spoiler_wrapper">
-        <FormGroup>
-          <FormControlLabel control={<Checkbox color="info" />} label={<Typography variant="subtitle2">스포일러?</Typography>} />
-        </FormGroup>
-        <Typography variant="body2" color="text.secondary">
-          1분전에 마지막으로 수정
-        </Typography>
+          {/* spoilers checkbox */}
+          <div className="spoiler_wrapper">
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={formReview.isSpoiler} onChange={handleFormChange} name="isSpoiler" color="info" />}
+                label={<Typography variant="subtitle2">스포일러?</Typography>}
+              />
+            </FormGroup>
+            <Typography variant="body2" color="text.secondary">
+              1분전에 마지막으로 수정
+            </Typography>
+          </div>
+
+          <Button color="secondary" variant="contained" type="submit">
+            게시하기
+          </Button>
+        </form>
       </div>
-
-      <Button color="secondary" variant="contained">
-        게시하기
-      </Button>
     </Box>
   );
 }

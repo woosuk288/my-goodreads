@@ -144,6 +144,7 @@ export async function updateRating(bookId: string, rating: number | null) {
     transaction.set(
       ratingDocRef,
       {
+        bookId,
         rating,
         uid: auth.currentUser?.uid,
         // timestamp: Timestamp.fromDate(new Date()),
@@ -151,6 +152,41 @@ export async function updateRating(bookId: string, rating: number | null) {
       { merge: true }
     );
   });
+}
+
+/**
+ * 리뷰 작성하기
+ *
+ */
+export async function addReviewToBook(bookId: string, reviewText: string, isSpoiler?: boolean) {
+  const uid = auth.currentUser?.uid;
+  if (!uid) {
+    throw new Error("No user ID has been provided.");
+  }
+  if (!bookId) {
+    throw new Error("No restaurant ID has been provided.");
+  }
+
+  if (!reviewText) {
+    throw new Error("A valid review has not been provided.");
+  }
+
+  try {
+    const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), uid);
+    await setDoc(
+      ratingDocRef,
+      {
+        bookId,
+        reviewText,
+        isSpoiler,
+        uid,
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error("There was an error adding the rating to the restaurant", error);
+    throw error;
+  }
 }
 
 // const updateWithRating = async (
