@@ -104,17 +104,13 @@ export async function getReviewByBookAndUser(bookId: string, uid: string): Promi
 
 /**
  * 책 평가하기
+ * TODO: 계산 로직 테스트 검증? (평점 주기 -> null -> 평점 다시주기)
  */
 
 export async function updateRating(bookId: string, rating: number | null) {
   const uid = auth.currentUser?.uid;
-  console.log("bookId : ", bookId);
-  console.log("rating : ", rating);
   const bookDocRef = doc(COL_BOOKS, bookId);
   const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), uid);
-
-  console.log("bookDocRef : ", bookDocRef);
-  console.log("newRatingDocRef : ", ratingDocRef);
 
   await runTransaction(db, async (transaction) => {
     const bookSnap = await transaction.get(bookDocRef);
@@ -125,10 +121,15 @@ export async function updateRating(bookId: string, rating: number | null) {
     let newSumRating = (bookData?.sumRating || 0) + Number(rating);
     // rating이 기존에 있었으면 누적안되도록 이전 평점 빼주기
     if (ratingSnap.exists()) {
-      newNumRatings = newNumRatings - 1;
-      newSumRating = newSumRating - (ratingSnap.data().rating ?? 0);
+      const prevRating = ratingSnap.data().rating;
+      if (rating === null) {
+        newNumRatings = newNumRatings - 2;
+      } else if (prevRating !== null) {
+        newNumRatings = newNumRatings - 1;
+      }
+      newSumRating = newSumRating - (prevRating ?? 0);
     }
-    const newAverage = newSumRating / newNumRatings;
+    const newAverage = newNumRatings === 0 ? 0 : newSumRating / newNumRatings;
 
     transaction.set(
       bookDocRef,

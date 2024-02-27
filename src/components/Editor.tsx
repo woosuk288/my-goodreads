@@ -44,11 +44,8 @@ export default function Editor({ kakaoBook }: Props) {
     (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
   );
 
-  const [rating, setRating] = useState<number | null>(0);
-
   const handleRatingChange = (_: any, newValue: number | null) => {
     console.log("newValue : ", newValue);
-    setRating(newValue);
 
     updateRatingTrigger({ bookId, rating: newValue });
   };
@@ -101,7 +98,7 @@ export default function Editor({ kakaoBook }: Props) {
           name="user-rating"
           size="large"
           precision={0.5}
-          value={rating}
+          value={reviewData?.rating}
           onChange={handleRatingChange}
           disabled={isMutating}
         />
