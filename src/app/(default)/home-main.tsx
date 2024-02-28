@@ -10,6 +10,7 @@ import HomeTextList from "../../components/HomeTextList";
 import Heading from "../../components/Heading";
 import NextLink from "next/link";
 import useUserSession from "@/hooks/useUserSession";
+import { CHALLENGES_PATH } from "@/constants/routes";
 
 const sxHome: SxProps = {};
 
@@ -103,9 +104,9 @@ Props) {
   return (
     <Box className="Home">
       <Box sx={sxHomepagePromotionWrapper}>
-        <a href="https://www.goodreads.com/challenges/11634?ref=rc_jan_24_soh">
-          <img src="https://th.bing.com/th/id/OIG1.f1YthwVioxwac3YabSPH?pid=ImgGn" alt="Homepagemasthead mobile" />
-        </a>
+        <NextLink href={CHALLENGES_PATH}>
+          <img src="https://th.bing.com/th/id/OIG1.qpF4MPDGP3iNZ.Zz4CZQ?w=1024&h=1024&rs=1&pid=ImgDetMain" alt="Homepagemasthead" />
+        </NextLink>
       </Box>
 
       <Container>

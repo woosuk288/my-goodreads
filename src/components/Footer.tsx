@@ -37,6 +37,10 @@ const sxFooter: SxProps<Theme> = (theme) => ({
 
   ".footer_app_links": {
     paddingLeft: "16px",
+    paddingRight: "16px",
+    img: {
+      maxWidth: "160px",
+    },
   },
 });
 

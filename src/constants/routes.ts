@@ -9,6 +9,8 @@ export const BOOK_PATH = "/book";
 
 export const REVIEW_EDIT_PATH = "/review/edit";
 
+export const CHALLENGES_PATH = "/challenges";
+
 /**
  * SERVER
  */

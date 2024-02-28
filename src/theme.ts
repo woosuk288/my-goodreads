@@ -43,6 +43,9 @@ const theme = createTheme({
           margin: 0,
           padding: 0,
         },
+        img: {
+          width: "100%",
+        },
       },
     },
     MuiLink: {
