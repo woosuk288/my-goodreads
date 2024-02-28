@@ -29,6 +29,46 @@ export const fetchPopularBooks = async (params?: IPopularLoanBooksRequest) => {
 };
 
 /**
+ * 4. 마니아를 위한 추천도서 조회
+ */
+
+export const fetchRecommandBooks = async (params: ILibRecommandBooksRequest) => {
+  const baseUrl = `${DATA_4_LIBRARY_API_URL}/recommandList`;
+  const queryParams = new URLSearchParams({ ...params, ...DEFAULT_PARAMS } as unknown as Record<string, string>);
+
+  const response = await fetch(`${baseUrl}?${queryParams}`);
+  const data: ILibRecommandBooksResponse = (await response.json()).response;
+
+  return data;
+};
+
+/**
+ * 7. 도서 키워드 목록
+ */
+export const fetchKeywordsByBook = async (params: ILibKeywordListRequest) => {
+  const baseUrl = `${DATA_4_LIBRARY_API_URL}/keywordList`;
+  const queryParams = new URLSearchParams({ ...params, ...DEFAULT_PARAMS } as unknown as Record<string, string>);
+
+  const response = await fetch(`${baseUrl}?${queryParams}`);
+  const data: ILibKeywordListResponse = (await response.json()).response;
+
+  return data;
+};
+
+/**
+ * 8. 도서별 이용 분석
+ */
+export const fetchAnalysisByBook = async (params: ILibAnalysisByBookRequest): Promise<ILibAnalysisByBookResponse> => {
+  const baseUrl = `${DATA_4_LIBRARY_API_URL}/usageAnalysisList`;
+  const queryParams = new URLSearchParams({ ...params, ...DEFAULT_PARAMS } as unknown as Record<string, string>);
+
+  const response = await fetch(`${baseUrl}?${queryParams}`);
+  const data: ILibAnalysisByBookResponse = (await response.json()).response;
+
+  return data;
+};
+
+/**
  * 12. 대출 급상승 도서
  */
 export const fetchHotTrendBooks = async (params?: IHotTrendBooksRequest) => {

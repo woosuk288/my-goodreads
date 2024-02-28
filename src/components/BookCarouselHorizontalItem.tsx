@@ -51,7 +51,7 @@ export default function BookCarouselHorizontalItem() {
       >
         {itemData.map((item) => (
           <SwiperSlide key={item.title}>
-            <Link className="book_cover_link_block" href={item.img} component={NextLink}>
+            <NextLink className="book_cover_link_block" href={item.img}>
               <img
                 className="book_cover_image"
                 alt={item.title}
@@ -67,7 +67,7 @@ export default function BookCarouselHorizontalItem() {
                 </Typography>
                 <Typography variant="body2">{item.author}</Typography>
               </div>
-            </Link>
+            </NextLink>
           </SwiperSlide>
         ))}
       </Swiper>

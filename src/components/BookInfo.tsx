@@ -38,9 +38,11 @@ import useSWRMutation from "swr/mutation";
 
 interface Props {
   kakaoBook: IKakaoBook;
+  // analysisBook: ILibAnalysisByBookResponse
+  keywordList: ILibKeywordListResponse;
 }
 
-export default function BookInfo({ kakaoBook }: Props) {
+export default function BookInfo({ kakaoBook, keywordList }: Props) {
   const { title, thumbnail, authors, contents, isbn } = kakaoBook;
 
   const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
@@ -197,15 +199,29 @@ export default function BookInfo({ kakaoBook }: Props) {
 
       <div className="genres_wrapper">
         <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+          키워드
+        </Typography>
+        <div className="genres_list">
+          {keywordList.items.slice(0, 10).map((keyword) => (
+            <Chip
+              key={keyword.item.word}
+              clickable
+              label={keyword.item.word}
+              sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }}
+            />
+          ))}
+        </div>
+        {/* <Typography variant="subtitle1" fontWeight={600} gutterBottom>
           장르
         </Typography>
+        
 
         <div className="genres_list">
           <Chip clickable label="자기계발" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
           <Chip clickable label="성공학" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
           <Chip clickable label="인간관계" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
           <Chip clickable label="경제경영" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
-        </div>
+        </div> */}
       </div>
     </Box>
   );

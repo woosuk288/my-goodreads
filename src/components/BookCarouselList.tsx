@@ -15,26 +15,33 @@ const sxBookCarouselList: SxProps = {
     textAlign: "center",
   },
 };
-export default function BookCarouselList() {
+
+interface Props {
+  recommandBookByMania: ILibRecommandBooksResponse;
+  recommandBookByReader: ILibRecommandBooksResponse;
+}
+
+export default function BookCarouselList({ recommandBookByMania, recommandBookByReader }: Props) {
   return (
     <Box sx={sxBookCarouselList}>
       <div className="heading_wrapper">
-        <BookPageHeading02 title="OTHER BOOKS BY THIS AUTHOR" />
+        <BookPageHeading02 title="이 저자의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
       </div>
       <div className="author_books_wrapper">
-        <BookCarouselVerticalItem />
+        <BookCarouselVerticalItem libBooks={recommandBookByMania} />
       </div>
       <div className="show_more_button_wrapper">
         <Button variant="outlined" href="#">
-          All books by this author
+          {/* All books by this author */}
+          All books by this moment
         </Button>
       </div>
 
       <div className="heading_wrapper">
-        <BookPageHeading02 title="READERS ALSO ENJOYED" />
+        <BookPageHeading02 title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
       </div>
       <div className="reader_realted_list">
-        <BookCarouselVerticalItem />
+        <BookCarouselVerticalItem libBooks={recommandBookByReader} />
       </div>
       <div className="show_more_button_wrapper">
         <Button variant="outlined" href="#">
@@ -43,11 +50,9 @@ export default function BookCarouselList() {
       </div>
 
       <div className="heading_wrapper">
-        <BookPageHeading02 title="LISTS FEATURING THIS BOOK" />
+        <BookPageHeading02 title="비슷한 유형의 추천 도서" /> {/* LISTS FEATURING THIS BOOK */}
       </div>
-      <div className="book_featuring_list">
-        <BookCarouselHorizontalItem />
-      </div>
+      <div className="book_featuring_list">{/* <BookCarouselHorizontalItem  /> */}</div>
       <div className="show_more_button_wrapper">
         <Button variant="outlined" href="#">
           Show More Lists

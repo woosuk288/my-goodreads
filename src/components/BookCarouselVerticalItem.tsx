@@ -1,10 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import { Box, Link, SxProps, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 import BookRatingStats from "./BookRatingStats";
 
 import NextLink from "next/link";
+import { BOOK_PATH } from "@/constants/routes";
 
 const sxBookCarouselVerticalItem: SxProps = {
   ".swiper-wrapper": {
@@ -54,7 +55,11 @@ const sxBookCarouselVerticalItem: SxProps = {
   },
 };
 
-export default function BookCarouselVerticalItem() {
+interface Props {
+  libBooks: ILibRecommandBooksResponse;
+}
+
+export default function BookCarouselVerticalItem({ libBooks }: Props) {
   return (
     <Box sx={sxBookCarouselVerticalItem}>
       <Swiper
@@ -63,28 +68,29 @@ export default function BookCarouselVerticalItem() {
         // onSlideChange={() => console.log("slide change")}
         // onSwiper={(swiper) => console.log(swiper)}
       >
-        {itemData.map((item) => (
-          <SwiperSlide key={item.title}>
-            <Link className="book_cover_link_block" href={item.img} component={NextLink}>
+        {libBooks.docs.map(({ book }) => (
+          <SwiperSlide key={book.isbn13 + book.publication_year}>
+            <NextLink className="book_cover_link_block" href={BOOK_PATH + `/${book.isbn13}`}>
               <img
                 className="book_cover_image"
-                alt={item.title}
-                title={item.title}
+                alt={book.bookname}
+                title={book.bookname}
                 itemProp="image"
-                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                src={`${item.img}?w=248&fit=crop&auto=format`}
+                src={book.bookImageURL}
+                // srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                // src={`${item.img}?w=248&fit=crop&auto=format`}
               />
 
               <div className="image_item_bar">
                 <Typography className="image_item_bar_title" variant="subtitle1">
-                  {item.title}
+                  {book.bookname}
                 </Typography>
-                <Typography variant="subtitle2">{item.author}</Typography>
+                <Typography variant="subtitle2">{book.authors}</Typography>
                 <div className="image_item_bar_rating_wrapper">
                   <BookRatingStats ratingValue={4.19} userRatingCount={3159} hasText={false} />
                 </div>
               </div>
-            </Link>
+            </NextLink>
           </SwiperSlide>
         ))}
       </Swiper>
