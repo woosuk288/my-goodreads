@@ -24,7 +24,7 @@ interface IExpandMoreBar {
 export default function ExpandMoreBar({ show, onShowMore }: IExpandMoreBar) {
   return (
     <Box sx={sxExpandMoreBar}>
-      <div className={`expand_more_bar__overlay${show && "--open"}`}>
+      <div className={`expand_more_bar__overlay${show ? "--open" : ""}`}>
         <Button
           type="button"
           sx={{ marginLeft: "-8px", color: "primary.dark", fontWeight: 600 }}
