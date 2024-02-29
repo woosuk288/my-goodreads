@@ -49,15 +49,18 @@ export default function BookCarouselList({ recommandBookByMania, recommandBookBy
         </Button>
       </div>
 
-      <div className="heading_wrapper">
-        <BookPageHeading02 title="관심 주제로 추천하는 인기 도서" /> {/* LISTS FEATURING THIS BOOK */}
+      {/* <div className="heading_wrapper">
+        <BookPageHeading02 title="관심 주제로 추천하는 인기 도서 (LISTS FEATURING THIS BOOK)" } />
+        
       </div>
-      <div className="book_featuring_list">{/* <BookCarouselHorizontalItem  /> */}</div>
+      <div className="book_featuring_list">
+        <BookCarouselHorizontalItem  />
+      </div>
       <div className="show_more_button_wrapper">
         <Button variant="outlined" href="#">
           Show More Lists
         </Button>
-      </div>
+      </div> */}
     </Box>
   );
 }

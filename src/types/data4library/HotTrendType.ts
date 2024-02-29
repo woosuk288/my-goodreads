@@ -1,7 +1,5 @@
-interface IHotTrendBooksRequest {
-  authKey?: string; // 인증키 (필수)
+interface IHotTrendBooksRequest extends ILibRequest {
   startDt?: string; // 검색시작일자 (선택)
-  format?: "xml" | "json"; // 응답유형 (xml: xml 타입, json: json 타입, 선택)
 }
 
 interface IHotTrendBooksResponse {

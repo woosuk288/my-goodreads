@@ -1,9 +1,7 @@
 // 분석 요청에 대한 정보를 나타내는 인터페이스
-interface ILibAnalysisByBookRequest {
-  authKey?: string; // 인증키, 필수, 문자열
+interface ILibAnalysisByBookRequest extends ILibRequest {
   isbn13: number; // 13 자리 ISBN, 필수, 숫자, 10 자리 또는 13 자리 ISBN 혼용 가능
   additionalYN?: "Y" | "N"; // 부가정보 적용여부, 선택, 문자열, 없는 경우 'N'을 기본값으로 설정, 'Y'인 경우 서지정보(도서명, 저자명, 출판사, 13 자리 ISBN)를 제공
-  format?: "xml" | "json"; // 응답유형, 선택, 문자열, 없을 경우 'xml' 타입으로 제공
 }
 
 // 책에 대한 정보를 나타내는 인터페이스

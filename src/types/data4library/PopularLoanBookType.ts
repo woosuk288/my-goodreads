@@ -1,5 +1,4 @@
-interface IPopularLoanBooksRequest {
-  authKey?: string; // 인증키 (필수)
+interface IPopularLoanBooksRequest extends ILibRequest {
   startDt?: string; // 검색시작일자 (선택)
   endDt?: string; // 검색종료일자 (선택)
   gender?: number[]; // 성별 (다중선택 가능, 선택)
@@ -14,7 +13,6 @@ interface IPopularLoanBooksRequest {
   dtl_kdc?: number[]; // 세부주제 (다중선택 가능, 선택)
   pageNo?: number; // 페이지번호 (응답결과가 제공되는 페이지 번호 지정, 선택)
   pageSize?: number; // 페이지크기 (한 페이지당 제공되는 도서목록 개수 지정, 선택)
-  format?: "xml" | "json"; // 응답유형 (xml: xml 타입, json: json 타입, 선택)
 }
 
 // 응답 메시지 명세를 기반으로 한 도서 정보 인터페이스

@@ -1,8 +1,6 @@
-interface ILibRecommandBooksRequest {
-  authKey?: string; // 인증키, 필수, 문자열
+interface ILibRecommandBooksRequest extends ILibRequest {
   isbn13: number; // 13 자리 ISBN, 필수, 숫자, 10 자리 또는 13 자리 ISBN 혼용 가능
   type: "mania" | "reader"; // [mania: 마니아를 위한 추천 도서] [reader: 다독자를 위한 추천 도서]
-  format?: "xml" | "json"; // 응답유형, 선택, 문자열, 없을 경우 'xml' 타입으로 제공
 }
 
 interface ILibRecommandBook {
