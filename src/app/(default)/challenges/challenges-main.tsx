@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Box, Button, SxProps, TextField, Typography } from "@mui/material";
 
 export default function ChallengesMain() {
+  const [bookCount, setBookCount] = useState<string>("");
+
   return (
     <Box sx={sxChallengesMain}>
       <div className="challenge_container">
@@ -17,10 +20,36 @@ export default function ChallengesMain() {
         </div>
         <form className="challenge_form">
           <div className="field">
-            <TextField className="challenge_input_number" type="number" name="user_challenge_goal" placeholder="N 권의 책" size="small" />
+            <TextField
+              className="challenge_input_number"
+              name="user_challenge_goal"
+              placeholder="N 권의 책"
+              size="small"
+              type="number"
+              value={bookCount}
+              onChange={(e) => {
+                let value = parseInt(e.target.value, 10);
+                console.log("value : ", value);
+                const min = 0;
+                const max = 1000;
+                if (value > max) value = max;
+                if (value < min) value = min;
+
+                setBookCount(isNaN(value) ? "" : String(value));
+              }}
+            />
           </div>
           <div className="actions">
-            <Button className="challenge_action_button" type="submit" variant="contained" size="large">
+            <Button
+              className="challenge_action_button"
+              type="submit"
+              variant="contained"
+              size="large"
+              onClick={(e) => {
+                e.preventDefault();
+                alert("Not yet.");
+              }}
+            >
               도전 시작하기
             </Button>
           </div>

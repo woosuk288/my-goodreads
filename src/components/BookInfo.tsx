@@ -44,16 +44,15 @@ interface Props {
 
 export default function BookInfo({ kakaoBook, keywordList }: Props) {
   const { title, thumbnail, authors, contents, isbn } = kakaoBook;
+  const bookId = extractISBN(isbn);
 
-  const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
-  const bookDetailLink = `${REVIEW_EDIT_PATH}?${params.toString()}`;
+  const bookDetailLink = `${REVIEW_EDIT_PATH}/${bookId}`;
 
   const { state, isLoggedIn, user } = useAuth();
   const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn ? "user" : null, getProfile);
 
-  const bookId = extractISBN(isbn);
   const uid = user?.uid;
-  const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `api/reviews/${bookId}/${uid}` : null, (_) =>
+  const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `api/ratings/${bookId}/${uid}` : null, (_) =>
     getReviewByBookAndUser(bookId, uid!)
   );
   const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
@@ -231,7 +230,6 @@ const sxBookInfo: SxProps = {
   padding: "12px",
   ".book_cover_section": {
     position: "relative",
-    height: "200px",
     width: "calc(100% + 24px)",
     left: "-12px",
     top: "-12px",
@@ -240,13 +238,9 @@ const sxBookInfo: SxProps = {
   },
   ".book_cover_wrapper": {
     width: "35%",
-    height: "100%",
     margin: "auto",
     filter: "drop-shadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.2))",
     textAlign: "center",
-    img: {
-      height: "100%",
-    },
   },
   ".book_cover_image": {
     borderRadius: "0 8px 8px 0",

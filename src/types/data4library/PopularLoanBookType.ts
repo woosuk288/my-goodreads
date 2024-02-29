@@ -10,7 +10,7 @@ interface IPopularLoanBooksRequest {
   dtl_region?: number[]; // 세부지역 (다중선택 가능, 선택)
   book_dvsn?: "big" | "oversea"; // 도서구분 (big: 큰글씨도서, oversea: 국외도서, 선택)
   addCode?: number[]; // ISBN 부가기호 (다중선택 가능, 선택)
-  kdc?: number[]; // 대주제 (다중선택 가능, 선택)
+  kdc?: string; // 대주제 (다중선택 가능, 선택)
   dtl_kdc?: number[]; // 세부주제 (다중선택 가능, 선택)
   pageNo?: number; // 페이지번호 (응답결과가 제공되는 페이지 번호 지정, 선택)
   pageSize?: number; // 페이지크기 (한 페이지당 제공되는 도서목록 개수 지정, 선택)

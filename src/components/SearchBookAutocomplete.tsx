@@ -13,6 +13,7 @@ import { BOOK_PATH, SEARCH_PATH } from "../constants/routes";
 import { Button } from "@mui/material";
 import { LINK_BUTTON_COLOR } from "../theme";
 import { KAKAO_BOOK_SEARCH_URL } from "@/constants/urls";
+import { extractISBN } from "@/lib/utils";
 
 interface Props {
   onClose: () => void;
@@ -89,18 +90,20 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
       popupIcon={null}
       value={value}
       onChange={(event: any, newValue, reason) => {
-        console.log("reason : ", reason);
-        console.log("onChange ");
-        console.log("newValue : ", newValue);
-        console.log("inputValue : ", inputValue);
+        // console.log("reason : ", reason);
+        // console.log("onChange ");
+        // console.log("newValue : ", newValue);
+        // console.log("inputValue : ", inputValue);
         onClose();
         if (typeof newValue === "string") {
           router.push(`${SEARCH_PATH}?query=${inputValue}`);
         } else {
           setOptions(newValue ? [newValue, ...options] : options);
           setValue(newValue);
-          const params = new URLSearchParams(newValue as unknown as Record<string, string>);
-          router.push(`${BOOK_PATH}?query=${inputValue}&${params.toString()}`);
+          if (newValue) {
+            const isbn = extractISBN(newValue.isbn);
+            router.push(`${BOOK_PATH}/${isbn}?query=${inputValue}`);
+          }
         }
       }}
       onInputChange={(event, newInputValue) => {

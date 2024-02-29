@@ -5,6 +5,7 @@ import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
 import { READ_STATUS } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
 import { BOOK_PATH } from "@/constants/routes";
+import { extractISBN } from "@/lib/utils";
 
 interface Props {
   kakaoBook: IKakaoBook;
@@ -13,10 +14,9 @@ interface Props {
 }
 
 export default function SearchBookItem({ kakaoBook, readStatus, authState }: Props) {
-  const { thumbnail, title, authors, datetime } = kakaoBook;
+  const { thumbnail, title, authors, datetime, isbn } = kakaoBook;
 
-  const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
-  const bookDetailLink = `${BOOK_PATH}?${params.toString()}`;
+  const bookDetailLink = `${BOOK_PATH}/${extractISBN(isbn)}`;
 
   return (
     <Card sx={sxSearchBookItem} component="li">

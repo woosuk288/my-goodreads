@@ -13,13 +13,11 @@ interface ISearchParams {
   };
 }
 export default async function Page({ searchParams }: ISearchParams) {
-  console.log("searchParams : ", searchParams);
   const kakaoBooksResult = await getKakaoBooks({ query: searchParams.query });
 
   return (
     <>
       <SignUpBanner />
-
       <SearchBookList query={searchParams.query} kakaoBooksResult={kakaoBooksResult} />
     </>
   );

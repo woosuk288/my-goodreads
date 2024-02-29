@@ -21,7 +21,13 @@ async function getPosts() {
 
 export default async function Page() {
   // Fetch data directly in a Server Component
-  const popularBooksReponse = await fetchPopularBooks({ pageNo: 1, pageSize: 30, startDt: getFormattedPreviousDate("month") });
+  const popularBooksReponse = await fetchPopularBooks({
+    from_age: 20,
+    to_age: 40,
+    pageNo: 1,
+    pageSize: 30,
+    startDt: getFormattedPreviousDate("month"),
+  });
   const newSepcialBooksResponse = await fetchAladinItemList({
     QueryType: "ItemNewSpecial",
     MaxResults: 30,

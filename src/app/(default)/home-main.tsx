@@ -124,7 +124,7 @@ Props) {
           </Box>
         )}
 
-        <Box className="serachBar" sx={{ margin: "10px" }}>
+        {/* <Box className="serachBar" sx={{ margin: "10px" }}>
           <TextField
             fullWidth
             size="small"
@@ -145,7 +145,7 @@ Props) {
 
         <Box sx={sxAppLinksWrapper}>
           <AppLinks />
-        </Box>
+        </Box> */}
 
         <Box>
           <Heading heading="이번 주 가장 많이 읽은 책" />

@@ -21,7 +21,6 @@ export const searchBooks = () => {};
 export const fetchPopularBooks = async (params?: IPopularLoanBooksRequest) => {
   const baseUrl = `${DATA_4_LIBRARY_API_URL}/loanItemSrch`;
   const queryParams = new URLSearchParams({ ...params, ...DEFAULT_PARAMS } as unknown as Record<string, string>);
-
   const response = await fetch(`${baseUrl}?${queryParams}`);
   const data: IPopularLoanBooksResponse = (await response.json()).response;
 

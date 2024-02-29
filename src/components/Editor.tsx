@@ -14,7 +14,6 @@ import {
   Rating,
   SxProps,
   TextField,
-  Theme,
   Typography,
 } from "@mui/material";
 
@@ -46,7 +45,9 @@ export default function Editor({ kakaoBook }: Props) {
     (_) => getReviewByBookAndUser(bookId, uid!),
     {
       onSuccess(data) {
-        setFormReview({ reviewText: data?.reviewText!, isSpoiler: data?.isSpoiler! });
+        if (data) {
+          setFormReview({ reviewText: data.reviewText ?? "", isSpoiler: data.isSpoiler ?? false });
+        }
       },
     }
   );
@@ -79,8 +80,7 @@ export default function Editor({ kakaoBook }: Props) {
       { bookId, ...formReview },
       {
         onSuccess() {
-          const params = new URLSearchParams(kakaoBook as unknown as Record<string, string>);
-          const bookDetailLink = `${BOOK_PATH}?${params.toString()}`;
+          const bookDetailLink = `${BOOK_PATH}/${bookId}`;
           router.replace(bookDetailLink);
         },
       }
@@ -150,7 +150,7 @@ export default function Editor({ kakaoBook }: Props) {
             rows={7}
             fullWidth
             placeholder="리뷰를 써보세요 (선택)"
-            value={formReview.reviewText}
+            value={formReview.reviewText ?? ""}
             onChange={handleFormChange}
           />
 

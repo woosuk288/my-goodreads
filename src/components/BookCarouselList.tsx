@@ -25,7 +25,7 @@ export default function BookCarouselList({ recommandBookByMania, recommandBookBy
   return (
     <Box sx={sxBookCarouselList}>
       <div className="heading_wrapper">
-        <BookPageHeading02 title="이 저자의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
+        <BookPageHeading02 title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
       </div>
       <div className="author_books_wrapper">
         <BookCarouselVerticalItem libBooks={recommandBookByMania} />
@@ -50,7 +50,7 @@ export default function BookCarouselList({ recommandBookByMania, recommandBookBy
       </div>
 
       <div className="heading_wrapper">
-        <BookPageHeading02 title="비슷한 유형의 추천 도서" /> {/* LISTS FEATURING THIS BOOK */}
+        <BookPageHeading02 title="관심 주제로 추천하는 인기 도서" /> {/* LISTS FEATURING THIS BOOK */}
       </div>
       <div className="book_featuring_list">{/* <BookCarouselHorizontalItem  /> */}</div>
       <div className="show_more_button_wrapper">
