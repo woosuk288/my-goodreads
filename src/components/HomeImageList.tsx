@@ -2,26 +2,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import { Box, SxProps } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 import Link from "next/link";
-
-const sxHomeImageList: SxProps = {
-  ".swiper-wrapper": {
-    margin: "8px",
-  },
-
-  ".swiper-slide": {
-    width: "140px",
-    height: "200px",
-    backgroundColor: "#999999",
-
-    img: {
-      width: "100%",
-      maxHeight: "200px",
-      objectFit: "cover",
-    },
-  },
-};
 
 interface Props {
   images: IBookImageItem[];
@@ -31,6 +13,7 @@ interface IBookImageItem {
   title: string;
   pageLink: string;
   imgSrc: string;
+  isbn: string;
 }
 
 export default function HomeImageList({ images }: Props) {
@@ -47,9 +30,35 @@ export default function HomeImageList({ images }: Props) {
             <Link href={image.pageLink}>
               <img alt={image.title} title={image.title} itemProp="image" className="bookCoverImage" src={image.imgSrc} />
             </Link>
+            <Typography sx={sxTruncateText}>{image.title}</Typography>
           </SwiperSlide>
         ))}
       </Swiper>
     </Box>
   );
 }
+
+const sxHomeImageList: SxProps = {
+  ".swiper-wrapper": {
+    margin: "8px",
+  },
+
+  ".swiper-slide": {
+    width: "140px",
+    // backgroundColor: "#999999",
+
+    img: {
+      height: "200px",
+      width: "100%",
+      objectFit: "cover",
+    },
+  },
+};
+
+const sxTruncateText: SxProps = {
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  display: "-webkit-box",
+  WebkitLineClamp: "2",
+  WebkitBoxOrient: "vertical",
+};

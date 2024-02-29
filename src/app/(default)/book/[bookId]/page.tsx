@@ -7,9 +7,8 @@ import { fetchAnalysisByBook, fetchKeywordsByBook, fetchPopularBooks, fetchRecom
 export default async function page({ params }: { params: { bookId: string } }) {
   const isbn = params.bookId;
   const kakaoBookResponse = await getKakaoBooks({ query: isbn, target: "isbn", size: 1 });
-  console.log("kakaoBookResponse.meta.total_count  : ", kakaoBookResponse.meta.total_count);
 
-  // TODO: client에서 불러오기
+  // TODO: component에서 불러오기, observer적용
   const keywordList = await fetchKeywordsByBook({ isbn13: Number(isbn) });
   // const analysisBook = await fetchAnalysisByBook({isbn13: Number(isbn)  })
   const recommandBookByMania = await fetchRecommandBooks({ isbn13: Number(isbn), type: "mania" });

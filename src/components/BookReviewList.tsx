@@ -30,7 +30,7 @@ const sxBookReviewList: SxProps = {
     borderTop: "1px solid #FFFFFF",
   },
   ".review_more_button_wrapper": {
-    margin: "24px 0",
+    margin: "24px 0 64px",
     textAlign: "center",
   },
 

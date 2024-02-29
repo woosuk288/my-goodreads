@@ -10,7 +10,7 @@ import HomeTextList from "../../components/HomeTextList";
 import Heading from "../../components/Heading";
 import NextLink from "next/link";
 import useUserSession from "@/hooks/useUserSession";
-import { CHALLENGES_PATH } from "@/constants/routes";
+import { BOOK_PATH, CHALLENGES_PATH } from "@/constants/routes";
 
 const sxHome: SxProps = {};
 
@@ -85,20 +85,23 @@ Props) {
   const popularBooksForImageList = popularBooksResponse.docs.map((item) => ({
     id: item.doc.isbn13,
     title: item.doc.bookname,
-    pageLink: item.doc.bookDtlUrl, // TODO: 주소 수정
+    pageLink: `${BOOK_PATH}/${item.doc.isbn13}`,
     imgSrc: item.doc.bookImageURL,
+    isbn: item.doc.isbn13,
   }));
   const newSepcialBooksForImageList = newSepcialBooksResponse.item.map((item) => ({
     id: item.itemId.toString(),
     title: item.title,
     pageLink: item.link,
     imgSrc: item.cover,
+    isbn: item.isbn13,
   }));
   const bloggerBestSellerForImageList = bloggerBestSellerResponse.item.map((item) => ({
     id: item.itemId.toString(),
     title: item.title,
     pageLink: item.link,
     imgSrc: item.cover,
+    isbn: item.isbn13,
   }));
 
   return (
