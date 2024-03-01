@@ -27,6 +27,99 @@ import HeaderNavDrawer from "./HeaderNavDrawer";
 import { signInWithGoogle } from "@/lib/firebase/auth";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
 import { useAuth } from "./AuthProvider";
+import { useRouter } from "next/navigation";
+import { REVIEW_LIST_PATH } from "@/constants/routes";
+
+interface IHeader {
+  // initialUser: User | undefined | null;
+}
+export default function Header({}: /* initialUser */ IHeader) {
+  const router = useRouter();
+  const authState = useAuth();
+
+  const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
+  const [tabCode, setTabCode] = React.useState<string | boolean>(false);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    console.log("handleChange : ", newValue);
+    setTabCode(newValue);
+    if (newValue === TAB_CODES.MY_BOOKS) {
+      authState.state === "loaded" && authState.isLoggedIn && router.push(REVIEW_LIST_PATH + `/${authState.user?.uid}`);
+    }
+  };
+
+  // const handleTabClick = (newValue: string) => () => {
+  //   if (tabCode === newValue) {
+  //     setTabCode(false);
+  //   }
+  // };
+
+  const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    signInWithGoogle();
+  };
+
+  const handleSearchIconClick = () => {
+    setOpenAutoComplete(!openAutoComplete);
+  };
+
+  const handleAutoCompleteClose = () => {
+    setOpenAutoComplete(false);
+  };
+
+  return (
+    <AppBar sx={sxHeader}>
+      <Container maxWidth="lg" disableGutters>
+        <Toolbar sx={sxToolbar} variant="dense">
+          <IconButton onClick={handleSearchIconClick}>
+            <SearchIcon aria-label="search" />
+          </IconButton>
+
+          <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
+
+          {authState.state === "loading" ? (
+            <CircularProgress size={32} />
+          ) : authState.state === "loaded" && !authState.user ? (
+            <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
+              Sign in
+            </Button>
+          ) : (
+            <HeaderNavDrawer />
+          )}
+        </Toolbar>
+
+        {openAutoComplete && (
+          <Box sx={sxAutoCompleteWrapper}>
+            <SearchBookAutocomplete onClose={handleAutoCompleteClose} />
+          </Box>
+        )}
+
+        <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
+          <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} />
+          <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} />
+          <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} />
+        </Tabs>
+
+        {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
+          <MenuList dense>
+            {tabCode === TAB_CODES.BROWSE &&
+              BROWSE_MENUS.map((menu) => (
+                <MenuItem key={menu.link}>
+                  <ListItemText>{menu.text}</ListItemText>
+                </MenuItem>
+              ))}
+            {tabCode === TAB_CODES.COMMUNITY &&
+              COMMUNITY_MENUS.map((menu) => (
+                <MenuItem key={menu.link}>
+                  <ListItemText>{menu.text}</ListItemText>
+                </MenuItem>
+              ))}
+          </MenuList>
+        )}
+      </Container>
+    </AppBar>
+  );
+}
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
@@ -140,105 +233,3 @@ const TAB_CODES = {
   BROWSE: "BROWSE",
   COMMUNITY: "COMMUNITY",
 };
-
-interface IHeader {
-  // initialUser: User | undefined | null;
-}
-export default function Header({}: /* initialUser */ IHeader) {
-  const authState = useAuth();
-
-  const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
-  const [tabCode, setTabCode] = React.useState<string | boolean>(false);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log("handleChange : ", newValue);
-    if (newValue === TAB_CODES.MY_BOOKS) {
-      alert("로그인 or 내 서재");
-    }
-    setTabCode(newValue);
-  };
-
-  const handleTabClick = (newValue: string) => () => {
-    if (tabCode === newValue) {
-      setTabCode(false);
-    }
-  };
-
-  const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    signInWithGoogle();
-  };
-
-  const handleSearchIconClick = () => {
-    setOpenAutoComplete(!openAutoComplete);
-  };
-
-  const handleAutoCompleteClose = () => {
-    setOpenAutoComplete(false);
-  };
-
-  return (
-    <AppBar sx={sxHeader}>
-      <Container maxWidth="lg" disableGutters>
-        <Toolbar sx={sxToolbar} variant="dense">
-          <IconButton onClick={handleSearchIconClick}>
-            <SearchIcon aria-label="search" />
-          </IconButton>
-
-          <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
-
-          {authState.state === "loading" ? (
-            <CircularProgress size={32} />
-          ) : authState.state === "loaded" && !authState.user ? (
-            <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
-              Sign in
-            </Button>
-          ) : (
-            <HeaderNavDrawer />
-          )}
-        </Toolbar>
-
-        {openAutoComplete && (
-          <Box sx={sxAutoCompleteWrapper}>
-            <SearchBookAutocomplete onClose={handleAutoCompleteClose} />
-          </Box>
-        )}
-
-        <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
-          <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} onClick={handleTabClick(TAB_CODES.MY_BOOKS)} />
-          <Tab
-            label="둘러보기"
-            value={TAB_CODES.BROWSE}
-            component={Button}
-            endIcon={<ArrowDropDownIcon />}
-            onClick={handleTabClick(TAB_CODES.BROWSE)}
-          />
-          <Tab
-            label="커뮤니티"
-            value={TAB_CODES.COMMUNITY}
-            component={Button}
-            endIcon={<ArrowDropDownIcon />}
-            onClick={handleTabClick(TAB_CODES.COMMUNITY)}
-          />
-        </Tabs>
-
-        {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
-          <MenuList dense>
-            {tabCode === TAB_CODES.BROWSE &&
-              BROWSE_MENUS.map((menu) => (
-                <MenuItem key={menu.link}>
-                  <ListItemText>{menu.text}</ListItemText>
-                </MenuItem>
-              ))}
-            {tabCode === TAB_CODES.COMMUNITY &&
-              COMMUNITY_MENUS.map((menu) => (
-                <MenuItem key={menu.link}>
-                  <ListItemText>{menu.text}</ListItemText>
-                </MenuItem>
-              ))}
-          </MenuList>
-        )}
-      </Container>
-    </AppBar>
-  );
-}

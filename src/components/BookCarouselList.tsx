@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, SxProps } from "@mui/material";
-import BookPageHeading02 from "./BookPageHeading02";
+import BookPageHeading from "./BookPageHeading";
 import BookCarouselVerticalList from "./BookCarouselVerticalList";
 // import BookCarouselHorizontalList from "./BookCarouselHorizontalList";
 import { useInView } from "react-intersection-observer";
@@ -46,7 +46,7 @@ export default function BookCarouselList({ isbn }: Props) {
         recommandBooksResult && (
           <>
             <div className="heading_wrapper">
-              <BookPageHeading02 title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
+              <BookPageHeading title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
             </div>
             <div className="author_books_wrapper">
               <BookCarouselVerticalList libBooks={recommandBooksResult[0]} /> {/* recommandBookByMania */}
@@ -59,7 +59,7 @@ export default function BookCarouselList({ isbn }: Props) {
             </div>
 
             <div className="heading_wrapper">
-              <BookPageHeading02 title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
+              <BookPageHeading title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
             </div>
             <div className="reader_realted_list">
               <BookCarouselVerticalList libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
@@ -73,7 +73,7 @@ export default function BookCarouselList({ isbn }: Props) {
         )
       )}
       {/* <div className="heading_wrapper">
-        <BookPageHeading02 title="관심 주제로 추천하는 인기 도서 (LISTS FEATURING THIS BOOK)" } />
+        <BookPageHeading title="관심 주제로 추천하는 인기 도서 (LISTS FEATURING THIS BOOK)" } />
         
       </div>
       <div className="book_featuring_list">

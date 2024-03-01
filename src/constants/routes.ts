@@ -8,6 +8,7 @@ export const SEARCH_PATH = "/search";
 export const BOOK_PATH = "/book";
 
 export const REVIEW_EDIT_PATH = "/review/edit";
+export const REVIEW_LIST_PATH = "/review/list";
 
 export const CHALLENGES_PATH = "/challenges";
 

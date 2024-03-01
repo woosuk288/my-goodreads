@@ -26,7 +26,7 @@ import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import StoreIcon from "@mui/icons-material/Store";
 import ShareIcon from "@mui/icons-material/Share";
 
-import BookPageHeading02 from "./BookPageHeading02";
+import BookPageHeading from "./BookPageHeading";
 import BookRatingStats from "./BookRatingStats";
 import ExpandMoreBar from "./ExpandMoreBar";
 import { REVIEW_EDIT_PATH } from "@/constants/routes";
@@ -186,7 +186,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
 
         <div className="description_wrapper">
           <div className="description_heading_wrapper">
-            <BookPageHeading02 title="BOOK DESCRIPTION" />
+            <BookPageHeading title="BOOK DESCRIPTION" />
           </div>
 
           <Collapse in={show} collapsedSize={160}>

@@ -3,7 +3,7 @@
 import { Box, Button, Divider, LinearProgress, Rating, SxProps, Typography } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-import BookPageHeading02 from "./BookPageHeading02";
+import BookPageHeading from "./BookPageHeading";
 import BookRatingStats from "./BookRatingStats";
 import BookReviewItem from "./BookReviewItem";
 
@@ -47,7 +47,7 @@ export default function BookReviewList() {
     <Box sx={sxBookReviewList}>
       <div className="rating_details_section">
         <div className="rating_stats_heading_wrapper">
-          <BookPageHeading02 title="RATING DETAILS" />
+          <BookPageHeading title="RATING DETAILS" />
         </div>
         <div className="rating_stats_wrapper">
           <BookRatingStats ratingValue={3.95} userRatingCount={348897} />
@@ -63,7 +63,7 @@ export default function BookReviewList() {
 
       <div className="review_section">
         <div className="review_section_heading_wrapper">
-          <BookPageHeading02 title="COMMUNITY REVIEWS" />
+          <BookPageHeading title="COMMUNITY REVIEWS" />
         </div>
         <div className="user_review_list_wrapper">
           <BookReviewItem />
