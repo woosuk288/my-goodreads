@@ -7,8 +7,8 @@ import BookRatingStats from "./BookRatingStats";
 import NextLink from "next/link";
 import { BOOK_PATH } from "@/constants/routes";
 
-const sxBookCarouselVerticalItem: SxProps = {
-  ".swiper-wrapper": {
+const sxBookCarouselVerticalList: SxProps = {
+  ".swiper": {
     padding: "12px 16px",
   },
 
@@ -59,9 +59,9 @@ interface Props {
   libBooks: ILibRecommandBooksResponse;
 }
 
-export default function BookCarouselVerticalItem({ libBooks }: Props) {
+export default function BookCarouselVerticalList({ libBooks }: Props) {
   return (
-    <Box sx={sxBookCarouselVerticalItem}>
+    <Box sx={sxBookCarouselVerticalList}>
       <Swiper
         spaceBetween={20}
         slidesPerView={"auto"}

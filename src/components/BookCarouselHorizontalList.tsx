@@ -5,8 +5,8 @@ import { Box, Link, SxProps, Typography } from "@mui/material";
 
 import NextLink from "next/link";
 
-const sxBookCarouselHorizontalItem: SxProps = {
-  ".swiper-wrapper": {
+const sxBookCarouselHorizontalList: SxProps = {
+  ".swiper": {
     padding: "12px 16px",
   },
 
@@ -40,9 +40,9 @@ const sxBookCarouselHorizontalItem: SxProps = {
   },
 };
 
-export default function BookCarouselHorizontalItem() {
+export default function BookCarouselHorizontalList() {
   return (
-    <Box sx={sxBookCarouselHorizontalItem}>
+    <Box sx={sxBookCarouselHorizontalList}>
       <Swiper
         spaceBetween={20}
         slidesPerView={"auto"}

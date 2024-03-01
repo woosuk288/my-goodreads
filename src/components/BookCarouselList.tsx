@@ -2,8 +2,8 @@
 
 import { Box, Button, SxProps } from "@mui/material";
 import BookPageHeading02 from "./BookPageHeading02";
-import BookCarouselVerticalItem from "./BookCarouselVerticalItem";
-// import BookCarouselHorizontalItem from "./BookCarouselHorizontalItem";
+import BookCarouselVerticalList from "./BookCarouselVerticalList";
+// import BookCarouselHorizontalList from "./BookCarouselHorizontalList";
 import { useInView } from "react-intersection-observer";
 import useSWR from "swr";
 import { fetchRecommandBooks } from "@/lib/data4library";
@@ -49,7 +49,7 @@ export default function BookCarouselList({ isbn }: Props) {
               <BookPageHeading02 title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
             </div>
             <div className="author_books_wrapper">
-              <BookCarouselVerticalItem libBooks={recommandBooksResult[0]} /> {/* recommandBookByMania */}
+              <BookCarouselVerticalList libBooks={recommandBooksResult[0]} /> {/* recommandBookByMania */}
             </div>
             <div className="show_more_button_wrapper">
               <Button variant="outlined" href="#">
@@ -62,7 +62,7 @@ export default function BookCarouselList({ isbn }: Props) {
               <BookPageHeading02 title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
             </div>
             <div className="reader_realted_list">
-              <BookCarouselVerticalItem libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
+              <BookCarouselVerticalList libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
             </div>
             <div className="show_more_button_wrapper">
               <Button variant="outlined" href="#">
@@ -77,7 +77,7 @@ export default function BookCarouselList({ isbn }: Props) {
         
       </div>
       <div className="book_featuring_list">
-        <BookCarouselHorizontalItem  />
+        <BookCarouselHorizontalList  />
       </div>
       <div className="show_more_button_wrapper">
         <Button variant="outlined" href="#">
