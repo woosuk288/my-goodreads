@@ -39,7 +39,7 @@ import useSWRMutation from "swr/mutation";
 interface Props {
   kakaoBook: IKakaoBook;
   // analysisBook: ILibAnalysisByBookResponse
-  keywordList: ILibKeywordListResponse;
+  keywordList: ILibKeywordListResponse | null;
 }
 
 export default function BookInfo({ kakaoBook, keywordList }: Props) {
@@ -201,7 +201,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           키워드
         </Typography>
         <div className="genres_list">
-          {keywordList.items.slice(0, 10).map((keyword) => (
+          {keywordList?.items.slice(0, 10).map((keyword) => (
             <Chip
               key={keyword.item.word}
               clickable
