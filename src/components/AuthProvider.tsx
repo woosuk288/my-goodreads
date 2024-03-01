@@ -1,3 +1,5 @@
+"use client";
+
 import { auth } from "@/lib/firebase/firebase";
 import { AuthState } from "@/types/exportType";
 import { onAuthStateChanged, User } from "firebase/auth";

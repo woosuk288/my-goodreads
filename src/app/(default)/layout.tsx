@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
@@ -8,8 +6,8 @@ import theme from "@/theme";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Main from "@/components/Main";
-
-import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase";
+//
+// import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase";
 // import { User } from "firebase/auth";
 // import { getCurrentUser } from "@/lib/firebase/firebase-admin";
 import { AuthProvider } from "@/components/AuthProvider";
