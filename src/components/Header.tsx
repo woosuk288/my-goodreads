@@ -27,7 +27,7 @@ import HeaderNavDrawer from "./HeaderNavDrawer";
 import { signInWithGoogle } from "@/lib/firebase/auth";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
 import { useAuth } from "./AuthProvider";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { REVIEW_LIST_PATH } from "@/constants/routes";
 
 interface IHeader {
@@ -35,13 +35,19 @@ interface IHeader {
 }
 export default function Header({}: /* initialUser */ IHeader) {
   const router = useRouter();
+  const pathname = usePathname();
   const authState = useAuth();
 
   const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
+  React.useEffect(() => {
+    if (TAB_CODES.MY_BOOKS === tabCode && pathname !== REVIEW_LIST_PATH + `/${authState.user?.uid}`) {
+      setTabCode(false);
+    }
+  }, [pathname]);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log("handleChange : ", newValue);
     setTabCode(newValue);
     if (newValue === TAB_CODES.MY_BOOKS) {
       authState.state === "loaded" && authState.isLoggedIn && router.push(REVIEW_LIST_PATH + `/${authState.user?.uid}`);
