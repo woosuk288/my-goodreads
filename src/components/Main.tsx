@@ -1,10 +1,11 @@
 "use client";
 
+import { HEADER_HEIGHT } from "@/constants/values";
 import { Box, SxProps, Theme } from "@mui/material";
 import { ReactNode } from "react";
 
 const sxMain: SxProps<Theme> = (theme) => ({
-  paddingTop: "100px",
+  paddingTop: HEADER_HEIGHT,
   maxWidth: theme.breakpoints.values.sm,
   margin: "0 auto",
 });

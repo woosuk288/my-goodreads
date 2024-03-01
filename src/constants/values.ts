@@ -11,3 +11,5 @@ export const READ_STATUS_TEXT = {
   read: "읽음",
   unread: "안 읽음",
 } as const;
+
+export const HEADER_HEIGHT = "100px";
