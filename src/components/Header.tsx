@@ -54,11 +54,15 @@ export default function Header({}: /* initialUser */ IHeader) {
     }
   };
 
-  // const handleTabClick = (newValue: string) => () => {
-  //   if (tabCode === newValue) {
-  //     setTabCode(false);
-  //   }
-  // };
+  const handleTabClick = (newValue: string) => () => {
+    if (tabCode === newValue) {
+      setTabCode(false);
+    }
+  };
+
+  const handleClose = () => {
+    setTabCode(false);
+  };
 
   const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
@@ -102,21 +106,33 @@ export default function Header({}: /* initialUser */ IHeader) {
 
         <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
           <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} />
-          <Tab label="둘러보기" value={TAB_CODES.BROWSE} component={Button} endIcon={<ArrowDropDownIcon />} />
-          <Tab label="커뮤니티" value={TAB_CODES.COMMUNITY} component={Button} endIcon={<ArrowDropDownIcon />} />
+          <Tab
+            label="둘러보기"
+            value={TAB_CODES.BROWSE}
+            component={Button}
+            endIcon={<ArrowDropDownIcon />}
+            onClick={handleTabClick(TAB_CODES.BROWSE)}
+          />
+          <Tab
+            label="커뮤니티"
+            value={TAB_CODES.COMMUNITY}
+            component={Button}
+            endIcon={<ArrowDropDownIcon />}
+            onClick={handleTabClick(TAB_CODES.COMMUNITY)}
+          />
         </Tabs>
 
         {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
           <MenuList dense>
             {tabCode === TAB_CODES.BROWSE &&
               BROWSE_MENUS.map((menu) => (
-                <MenuItem key={menu.link}>
+                <MenuItem key={menu.link} onClick={handleClose}>
                   <ListItemText>{menu.text}</ListItemText>
                 </MenuItem>
               ))}
             {tabCode === TAB_CODES.COMMUNITY &&
               COMMUNITY_MENUS.map((menu) => (
-                <MenuItem key={menu.link}>
+                <MenuItem key={menu.link} onClick={handleClose}>
                   <ListItemText>{menu.text}</ListItemText>
                 </MenuItem>
               ))}
