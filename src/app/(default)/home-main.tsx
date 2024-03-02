@@ -1,10 +1,12 @@
 "use client";
 
-import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Typography } from "@mui/material";
+import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Theme, Typography } from "@mui/material";
 import LoginButtonGroup from "../../components/LoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppLinks from "../../components/AppLinks";
+import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded";
+
 import HomeImageList from "../../components/HomeImageList";
 import HomeTextList from "../../components/HomeTextList";
 import Heading from "../../components/Heading";
@@ -14,14 +16,21 @@ import { BOOK_PATH, CHALLENGES_PATH } from "@/constants/routes";
 
 const sxHome: SxProps = {};
 
-const sxHomepagePromotionWrapper: SxProps = {
+const sxHomepagePromotionWrapper: SxProps<Theme> = (theme) => ({
   marginLeft: "auto",
   marginRight: "auto",
   marginBottom: "24px",
   padding: "0 0 24px",
 
-  img: { width: "100%" },
-};
+  img: { width: "100%", borderRadius: "4px" },
+  [theme.breakpoints.up("sm")]: {
+    img: {
+      height: "380px",
+      objectFit: "cover",
+      objectPosition: "100% 53%",
+    },
+  },
+});
 
 const sxAuthSignInWrapper: SxProps = {
   textAlign: "center",

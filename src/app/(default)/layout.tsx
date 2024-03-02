@@ -14,6 +14,11 @@ import { AuthProvider } from "@/components/AuthProvider";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "Goodreads clone",
+  description: "Goodreads clone is a book review website built with Next.js and Firebase.",
+};
+
 export default async function RootLayout(props: { children: React.ReactNode }) {
   // const { currentUser } = await getAuthenticatedAppForUser();
   // const currentUser = await getCurrentUser();
