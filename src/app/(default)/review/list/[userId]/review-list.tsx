@@ -7,7 +7,11 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 import BookPageHeading from "@/components/BookPageHeading";
 
-export default function ReviewList() {
+interface Props {
+  profile: IUser;
+}
+
+export default function ReviewList({ profile }: Props) {
   return (
     <Box sx={sxReviewList}>
       <section className="shelf_section">
@@ -15,17 +19,17 @@ export default function ReviewList() {
 
         <ListItemButton component={NextLink} href="">
           <ListItemText primary="읽음" />
-          <Typography color="grey">1123</Typography>
+          <Typography color="grey">{profile.booksRead?.length}</Typography>
         </ListItemButton>
         <Divider />
         <ListItemButton component={NextLink} href="">
           <ListItemText primary="읽는 중" />
-          <Typography color="grey">2</Typography>
+          <Typography color="grey">{profile.booksReading?.length}</Typography>
         </ListItemButton>
         <Divider />
         <ListItemButton component={NextLink} href="">
           <ListItemText primary="읽고싶어요" />
-          <Typography color="grey">25</Typography>
+          <Typography color="grey">{profile.booksWant?.length}</Typography>
         </ListItemButton>
         <Divider />
       </section>

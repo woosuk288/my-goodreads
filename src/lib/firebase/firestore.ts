@@ -50,6 +50,12 @@ export async function getProfile(): Promise<IUser | undefined> {
   return user.data();
 }
 
+export async function getProfileById(uid: string): Promise<IUser | undefined> {
+  const userRef = doc(COL_USERS, uid);
+  const user = await getDoc(userRef);
+  return user.data();
+}
+
 /**
  * 책 읽기 상태 CRUD
  */

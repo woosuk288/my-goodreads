@@ -4,6 +4,7 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth, connectAuthEmulator, signInWithCustomToken } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { LOGIN_PATH } from "@/constants/routes";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -62,7 +63,7 @@ export async function getAuthenticatedAppForUser(session: string | undefined | n
 
   const decodedIdToken = await adminAuth.verifySessionCookie(session).catch((e) => console.error(e.message));
   if (!decodedIdToken) {
-    redirect("/login");
+    redirect(LOGIN_PATH);
   }
 
   const app = initializeAuthenticatedApp(decodedIdToken.uid);

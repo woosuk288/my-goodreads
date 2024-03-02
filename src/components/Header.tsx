@@ -28,7 +28,7 @@ import { signInWithGoogle } from "@/lib/firebase/auth";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
 import { useAuth } from "./AuthProvider";
 import { usePathname, useRouter } from "next/navigation";
-import { REVIEW_LIST_PATH } from "@/constants/routes";
+import { LOGIN_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
 
 interface IHeader {
   // initialUser: User | undefined | null;
@@ -90,7 +90,7 @@ export default function Header({}: /* initialUser */ IHeader) {
           {authState.state === "loading" ? (
             <CircularProgress size={32} />
           ) : authState.state === "loaded" && !authState.user ? (
-            <Button variant="contained" size="small" component={NextLink} href="/login" onClick={handleSignInWithGoogle}>
+            <Button variant="contained" size="small" component={NextLink} href={LOGIN_PATH} onClick={handleSignInWithGoogle}>
               Sign in
             </Button>
           ) : (
