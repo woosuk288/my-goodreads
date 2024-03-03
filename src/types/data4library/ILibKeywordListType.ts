@@ -5,7 +5,7 @@ interface ILibKeywordListRequest extends ILibRequest {
 
 interface ILibKeywordListResponse {
   resultNum: number; // 응답결과 수
-  items: Array<{ item: ILibKeywordListItem }>; // 항목
+  items?: Array<{ item: ILibKeywordListItem }>; // 항목
   additionalItem?: AdditionalItem;
   error?: string;
 }

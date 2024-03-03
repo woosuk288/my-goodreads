@@ -196,21 +196,25 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
         </div>
       </div>
 
-      <div className="genres_wrapper">
-        <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-          키워드
-        </Typography>
-        <div className="genres_list">
-          {keywordList?.items.slice(0, 10).map((keyword) => (
-            <Chip
-              key={keyword.item.word}
-              clickable
-              label={keyword.item.word}
-              sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }}
-            />
-          ))}
+      {keywordList?.items && (
+        <div className="genres_wrapper">
+          <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+            키워드
+          </Typography>
+          <div className="genres_list">
+            {keywordList?.items?.slice(0, 10).map((keyword) => (
+              <Chip
+                key={keyword.item.word}
+                clickable
+                label={keyword.item.word}
+                sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }}
+              />
+            ))}
+          </div>
         </div>
-        {/* <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+      )}
+
+      {/* <Typography variant="subtitle1" fontWeight={600} gutterBottom>
           장르
         </Typography>
         
@@ -221,7 +225,6 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           <Chip clickable label="인간관계" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
           <Chip clickable label="경제경영" sx={{ fontWeight: 600, color: "secondary.main", bgcolor: "#EEEEEE" }} />
         </div> */}
-      </div>
     </Box>
   );
 }
