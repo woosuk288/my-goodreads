@@ -84,8 +84,11 @@ export async function updateBookFromShelf(bookId: string, readStatus: IBookReadS
   }
   //unread (삭제)
   else {
+    await updateRating(bookId, null);
     batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayRemove(bookId) });
     batch.delete(bookShelvRef);
+    const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), auth.currentUser?.uid);
+    batch.delete(ratingDocRef);
   }
   await batch.commit();
   //TODO: shelves 여러개 일 때 하위컬렉션에서 찾아서 전부 삭제
@@ -137,6 +140,7 @@ export async function updateRating(bookId: string, rating: number | null) {
     if (ratingSnap.exists()) {
       const prevRating = ratingSnap.data().rating;
       if (rating === null) {
+        // 평점 취소 case
         newNumRatings = newNumRatings - 2;
       } else if (prevRating !== null) {
         newNumRatings = newNumRatings - 1;
@@ -201,6 +205,15 @@ export async function addReviewToBook(bookId: string, reviewText: string, isSpoi
     console.error("There was an error adding the rating to the restaurant", error);
     throw error;
   }
+}
+
+/**
+ * 리뷰 삭제하기
+ */
+
+export async function deleteReviewFromBook(bookId: string) {
+  const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), auth.currentUser?.uid);
+  await setDoc(ratingDocRef, { reviewText: "" }, { merge: true });
 }
 
 // const updateWithRating = async (

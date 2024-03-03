@@ -39,6 +39,9 @@ const WantToReadBottomDrawer = ({ kakaoBook, readStatus, authState }: Props) => 
 
   const handleUpdateReadStatus = (status: IBookReadStatus) => async () => {
     setOpen(false);
+    if (status === "unread" && !confirm("이 도서를 책장에서 제거하신다면 관련된 평점, 리뷰, 읽기 활동도 같이 삭제됩니다.")) {
+      return;
+    }
     await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status, kakaoBook: kakaoBook });
   };
 
