@@ -34,7 +34,7 @@ const COL_USERS = createCollection<IUser>("users");
 const COL_BOOKS = createCollection<IBook>("books");
 // const COL_SHELVS = createCollection<IShelf>("shelves");
 // const COL_REVIEWS = createCollection<IRating>("reviews");
-const COL_SHELF_BOOKS = (shelfId: string) => createCollection<IKakaoBook>("shelves/" + shelfId + "/books");
+const COL_SHELF_BOOKS = (shelfId: string) => createCollection<IShelfBook>("shelves/" + shelfId + "/books");
 const COL_BOOK_RATINGS = (bookId: string) => createCollection<IRating>("books/" + bookId + "/ratings");
 
 /**
@@ -59,27 +59,35 @@ export async function getProfileById(uid: string): Promise<IUser | undefined> {
 /**
  * 책 읽기 상태 CRUD
  */
-export async function updateBookFromShelf(bookId: string, bookStatus: IBookReadStatus, bookInfo?: IKakaoBook) {
+export async function getBooksFromShelf(uid: string, readStatus: IBookReadStatus) {
+  const q = query(COL_SHELF_BOOKS(uid), where("readStatus", "==", readStatus), limit(10));
+
+  const result = await getDocs(q);
+
+  return result;
+}
+export async function updateBookFromShelf(bookId: string, readStatus: IBookReadStatus, kakaoBook: IKakaoBook) {
   const userRef = doc(COL_USERS, auth.currentUser?.uid);
 
   const bookShelvRef = doc(COL_SHELF_BOOKS(auth.currentUser?.uid!), bookId);
   const batch = writeBatch(db);
 
-  if (bookStatus === "want") {
+  if (readStatus === "want") {
     batch.update(userRef, { booksWant: arrayUnion(bookId), booksReading: arrayRemove(bookId), booksRead: arrayRemove(bookId) });
-    batch.set(bookShelvRef, bookInfo, { merge: true });
-    await batch.commit();
-  } else if (bookStatus === "reading") {
-    await updateDoc(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayUnion(bookId), booksRead: arrayRemove(bookId) });
-  } else if (bookStatus === "read") {
-    await updateDoc(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayUnion(bookId) });
+    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
+  } else if (readStatus === "reading") {
+    batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayUnion(bookId), booksRead: arrayRemove(bookId) });
+    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
+  } else if (readStatus === "read") {
+    batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayUnion(bookId) });
+    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
   }
   //unread (삭제)
   else {
     batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayRemove(bookId) });
     batch.delete(bookShelvRef);
-    await batch.commit();
   }
+  await batch.commit();
   //TODO: shelves 여러개 일 때 하위컬렉션에서 찾아서 전부 삭제
 }
 

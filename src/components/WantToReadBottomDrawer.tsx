@@ -10,7 +10,7 @@ import { Box, Button, CircularProgress, Drawer, List, ListItem, ListItemButton, 
 
 import { updateBookFromShelf } from "@/lib/firebase/firestore";
 import { extractISBN } from "@/lib/utils";
-import { LOGIN_PATH } from "@/constants/routes";
+import { API_PROFILE, LOGIN_PATH } from "@/constants/routes";
 import { READ_STATUS, READ_STATUS_TEXT } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
 
@@ -21,11 +21,10 @@ interface Props {
 }
 const WantToReadBottomDrawer = ({ kakaoBook, readStatus, authState }: Props) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(
-    "user",
-    (key, { arg }: { arg: { bookId: string; status: IBookReadStatus; booInfo?: IKakaoBook } }) =>
-      updateBookFromShelf(arg.bookId, arg.status, arg.booInfo)
+    API_PROFILE,
+    (key, { arg }: { arg: { bookId: string; status: IBookReadStatus; kakaoBook: IKakaoBook } }) =>
+      updateBookFromShelf(arg.bookId, arg.status, arg.kakaoBook)
   );
 
   const toggleDrawer = (status: boolean) => () => {
@@ -35,13 +34,12 @@ const WantToReadBottomDrawer = ({ kakaoBook, readStatus, authState }: Props) => 
   const handleAddBookSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("handleAddBookSubmit");
-    await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status: "want", booInfo: kakaoBook });
+    await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status: "want", kakaoBook: kakaoBook });
   };
 
   const handleUpdateReadStatus = (status: IBookReadStatus) => async () => {
     setOpen(false);
-    await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status });
+    await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status, kakaoBook: kakaoBook });
   };
 
   return (

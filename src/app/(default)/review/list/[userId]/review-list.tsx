@@ -6,28 +6,30 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemText, SxProps, Ty
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 import BookPageHeading from "@/components/BookPageHeading";
+import { REVIEW_LIST_PATH } from "@/constants/routes";
 
 interface Props {
+  uid: string;
   profile: IUser;
 }
 
-export default function ReviewList({ profile }: Props) {
+export default function ReviewList({ uid, profile }: Props) {
   return (
     <Box sx={sxReviewList}>
       <section className="shelf_section">
         <BookPageHeading title="내 서재" component="h1" />
 
-        <ListItemButton component={NextLink} href="">
+        <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=read`}>
           <ListItemText primary="읽음" />
           <Typography color="grey">{profile.booksRead?.length}</Typography>
         </ListItemButton>
         <Divider />
-        <ListItemButton component={NextLink} href="">
+        <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=reading`}>
           <ListItemText primary="읽는 중" />
           <Typography color="grey">{profile.booksReading?.length}</Typography>
         </ListItemButton>
         <Divider />
-        <ListItemButton component={NextLink} href="">
+        <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=want`}>
           <ListItemText primary="읽고싶어요" />
           <Typography color="grey">{profile.booksWant?.length}</Typography>
         </ListItemButton>

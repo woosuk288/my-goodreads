@@ -4,7 +4,6 @@ import { Button, Container, Typography, Stack } from "@mui/material";
 import NextLink from "next/link";
 
 export default function NotFound() {
-  console.log("notofund");
   return (
     <Container
       sx={{

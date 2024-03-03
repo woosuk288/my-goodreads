@@ -8,6 +8,7 @@ import { extractISBN, getReadStatus } from "@/lib/utils";
 import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
 import { getProfile } from "@/lib/firebase/firestore";
+import { API_PROFILE } from "@/constants/routes";
 
 const sxSearchBookList: SxProps = {
   "li.MuiCard-root:last-child": {
@@ -29,7 +30,7 @@ const SIZE_PER_PAGE = 10;
 
 export default function SearchBookList({ query, kakaoBooksResult }: Props) {
   const { state, isLoggedIn } = useAuth();
-  const { data: userData } = useSWR(state === "loaded" && isLoggedIn && "user", getProfile);
+  const { data: userData } = useSWR(state === "loaded" && isLoggedIn ? API_PROFILE : null, getProfile);
 
   const initialKakaoBooks = kakaoBooksResult.documents;
   const [nextPage, setNextPage] = useState(PAGE_OFFSET);

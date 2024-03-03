@@ -13,5 +13,9 @@ export const REVIEW_LIST_PATH = "/review/list";
 export const CHALLENGES_PATH = "/challenges";
 
 /**
- * SERVER
+ * SERVER ???
  */
+
+export const API_PROFILE = "/api/profile";
+export const API_PROFILE_BY_ID = (uid: String) => "/api/profile/" + uid;
+export const API_SHELVES = "/api/shelves";
