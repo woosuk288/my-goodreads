@@ -101,14 +101,14 @@ Props) {
   const newSepcialBooksForImageList = newSepcialBooksResponse.item.map((item) => ({
     id: item.itemId.toString(),
     title: item.title,
-    pageLink: item.link,
+    pageLink: `${BOOK_PATH}/${item.isbn13}`,
     imgSrc: item.cover,
     isbn: item.isbn13,
   }));
   const bloggerBestSellerForImageList = bloggerBestSellerResponse.item.map((item) => ({
     id: item.itemId.toString(),
     title: item.title,
-    pageLink: item.link,
+    pageLink: `${BOOK_PATH}/${item.isbn13}`,
     imgSrc: item.cover,
     isbn: item.isbn13,
   }));

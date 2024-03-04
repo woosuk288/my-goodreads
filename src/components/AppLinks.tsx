@@ -1,8 +1,10 @@
+import { Box } from "@mui/material";
+
 interface IAppLinks {}
 
 export default function AppLinks({}: IAppLinks) {
   return (
-    <div className="app_links">
+    <Box className="app_links" sx={{ img: { maxWidth: "160px" } }}>
       <a href="https://itunes.apple.com/app/apple-store/id355833469?pt=325668&amp;ct=mw_footer&amp;mt=8">
         <img
           alt="Download app for iOS"
@@ -16,6 +18,6 @@ export default function AppLinks({}: IAppLinks) {
           src="https://s.gr-assets.com/assets/app/badge-android-desktop-home-0f517cbae4d56c88a128d27a7bea1118.png"
         />
       </a>
-    </div>
+    </Box>
   );
 }

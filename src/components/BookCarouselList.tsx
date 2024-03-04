@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, SxProps } from "@mui/material";
+import { Box, Button, SxProps, Typography } from "@mui/material";
 import BookPageHeading from "./BookPageHeading";
 import BookCarouselVerticalList from "./BookCarouselVerticalList";
 // import BookCarouselHorizontalList from "./BookCarouselHorizontalList";
@@ -48,27 +48,43 @@ export default function BookCarouselList({ isbn }: Props) {
             <div className="heading_wrapper">
               <BookPageHeading title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
             </div>
-            <div className="author_books_wrapper">
-              <BookCarouselVerticalList libBooks={recommandBooksResult[0]} /> {/* recommandBookByMania */}
-            </div>
-            <div className="show_more_button_wrapper">
-              <Button variant="outlined" href="#">
-                {/* All books by this author */}
-                All books by this genre
-              </Button>
-            </div>
-
+            {recommandBooksResult[0].resultNum === 0 ? (
+              <Typography variant="body2" align="center" color="text.secondary">
+                죄송합니다. 아직 추천도서가 없습니다.
+              </Typography>
+            ) : (
+              <>
+                <div className="author_books_wrapper">
+                  <BookCarouselVerticalList libBooks={recommandBooksResult[0]} />
+                  {/* recommandBookByMania */}
+                </div>
+                <div className="show_more_button_wrapper">
+                  <Button variant="outlined" href="#">
+                    {/* All books by this author */}
+                    All books by this genre
+                  </Button>
+                </div>
+              </>
+            )}
             <div className="heading_wrapper">
               <BookPageHeading title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
             </div>
-            <div className="reader_realted_list">
-              <BookCarouselVerticalList libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
-            </div>
-            <div className="show_more_button_wrapper">
-              <Button variant="outlined" href="#">
-                Readers also enjoyed
-              </Button>
-            </div>
+            {recommandBooksResult[1].resultNum === 0 ? (
+              <Typography variant="body2" align="center" color="text.secondary">
+                죄송합니다. 아직 추천도서가 없습니다.
+              </Typography>
+            ) : (
+              <>
+                <div className="reader_realted_list">
+                  <BookCarouselVerticalList libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
+                </div>
+                <div className="show_more_button_wrapper">
+                  <Button variant="outlined" href="#">
+                    Readers also enjoyed
+                  </Button>
+                </div>
+              </>
+            )}
           </>
         )
       )}
