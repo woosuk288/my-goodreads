@@ -1,7 +1,7 @@
 import NextLink from "next/link";
 
 import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, SxProps, Typography } from "@mui/material";
-import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
+import WantToReadButton from "./WantToReadButton";
 import { READ_STATUS } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
 import { BOOK_PATH } from "@/constants/routes";
@@ -62,7 +62,7 @@ export default function SearchBookItem({ kakaoBook, readStatus, authState }: Pro
         </CardContent>
         <Box sx={sxBookUserShelfAction}>
           <div className="wtr_wrapper">
-            <WantToReadBottomDrawer kakaoBook={kakaoBook} readStatus={readStatus} authState={authState} />
+            <WantToReadButton kakaoBook={kakaoBook} readStatus={readStatus} authState={authState} />
           </div>
           {/* <div className="purchase_wrapper">
             <Button

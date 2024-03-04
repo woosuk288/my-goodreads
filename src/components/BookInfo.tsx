@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import WantToReadBottomDrawer from "./WantToReadBottomDrawer";
+import WantToReadButton from "./WantToReadButton";
 import NextLink from "next/link";
 
 import {
@@ -29,7 +29,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import BookPageHeading from "./BookPageHeading";
 import BookRatingStats from "./BookRatingStats";
 import ExpandMoreBar from "./ExpandMoreBar";
-import { REVIEW_EDIT_PATH } from "@/constants/routes";
+import { API_PROFILE, REVIEW_EDIT_PATH } from "@/constants/routes";
 import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
 import { getProfile, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
@@ -49,7 +49,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
   const bookDetailLink = `${REVIEW_EDIT_PATH}/${bookId}`;
 
   const { state, isLoggedIn, user } = useAuth();
-  const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn ? "user" : null, getProfile);
+  const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn ? API_PROFILE : null, getProfile);
 
   const uid = user?.uid;
   const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `api/ratings/${bookId}/${uid}` : null, (_) =>
@@ -101,7 +101,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
         </div>
         <div className="actions_warpper">
           <div className="wtr_button">
-            <WantToReadBottomDrawer
+            <WantToReadButton
               kakaoBook={kakaoBook}
               readStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)}
               authState={{ state, isLoggedIn }}

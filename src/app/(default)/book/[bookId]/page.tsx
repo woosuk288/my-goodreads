@@ -5,6 +5,7 @@ import BookCarouselList from "@/components/BookCarouselList";
 import BookInfo from "@/components/BookInfo";
 import BookReviewList from "@/components/BookReviewList";
 import { fetchAnalysisByBook, fetchKeywordsByBook, fetchPopularBooks, fetchRecommandBooks } from "@/lib/data4library";
+import ReadStatusDrawer from "@/components/ReadStatusDrawer";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export default async function page({ params }: { params: { bookId: string } }) {
   return (
     <>
       <BookInfo kakaoBook={kakaoBookResponse.documents[0]} /* analysisBook={analysisBook} */ keywordList={keywordList} />
+      <ReadStatusDrawer />
       <BookReviewList />
       <BookCarouselList isbn={isbn} />
     </>

@@ -50,6 +50,7 @@ export async function getProfile(): Promise<IUser | undefined> {
   return user.data();
 }
 
+// TODO: private 분리
 export async function getProfileById(uid: string): Promise<IUser | undefined> {
   const userRef = doc(COL_USERS, uid);
   const user = await getDoc(userRef);
