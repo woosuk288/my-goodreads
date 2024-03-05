@@ -4,11 +4,12 @@ import { useState } from "react";
 import { Box, Button, SxProps, TextField, Theme, Typography } from "@mui/material";
 import useSWR from "swr";
 import { useAuth } from "@/components/AuthProvider";
-import { API_CHALLENGE_BY_ID, USER_CHALLENGES_PATH } from "@/constants/routes";
-import { updateChallenge, getChallenge } from "@/lib/firebase/firestore";
+import { API_CHALLENGE_BY_ID, HOME_PATH, USER_CHALLENGES_PATH } from "@/constants/routes";
+import { updateChallenge, getChallenge, deleteChallege } from "@/lib/firebase/firestore";
 import useSWRMutation from "swr/mutation";
 import LoadingProgress from "@/components/LoadingProgress";
 import { useRouter } from "next/navigation";
+import NextLink from "next/link";
 
 const MIN_READING_GOAL = 1;
 const MAX_READING_GAOL = 1000;
@@ -26,7 +27,7 @@ export default function ChallengesMain() {
   });
   const [readingGoal, setReadingGoal] = useState<string>("");
   const { trigger, isMutating } = useSWRMutation(
-    user ? API_CHALLENGE_BY_ID(user.uid) : null,
+    user && API_CHALLENGE_BY_ID(user.uid),
     () => updateChallenge(Number(readingGoal), thisYear),
     {
       onSuccess() {
@@ -35,10 +36,31 @@ export default function ChallengesMain() {
     }
   );
 
+  const { trigger: deleteTrigger, isMutating: isDeleting } = useSWRMutation(
+    user && API_CHALLENGE_BY_ID(user.uid),
+    () => deleteChallege(thisYear),
+    {
+      onSuccess() {
+        router.push(HOME_PATH);
+      },
+      populateCache() {
+        return undefined;
+      },
+      revalidate: false,
+    }
+  );
+
   const handleChallengeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!errorGoal) {
       trigger();
+    }
+  };
+
+  const handleChallegeLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (confirm("정말 포기하실 건가요?")) {
+      deleteTrigger();
     }
   };
 
@@ -77,15 +99,23 @@ export default function ChallengesMain() {
               }}
               error={errorGoal}
               helperText={errorGoal && "1~1000까지의 입력만 가능합니다."}
-              disabled={isMutating}
+              disabled={isMutating || isDeleting}
             />
           </div>
           <div className="actions">
-            <Button type="submit" className="challenge_action_button" variant="contained" size="large" disabled={isMutating}>
+            <Button type="submit" className="challenge_action_button" variant="contained" size="large" disabled={isMutating || isDeleting}>
               {challengeSnap?.exists() ? "도전 수정하기" : "도전 시작하기"}
             </Button>
           </div>
         </form>
+
+        {challengeSnap?.exists() && (
+          <div className="challenge_leave">
+            <Button component={NextLink} href="#" onClick={handleChallegeLeave} disabled={isMutating || isDeleting}>
+              도전에서 나가기
+            </Button>
+          </div>
+        )}
       </div>
     </Box>
   );
@@ -130,5 +160,16 @@ const sxChallengesMain: SxProps<Theme> = (theme) => ({
     margin: "20px",
     fontSize: "1.125rem",
     fontWeight: "bold",
+  },
+
+  ".challenge_leave": {
+    margin: "8px",
+    textAlign: "center",
+    a: {
+      color: "text.secondary",
+      "&:hover": {
+        textDecoration: "underline",
+      },
+    },
   },
 });

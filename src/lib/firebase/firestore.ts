@@ -42,8 +42,6 @@ const COL_CHALLENGES = createCollection<IChallenge>("challenges");
 // auth middleware?
 const authUser = () => {
   if (!auth.currentUser) throw Error("로그인이 필요합니다.");
-
-  console.log("go user");
   return auth.currentUser;
 };
 
@@ -244,6 +242,11 @@ export async function updateChallenge(readingGoal: number, year: string) {
 export async function getChallenge(uid: string, year: string) {
   const challegeRef = doc(COL_CHALLENGES, uid + year);
   return getDoc(challegeRef);
+}
+
+export async function deleteChallege(year: string) {
+  const challegeRef = doc(COL_CHALLENGES, authUser().uid + year);
+  return deleteDoc(challegeRef);
 }
 
 // export async function getChallenge(uid: string, year: string) {
