@@ -21,6 +21,7 @@ import {
   limit,
   Transaction,
   DocumentReference,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase/firebase";
@@ -36,6 +37,15 @@ const COL_BOOKS = createCollection<IBook>("books");
 // const COL_REVIEWS = createCollection<IRating>("reviews");
 const COL_SHELF_BOOKS = (shelfId: string) => createCollection<IShelfBook>("shelves/" + shelfId + "/books");
 const COL_BOOK_RATINGS = (bookId: string) => createCollection<IRating>("books/" + bookId + "/ratings");
+const COL_CHALLENGES = createCollection<IChallenge>("challenges");
+
+// auth middleware?
+const authUser = () => {
+  if (!auth.currentUser) throw Error("로그인이 필요합니다.");
+
+  console.log("go user");
+  return auth.currentUser;
+};
 
 /**
  * 로그인시 관리자단 유저 있는지 확인해서 users에 문서 추가
@@ -216,6 +226,33 @@ export async function deleteReviewFromBook(bookId: string) {
   const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), auth.currentUser?.uid);
   await setDoc(ratingDocRef, { reviewText: "" }, { merge: true });
 }
+
+/**
+ * 도전(challenge)
+ */
+
+export async function updateChallenge(readingGoal: number, year: string) {
+  try {
+    const challegeRef = doc(COL_CHALLENGES, authUser().uid + year);
+    return setDoc(challegeRef, { year, readingGoal, uid: authUser().uid }, { merge: true });
+  } catch (error) {
+    console.error("There was an error updating the goal to the challenge", error);
+    throw error;
+  }
+}
+
+export async function getChallenge(uid: string, year: string) {
+  const challegeRef = doc(COL_CHALLENGES, uid + year);
+  return getDoc(challegeRef);
+}
+
+// export async function getChallenge(uid: string, year: string) {
+//   const q = query(COL_CHALLENGES, where('uid', '==', uid), where('year', '==', year), limit(1))
+//   const result = await getDocs(q)
+
+//   return result.docs[0]
+
+// }
 
 // const updateWithRating = async (
 //   transaction: Transaction,

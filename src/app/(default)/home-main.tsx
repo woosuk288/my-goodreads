@@ -22,7 +22,7 @@ const sxHomepagePromotionWrapper: SxProps<Theme> = (theme) => ({
   marginBottom: "24px",
   padding: "0 0 24px",
 
-  img: { width: "100%", borderRadius: "4px" },
+  img: { borderRadius: "4px" },
   [theme.breakpoints.up("sm")]: {
     img: {
       height: "380px",

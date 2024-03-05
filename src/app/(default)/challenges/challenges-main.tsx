@@ -1,11 +1,50 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, SxProps, TextField, Typography } from "@mui/material";
+import { Box, Button, SxProps, TextField, Theme, Typography } from "@mui/material";
+import useSWR from "swr";
+import { useAuth } from "@/components/AuthProvider";
+import { API_CHALLENGE_BY_ID, USER_CHALLENGES_PATH } from "@/constants/routes";
+import { updateChallenge, getChallenge } from "@/lib/firebase/firestore";
+import useSWRMutation from "swr/mutation";
+import LoadingProgress from "@/components/LoadingProgress";
+import { useRouter } from "next/navigation";
+
+const MIN_READING_GOAL = 1;
+const MAX_READING_GAOL = 1000;
 
 export default function ChallengesMain() {
-  const [bookCount, setBookCount] = useState<string>("");
+  const router = useRouter();
 
+  const thisYear = new Date().getFullYear().toString();
+  const { state, user } = useAuth();
+
+  const { data: challengeSnap, isLoading } = useSWR(user ? API_CHALLENGE_BY_ID(user.uid) : null, () => getChallenge(user!.uid, thisYear), {
+    onSuccess(data, key, config) {
+      setReadingGoal(data.get("readingGoal").toString());
+    },
+  });
+  const [readingGoal, setReadingGoal] = useState<string>("");
+  const { trigger, isMutating } = useSWRMutation(
+    user ? API_CHALLENGE_BY_ID(user.uid) : null,
+    () => updateChallenge(Number(readingGoal), thisYear),
+    {
+      onSuccess() {
+        router.push(USER_CHALLENGES_PATH + `/${user?.uid}?year=${thisYear}`);
+      },
+    }
+  );
+
+  const handleChallengeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!errorGoal) {
+      trigger();
+    }
+  };
+
+  if (state === "loading" || isLoading) return <LoadingProgress />;
+
+  const errorGoal = !!(readingGoal && !(MIN_READING_GOAL <= Number(readingGoal) && Number(readingGoal) <= MAX_READING_GAOL));
   return (
     <Box sx={sxChallengesMain}>
       <div className="challenge_container">
@@ -14,11 +53,11 @@ export default function ChallengesMain() {
             <img src="https://th.bing.com/th/id/OIG1.qpF4MPDGP3iNZ.Zz4CZQ?w=1024&h=1024&rs=1&pid=ImgDetMain" alt="Homepagemasthead" />
           </div>
           <Typography className="challenge_text">
-            {new Date().getFullYear()}년에 몇 권의 책을 읽고 싶은지 알려주시면 {/* Goodreads */}
+            {thisYear}년에 몇 권의 책을 읽고 싶은지 알려주시면 {/* Goodreads */}
             목표를 달성할 수 있도록 도와드릴게요.
           </Typography>
         </div>
-        <form className="challenge_form">
+        <form className="challenge_form" onSubmit={handleChallengeSubmit}>
           <div className="field">
             <TextField
               className="challenge_input_number"
@@ -26,31 +65,24 @@ export default function ChallengesMain() {
               placeholder="N 권의 책"
               size="small"
               type="number"
-              value={bookCount}
+              value={readingGoal}
               onChange={(e) => {
                 let value = parseInt(e.target.value, 10);
-                console.log("value : ", value);
                 const min = 0;
                 const max = 1000;
                 if (value > max) value = max;
                 if (value < min) value = min;
 
-                setBookCount(isNaN(value) ? "" : String(value));
+                setReadingGoal(isNaN(value) ? "" : String(value));
               }}
+              error={errorGoal}
+              helperText={errorGoal && "1~1000까지의 입력만 가능합니다."}
+              disabled={isMutating}
             />
           </div>
           <div className="actions">
-            <Button
-              className="challenge_action_button"
-              type="submit"
-              variant="contained"
-              size="large"
-              onClick={(e) => {
-                e.preventDefault();
-                alert("Not yet.");
-              }}
-            >
-              도전 시작하기
+            <Button type="submit" className="challenge_action_button" variant="contained" size="large" disabled={isMutating}>
+              {challengeSnap?.exists() ? "도전 수정하기" : "도전 시작하기"}
             </Button>
           </div>
         </form>
@@ -59,11 +91,19 @@ export default function ChallengesMain() {
   );
 }
 
-const sxChallengesMain: SxProps = {
+const sxChallengesMain: SxProps<Theme> = (theme) => ({
   ".challenge_content": {
     marginTop: "10px",
     marginBottom: "20px",
     textAlign: "center",
+    img: { borderRadius: "4px" },
+    [theme.breakpoints.up("sm")]: {
+      img: {
+        height: "380px",
+        objectFit: "cover",
+        objectPosition: "100% 53%",
+      },
+    },
   },
 
   ".challenge_text": {
@@ -91,4 +131,4 @@ const sxChallengesMain: SxProps = {
     fontSize: "1.125rem",
     fontWeight: "bold",
   },
-};
+});

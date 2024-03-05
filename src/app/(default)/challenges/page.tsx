@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Challenges",
 };
 
-export default function page() {
+export default async function page() {
   return (
     <div>
       <SignUpBanner />
