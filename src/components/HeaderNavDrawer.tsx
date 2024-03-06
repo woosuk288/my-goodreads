@@ -175,7 +175,7 @@ const NAV_DRAWER_MENUS_01 = [
   },
   {
     link: "/notes",
-    text: "Kindle Notes & Highlights",
+    text: "Notes & Highlights",
   },
   {
     link: "/quotes",

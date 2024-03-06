@@ -6,7 +6,7 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemText, SxProps, Ty
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 import BookPageHeading from "@/components/BookPageHeading";
-import { REVIEW_LIST_PATH } from "@/constants/routes";
+import { USER_CHALLENGES_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
 
 interface Props {
   uid: string;
@@ -44,7 +44,7 @@ export default function ReviewList({ uid, profile }: Props) {
       <section className="activity_section">
         <BookPageHeading title="Reading Activity" component="h2" />
         <List>
-          <ListItemButton component={NextLink} href="">
+          <ListItemButton component={NextLink} href={`${USER_CHALLENGES_PATH}/${uid}/${new Date().getFullYear().toString()}`}>
             <ListItemText primary="Reading Challenge" />
             <NavigateNextIcon />
           </ListItemButton>

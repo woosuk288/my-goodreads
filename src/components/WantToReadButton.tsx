@@ -13,13 +13,14 @@ import { extractISBN } from "@/lib/utils";
 import { API_PROFILE, LOGIN_PATH, SEARCH_PATH } from "@/constants/routes";
 import { READ_STATUS, READ_STATUS_TEXT } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
+import { useAuth } from "./AuthProvider";
 
 interface Props {
   kakaoBook: IKakaoBook;
   currentReadStatus: IBookReadStatus;
-  authState: AuthState;
 }
-const WantToReadButton = ({ kakaoBook, currentReadStatus, authState }: Props) => {
+const WantToReadButton = ({ kakaoBook, currentReadStatus }: Props) => {
+  const authState = useAuth();
   const isbn = extractISBN(kakaoBook.isbn);
   const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(API_PROFILE, (key, { arg }) =>
     updateBookFromShelf(isbn, "want", kakaoBook, currentReadStatus)
@@ -69,7 +70,7 @@ const WantToReadButton = ({ kakaoBook, currentReadStatus, authState }: Props) =>
           </Button>
         </Box>
       ) : (
-        <NextLink href={{ query: { isbn, currentReadStatus, "read-status-drawer": true } }}>
+        <NextLink href={{ query: { isbn, currentReadStatus, "read-status-drawer": true } }} passHref legacyBehavior>
           <Button
             className="wtr_button btn_read_status btn_drawer_border"
             variant="contained"

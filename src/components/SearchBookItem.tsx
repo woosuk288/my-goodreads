@@ -10,10 +10,9 @@ import { extractISBN } from "@/lib/utils";
 interface Props {
   kakaoBook: IKakaoBook;
   currentReadStatus: IBookReadStatus;
-  authState: AuthState;
 }
 
-export default function SearchBookItem({ kakaoBook, currentReadStatus, authState }: Props) {
+export default function SearchBookItem({ kakaoBook, currentReadStatus }: Props) {
   const { thumbnail, title, authors, datetime, isbn } = kakaoBook;
 
   const bookDetailLink = `${BOOK_PATH}/${extractISBN(isbn)}`;
@@ -62,7 +61,7 @@ export default function SearchBookItem({ kakaoBook, currentReadStatus, authState
         </CardContent>
         <Box sx={sxBookUserShelfAction}>
           <div className="wtr_wrapper">
-            <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={currentReadStatus} authState={authState} />
+            <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={currentReadStatus} />
           </div>
           {/* <div className="purchase_wrapper">
             <Button

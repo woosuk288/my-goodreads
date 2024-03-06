@@ -30,12 +30,7 @@ function ReviewBookList({ uid, readStatus }: Props) {
       </div>
       <ul>
         {booksData?.docs.map((doc) => (
-          <SearchBookItem
-            key={doc.id}
-            kakaoBook={doc.data().kakaoBook}
-            currentReadStatus={getReadStatus(doc.id, profileData)}
-            authState={{ state, isLoggedIn }}
-          />
+          <SearchBookItem key={doc.id} kakaoBook={doc.data().kakaoBook} currentReadStatus={getReadStatus(doc.id, profileData)} />
         ))}
       </ul>
     </Box>

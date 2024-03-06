@@ -31,7 +31,7 @@ export default function ChallengesMain() {
     () => updateChallenge(Number(readingGoal), thisYear),
     {
       onSuccess() {
-        router.push(USER_CHALLENGES_PATH + `/${user?.uid}?year=${thisYear}`);
+        router.push(USER_CHALLENGES_PATH + `/${user?.uid}/${thisYear}`);
       },
     }
   );

@@ -101,11 +101,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
         </div>
         <div className="actions_warpper">
           <div className="wtr_button">
-            <WantToReadButton
-              kakaoBook={kakaoBook}
-              currentReadStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)}
-              authState={{ state, isLoggedIn }}
-            />
+            <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)} />
           </div>
           <div className="user_rating">
             <Typography component="legend" variant="subtitle2">

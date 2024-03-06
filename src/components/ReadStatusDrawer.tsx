@@ -13,12 +13,11 @@ import { fetchKakaoBooks } from "@/lib/kakaobook";
 import { mutate } from "swr";
 
 function ReadStatusDrawer() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const isbn = searchParams.get("isbn");
   const currentReadStatus = searchParams.get("currentReadStatus") as IBookReadStatus | null;
   const open = searchParams.get("read-status-drawer");
-
-  const router = useRouter();
 
   if (open && (!isbn || !currentReadStatus)) {
     notFound();
@@ -31,7 +30,7 @@ function ReadStatusDrawer() {
   );
 
   const { state, isLoggedIn, user } = useAuth();
-  // TODO: udpate후 캐싱처리 및 loading중일 때 표시
+
   const handleDrawerClose = () => {
     router.back();
   };
@@ -45,6 +44,7 @@ function ReadStatusDrawer() {
     if (kakaoBookResponse.meta.total_count === 0) throw Error("도서를 조회할 수 없습니다.");
 
     await updateBookStatusTrigger({ nextReadStatus, kakaoBook: kakaoBookResponse.documents[0] });
+    // udpate   후 캐싱처리
     mutate((key) => typeof key === "string" && key.startsWith(API_PROFILE), undefined, { revalidate: true });
 
     router.back();
@@ -77,7 +77,7 @@ function ReadStatusDrawer() {
             전체 책장 보기
             {/* <Link href='#' color="secondary">전체 책장 보기</Link> */}
           </Button>
-          <Button color="secondary" startIcon={<CloseIcon />}>
+          <Button color="secondary" startIcon={<CloseIcon />} onClick={handleDrawerClose}>
             닫기
           </Button>
         </ListItem>

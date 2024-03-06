@@ -70,8 +70,15 @@ export async function getProfileById(uid: string): Promise<IUser | undefined> {
 /**
  * 책 읽기 상태 CRUD
  */
-export async function getBooksFromShelf(uid: string, readStatus: IBookReadStatus) {
-  const q = query(COL_SHELF_BOOKS(uid), where("readStatus", "==", readStatus), limit(10));
+export async function getBooksFromShelf(uid: string, readStatus: IBookReadStatus, year?: string) {
+  let q = query(COL_SHELF_BOOKS(uid), where("readStatus", "==", readStatus), limit(10));
+  if (year) {
+    const startDate = new Date(`${year}-01-01`);
+    const endDate = new Date(`${year}-12-31`);
+    console.log("startDate : ", startDate);
+    console.log("endDate : ", endDate);
+    q = query(q, where("updatedAt", ">=", startDate), where("updatedAt", "<=", endDate), orderBy("updatedAt", "desc"));
+  }
 
   const result = await getDocs(q);
 
