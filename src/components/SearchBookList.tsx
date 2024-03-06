@@ -54,7 +54,7 @@ export default function SearchBookList({ query, kakaoBooksResult }: Props) {
           <SearchBookItem
             key={doc.isbn + doc.datetime}
             kakaoBook={doc}
-            readStatus={getReadStatus(extractISBN(doc.isbn), userData)}
+            currentReadStatus={getReadStatus(extractISBN(doc.isbn), userData)}
             authState={{ state, isLoggedIn }}
           />
         ))}

@@ -14,41 +14,40 @@ import { mutate } from "swr";
 
 function ReadStatusDrawer() {
   const searchParams = useSearchParams();
-  const readStatus = searchParams.get("readStatus");
+  const isbn = searchParams.get("isbn");
+  const currentReadStatus = searchParams.get("currentReadStatus") as IBookReadStatus | null;
   const open = searchParams.get("read-status-drawer");
-  const { bookId } = useParams<{ bookId: string }>();
-  const pathname = usePathname();
 
   const router = useRouter();
 
-  if (open && !bookId) {
+  if (open && (!isbn || !currentReadStatus)) {
     notFound();
   }
 
   const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(
     API_PROFILE,
-    (key, { arg }: { arg: { bookId: string; status: IBookReadStatus; kakaoBook: IKakaoBook } }) =>
-      updateBookFromShelf(arg.bookId, arg.status, arg.kakaoBook)
+    (key, { arg }: { arg: { nextReadStatus: IBookReadStatus; kakaoBook: IKakaoBook } }) =>
+      updateBookFromShelf(isbn!, arg.nextReadStatus, arg.kakaoBook, currentReadStatus!)
   );
 
   const { state, isLoggedIn, user } = useAuth();
   // TODO: udpate후 캐싱처리 및 loading중일 때 표시
   const handleDrawerClose = () => {
-    router.push(pathname);
+    router.back();
   };
 
-  const handleUpdateReadStatus = (status: IBookReadStatus) => async () => {
-    if (status === "unread" && !confirm("이 도서를 책장에서 제거하신다면 관련된 평점, 리뷰, 읽기 활동도 같이 삭제됩니다.")) {
+  const handleUpdateReadStatus = (nextReadStatus: IBookReadStatus) => async () => {
+    if (nextReadStatus === "unread" && !confirm("이 도서를 책장에서 제거하신다면 관련된 평점, 리뷰, 읽기 활동도 같이 삭제됩니다.")) {
       return;
     }
 
-    const kakaoBookResponse = await fetchKakaoBooks({ query: bookId, target: "isbn", size: 1 });
+    const kakaoBookResponse = await fetchKakaoBooks({ query: isbn!, target: "isbn", size: 1 });
     if (kakaoBookResponse.meta.total_count === 0) throw Error("도서를 조회할 수 없습니다.");
 
-    await updateBookStatusTrigger({ bookId, status, kakaoBook: kakaoBookResponse.documents[0] });
+    await updateBookStatusTrigger({ nextReadStatus, kakaoBook: kakaoBookResponse.documents[0] });
     mutate((key) => typeof key === "string" && key.startsWith(API_PROFILE), undefined, { revalidate: true });
 
-    router.push(pathname);
+    router.back();
   };
 
   return (
@@ -61,13 +60,13 @@ function ReadStatusDrawer() {
       {/* Bottom Sheet 내용 */}
       {/* Your Bottom Sheet Content Goes Here */}
       <List sx={sxSlideUpMenuList}>
-        <ListItemButton component="li" selected={readStatus === "want"} onClick={handleUpdateReadStatus("want")}>
+        <ListItemButton component="li" selected={currentReadStatus === "want"} onClick={handleUpdateReadStatus("want")}>
           읽고 싶어요
         </ListItemButton>
-        <ListItemButton component="li" selected={readStatus === "reading"} onClick={handleUpdateReadStatus("reading")}>
+        <ListItemButton component="li" selected={currentReadStatus === "reading"} onClick={handleUpdateReadStatus("reading")}>
           현재 읽는 중
         </ListItemButton>
-        <ListItemButton component="li" selected={readStatus === "read"} onClick={handleUpdateReadStatus("read")}>
+        <ListItemButton component="li" selected={currentReadStatus === "read"} onClick={handleUpdateReadStatus("read")}>
           읽음
         </ListItemButton>
         <ListItemButton component="li" onClick={handleUpdateReadStatus("unread")}>

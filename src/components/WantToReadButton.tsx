@@ -10,26 +10,26 @@ import { Box, Button, CircularProgress, Drawer, List, ListItem, ListItemButton, 
 
 import { updateBookFromShelf } from "@/lib/firebase/firestore";
 import { extractISBN } from "@/lib/utils";
-import { API_PROFILE, LOGIN_PATH } from "@/constants/routes";
+import { API_PROFILE, LOGIN_PATH, SEARCH_PATH } from "@/constants/routes";
 import { READ_STATUS, READ_STATUS_TEXT } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
 
 interface Props {
   kakaoBook: IKakaoBook;
-  readStatus: IBookReadStatus;
+  currentReadStatus: IBookReadStatus;
   authState: AuthState;
 }
-const WantToReadButton = ({ kakaoBook, readStatus, authState }: Props) => {
-  const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(
-    API_PROFILE,
-    (key, { arg }: { arg: { bookId: string; status: IBookReadStatus; kakaoBook: IKakaoBook } }) =>
-      updateBookFromShelf(arg.bookId, arg.status, arg.kakaoBook)
+const WantToReadButton = ({ kakaoBook, currentReadStatus, authState }: Props) => {
+  const isbn = extractISBN(kakaoBook.isbn);
+  const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(API_PROFILE, (key, { arg }) =>
+    updateBookFromShelf(isbn, "want", kakaoBook, currentReadStatus)
   );
 
   const handleAddBookSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status: "want", kakaoBook: kakaoBook });
+    // await updateBookStatusTrigger({ bookId: extractISBN(kakaoBook.isbn), status: "want", kakaoBook: kakaoBook });
+    await updateBookStatusTrigger();
   };
 
   return (
@@ -47,7 +47,7 @@ const WantToReadButton = ({ kakaoBook, readStatus, authState }: Props) => {
         >
           읽고싶어요
         </Button>
-      ) : readStatus === READ_STATUS.unread ? (
+      ) : currentReadStatus === READ_STATUS.unread ? (
         <Box component="form" onSubmit={handleAddBookSubmit}>
           <Button
             type="submit"
@@ -59,7 +59,7 @@ const WantToReadButton = ({ kakaoBook, readStatus, authState }: Props) => {
               isMutating ? (
                 <CircularProgress size={20} color="inherit" />
               ) : (
-                <NextLink href={{ query: { readStatus, "read-status-drawer": true } }} passHref legacyBehavior>
+                <NextLink href={{ query: { isbn, currentReadStatus, "read-status-drawer": true } }} passHref legacyBehavior>
                   <ExpandMoreIcon />
                 </NextLink>
               )
@@ -69,7 +69,7 @@ const WantToReadButton = ({ kakaoBook, readStatus, authState }: Props) => {
           </Button>
         </Box>
       ) : (
-        <NextLink href={{ query: { readStatus, "read-status-drawer": true } }}>
+        <NextLink href={{ query: { isbn, currentReadStatus, "read-status-drawer": true } }}>
           <Button
             className="wtr_button btn_read_status btn_drawer_border"
             variant="contained"
@@ -78,7 +78,7 @@ const WantToReadButton = ({ kakaoBook, readStatus, authState }: Props) => {
             disabled={isMutating}
             type="button"
           >
-            {READ_STATUS_TEXT[readStatus]}
+            {READ_STATUS_TEXT[currentReadStatus]}
             {/* {readStatus === READ_STATUS.read ? '읽음' : {readStatus === READ_STATUS.reading ? '읽는 중' } */}
           </Button>
         </NextLink>

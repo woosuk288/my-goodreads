@@ -9,11 +9,11 @@ import { extractISBN } from "@/lib/utils";
 
 interface Props {
   kakaoBook: IKakaoBook;
-  readStatus: IBookReadStatus;
+  currentReadStatus: IBookReadStatus;
   authState: AuthState;
 }
 
-export default function SearchBookItem({ kakaoBook, readStatus, authState }: Props) {
+export default function SearchBookItem({ kakaoBook, currentReadStatus, authState }: Props) {
   const { thumbnail, title, authors, datetime, isbn } = kakaoBook;
 
   const bookDetailLink = `${BOOK_PATH}/${extractISBN(isbn)}`;
@@ -29,11 +29,11 @@ export default function SearchBookItem({ kakaoBook, readStatus, authState }: Pro
           <Typography className="book_title" component={NextLink} href={bookDetailLink}>
             {title}
           </Typography>
-          <Typography variant="subtitle1" component="div">
+          <Typography variant="subtitle1" component="div" lineHeight={1.42}>
             {authors.join(", ")}
           </Typography>
           <div className="book_meta_info">
-            <div className="book_rating">
+            {/* <div className="book_rating">
               <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
               <Typography variant="body2" color="text.secondary">
                 3.95
@@ -46,10 +46,10 @@ export default function SearchBookItem({ kakaoBook, readStatus, authState }: Pro
                 <meta content="3430" itemProp="reviewCount" />
                 3,430 리뷰
               </Typography>
-            </div>
+            </div> */}
             <div className="book_supplemental_info">
-              <Typography className="book_publication_date" color="text.secondary" component="span" marginRight="12px">
-                Published {new Date(datetime).toLocaleDateString()}
+              <Typography className="book_publication_date" variant="body2" color="text.secondary" component="span" marginRight="12px">
+                {new Date(datetime).toLocaleDateString()}
               </Typography>
               {/* <Link
                 href="https://www.goodreads.com/work/editions/21998914-give-and-take-a-revolutionary-approach-to-success"
@@ -62,7 +62,7 @@ export default function SearchBookItem({ kakaoBook, readStatus, authState }: Pro
         </CardContent>
         <Box sx={sxBookUserShelfAction}>
           <div className="wtr_wrapper">
-            <WantToReadButton kakaoBook={kakaoBook} readStatus={readStatus} authState={authState} />
+            <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={currentReadStatus} authState={authState} />
           </div>
           {/* <div className="purchase_wrapper">
             <Button
@@ -118,9 +118,6 @@ const sxBookInfoColumn: SxProps = {
       alignItems: "center",
       flexWrap: "wrap",
       marginBottom: "12px",
-    },
-    "& *": {
-      fontSize: "0.75rem",
     },
   },
   ".static_stars": {

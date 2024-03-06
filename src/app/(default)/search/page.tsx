@@ -4,6 +4,7 @@ import SignUpBanner from "../../../components/SignUpBanner";
 import { getKakaoBooks } from "@/actions/getKakaoBooks";
 import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase";
 import { getProfile } from "@/lib/firebase/firestore";
+import ReadStatusDrawer from "@/components/ReadStatusDrawer";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default async function Page({ searchParams }: ISearchParams) {
     <>
       <SignUpBanner />
       <SearchBookList query={searchParams.query} kakaoBooksResult={kakaoBooksResult} />
+      <ReadStatusDrawer />
     </>
   );
 }

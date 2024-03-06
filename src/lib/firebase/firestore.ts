@@ -44,6 +44,8 @@ const authUser = () => {
   if (!auth.currentUser) throw Error("로그인이 필요합니다.");
   return auth.currentUser;
 };
+const createdAt = () => ({ createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+const updatedAt = () => ({ updatedAt: serverTimestamp() });
 
 /**
  * 로그인시 관리자단 유저 있는지 확인해서 users에 문서 추가
@@ -75,26 +77,47 @@ export async function getBooksFromShelf(uid: string, readStatus: IBookReadStatus
 
   return result;
 }
-export async function updateBookFromShelf(bookId: string, readStatus: IBookReadStatus, kakaoBook: IKakaoBook) {
+export async function updateBookFromShelf(
+  bookId: string,
+  readStatus: IBookReadStatus,
+  kakaoBook: IKakaoBook,
+  currentReadStatus: IBookReadStatus
+) {
   const userRef = doc(COL_USERS, auth.currentUser?.uid);
 
   const bookShelvRef = doc(COL_SHELF_BOOKS(auth.currentUser?.uid!), bookId);
   const batch = writeBatch(db);
 
+  const bookshelfData = {
+    kakaoBook,
+    readStatus,
+    ...(currentReadStatus === "unread" ? createdAt() : updatedAt()),
+  };
+
   if (readStatus === "want") {
-    batch.update(userRef, { booksWant: arrayUnion(bookId), booksReading: arrayRemove(bookId), booksRead: arrayRemove(bookId) });
-    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
+    batch.update(userRef, {
+      booksWant: arrayUnion(bookId),
+      booksReading: arrayRemove(bookId),
+      booksRead: arrayRemove(bookId),
+      ...updatedAt(),
+    });
+    batch.set(bookShelvRef, bookshelfData, { merge: true });
   } else if (readStatus === "reading") {
     batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayUnion(bookId), booksRead: arrayRemove(bookId) });
-    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
+    batch.set(bookShelvRef, bookshelfData, { merge: true });
   } else if (readStatus === "read") {
     batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayUnion(bookId) });
-    batch.set(bookShelvRef, { kakaoBook, readStatus }, { merge: true });
+    batch.set(bookShelvRef, bookshelfData, { merge: true });
   }
   //unread (삭제)
   else {
     await updateRating(bookId, null);
-    batch.update(userRef, { booksWant: arrayRemove(bookId), booksReading: arrayRemove(bookId), booksRead: arrayRemove(bookId) });
+    batch.update(userRef, {
+      booksWant: arrayRemove(bookId),
+      booksReading: arrayRemove(bookId),
+      booksRead: arrayRemove(bookId),
+      ...updatedAt(),
+    });
     batch.delete(bookShelvRef);
     const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), auth.currentUser?.uid);
     batch.delete(ratingDocRef);
@@ -164,6 +187,7 @@ export async function updateRating(bookId: string, rating: number | null) {
         numRatings: newNumRatings,
         sumRating: newSumRating,
         avgRating: newAverage,
+        ...(bookSnap.exists() ? createdAt() : updatedAt()),
       },
       { merge: true }
     );
@@ -174,6 +198,7 @@ export async function updateRating(bookId: string, rating: number | null) {
         bookId,
         rating,
         uid: auth.currentUser?.uid,
+        ...(ratingSnap.exists() ? createdAt() : updatedAt()),
         // timestamp: Timestamp.fromDate(new Date()),
       },
       { merge: true }
@@ -207,6 +232,7 @@ export async function addReviewToBook(bookId: string, reviewText: string, isSpoi
         reviewText,
         isSpoiler,
         uid,
+        ...updatedAt(),
       },
       { merge: true }
     );
@@ -232,7 +258,7 @@ export async function deleteReviewFromBook(bookId: string) {
 export async function updateChallenge(readingGoal: number, year: string) {
   try {
     const challegeRef = doc(COL_CHALLENGES, authUser().uid + year);
-    return setDoc(challegeRef, { year, readingGoal, uid: authUser().uid }, { merge: true });
+    return setDoc(challegeRef, { year, readingGoal, uid: authUser().uid, ...updatedAt() }, { merge: true });
   } catch (error) {
     console.error("There was an error updating the goal to the challenge", error);
     throw error;

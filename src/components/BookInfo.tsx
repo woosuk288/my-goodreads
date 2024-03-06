@@ -103,7 +103,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           <div className="wtr_button">
             <WantToReadButton
               kakaoBook={kakaoBook}
-              readStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)}
+              currentReadStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)}
               authState={{ state, isLoggedIn }}
             />
           </div>

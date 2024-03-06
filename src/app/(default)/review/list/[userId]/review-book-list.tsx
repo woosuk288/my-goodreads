@@ -33,7 +33,7 @@ function ReviewBookList({ uid, readStatus }: Props) {
           <SearchBookItem
             key={doc.id}
             kakaoBook={doc.data().kakaoBook}
-            readStatus={getReadStatus(doc.id, profileData)}
+            currentReadStatus={getReadStatus(doc.id, profileData)}
             authState={{ state, isLoggedIn }}
           />
         ))}
