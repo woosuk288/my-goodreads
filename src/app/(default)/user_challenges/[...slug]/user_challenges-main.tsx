@@ -59,7 +59,7 @@ export default function UserChallengesMain({ challege, thisYearReadBooks }: Prop
         </Card>
 
         <Typography sx={{ margin: "24px 4px", wordBreak: "keep-all", textAlign: "center", fontSize: "0.875rem" }}>
-          좋아요! 남은 기간 동안 매주 2권씩 책을 읽으며 도전을 완수하세요
+          {readingChallengeText(readBookCount)}
         </Typography>
       </div>
 
@@ -119,3 +119,20 @@ const sxUserChallengesMain: SxProps<Theme> = (theme) => ({
     overflow: "hidden",
   },
 });
+
+function readingChallengeText(targetBooks: number) {
+  let booksPerTime;
+  let challegeText: string;
+
+  if (targetBooks >= 52) {
+    booksPerTime = Math.ceil(targetBooks / 52);
+    challegeText = `좋아요! 남은 기간 동안 매주 ${booksPerTime}권씩 책을 읽으며 도전을 완수하세요`;
+  } else if (targetBooks < 52 && targetBooks >= 12) {
+    booksPerTime = Math.ceil(targetBooks / 12);
+    challegeText = `좋아요! 남은 기간 동안 매달 ${booksPerTime}권씩 책을 읽으며 도전을 완수하세요`;
+  } else {
+    challegeText = `좋아요! 남은 기간 동안 매달 1권씩 책을 읽으며 도전을 완수하고 목표도 높여보세요`;
+  }
+
+  return challegeText;
+}
