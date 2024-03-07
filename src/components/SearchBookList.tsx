@@ -1,14 +1,17 @@
 "use client";
 
+import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+
 import { Box, Button, SxProps, Typography } from "@mui/material";
+
 import SearchBookItem from "./SearchBookItem";
-import { useState, useTransition } from "react";
-import { getKakaoBooks } from "@/actions/getKakaoBooks";
 import { extractISBN, getReadStatus } from "@/lib/utils";
 import { useAuth } from "./AuthProvider";
-import useSWR from "swr";
+
 import { getProfile } from "@/lib/firebase/firestore";
-import { API_PROFILE } from "@/constants/routes";
+import { API_KAKAOBOOK, API_PROFILE } from "@/constants/routes";
+import { fetchKakaoBooks } from "@/lib/kakaobook";
 
 const sxSearchBookList: SxProps = {
   "li.MuiCard-root:last-child": {
@@ -25,23 +28,22 @@ interface Props {
   kakaoBooksResult: IKakaoBookApiResponse;
 }
 
-const PAGE_OFFSET = 2;
-const SIZE_PER_PAGE = 10;
-
 export default function SearchBookList({ query, kakaoBooksResult }: Props) {
   const { state, isLoggedIn } = useAuth();
   const { data: userData } = useSWR(state === "loaded" && isLoggedIn ? API_PROFILE : null, getProfile);
 
-  const initialKakaoBooks = kakaoBooksResult.documents;
-  const [nextPage, setNextPage] = useState(PAGE_OFFSET);
-  const [kakaoBooks, setKakaoBooks] = useState(initialKakaoBooks);
-  const [isPending, startTransition] = useTransition();
+  const { data, size, setSize, isLoading } = useSWRInfinite(
+    (pageIndex, previousPageData) => {
+      if (previousPageData && previousPageData.meta.is_end) return null; // 끝에 도달
+      return [API_KAKAOBOOK, query, pageIndex + 1]; // SWR 키
+    },
+    ([_, query, page]) => {
+      return fetchKakaoBooks({ query, page });
+    },
+    { fallbackData: [kakaoBooksResult] }
+  );
 
-  const loadMoreBooks = async () => {
-    const nextkakaoBooksResult = await getKakaoBooks({ query, page: nextPage, size: SIZE_PER_PAGE });
-    setKakaoBooks([...kakaoBooks, ...nextkakaoBooksResult.documents]);
-    setNextPage(nextPage + 1);
-  };
+  const loadMoreBooks = () => setSize(size + 1);
 
   return (
     <Box sx={sxSearchBookList}>
@@ -50,14 +52,16 @@ export default function SearchBookList({ query, kakaoBooksResult }: Props) {
       </Typography>
 
       <ul>
-        {kakaoBooks.map((doc) => (
-          <SearchBookItem
-            key={doc.isbn + doc.datetime}
-            kakaoBook={doc}
-            currentReadStatus={getReadStatus(extractISBN(doc.isbn), userData)}
-            hideElements={{ ratingEl: false }}
-          />
-        ))}
+        {data?.map((result) =>
+          result.documents.map((doc) => (
+            <SearchBookItem
+              key={doc.isbn + doc.datetime}
+              kakaoBook={doc}
+              currentReadStatus={getReadStatus(extractISBN(doc.isbn), userData)}
+              hideElements={{ ratingEl: false }}
+            />
+          ))
+        )}
       </ul>
 
       <div className="load_more_wrapper">
@@ -65,10 +69,10 @@ export default function SearchBookList({ query, kakaoBooksResult }: Props) {
           <Button
             fullWidth
             sx={{ bgcolor: "primary.light", color: "#181818", ":hover": { bgcolor: "primary.light" }, boxShadow: 1 }}
-            onClick={() => startTransition(loadMoreBooks)}
-            disabled={isPending}
+            onClick={loadMoreBooks}
+            disabled={isLoading}
           >
-            {isPending ? "불러오는 중..." : "더 보기"}
+            {isLoading ? "불러오는 중..." : "더 보기"}
           </Button>
         )}
       </div>

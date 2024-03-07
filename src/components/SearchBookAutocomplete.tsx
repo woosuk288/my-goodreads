@@ -36,7 +36,7 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
           },
         });
         const hits: IKakaoBookApiResponse = await response.json();
-        console.log("hits : ", hits);
+        // console.log("hits : ", hits);
 
         callback(hits.documents);
       }, 500),
@@ -102,7 +102,7 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
           setValue(newValue);
           if (newValue) {
             const isbn = extractISBN(newValue.isbn);
-            router.push(`${BOOK_PATH}/${isbn}?query=${inputValue}`);
+            router.push(`${BOOK_PATH}/${isbn}`);
           }
         }
       }}

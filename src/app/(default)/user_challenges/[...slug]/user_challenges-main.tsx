@@ -5,7 +5,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 
 import BookPageHeading from "@/components/BookPageHeading";
-import { DocumentData, DocumentSnapshot, QuerySnapshot } from "firebase/firestore";
 import SearchBookItem from "@/components/SearchBookItem";
 import NextLink from "next/link";
 import { CHALLENGES_PATH } from "@/constants/routes";

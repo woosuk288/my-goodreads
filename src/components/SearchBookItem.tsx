@@ -1,14 +1,12 @@
 import NextLink from "next/link";
 
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Link, Rating, SxProps, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, SxProps, Typography } from "@mui/material";
 import WantToReadButton from "./WantToReadButton";
-import { READ_STATUS } from "@/constants/values";
-import { AuthState } from "@/types/exportType";
 import { BOOK_PATH } from "@/constants/routes";
 import { extractISBN } from "@/lib/utils";
 import UserRatingButton from "./UserRatingButton";
 
-interface HideElements {
+interface IHideElements {
   authorEl?: boolean;
   publicationDateEl?: boolean;
   wtrButtonEl?: boolean;
@@ -18,7 +16,7 @@ interface HideElements {
 interface Props {
   kakaoBook: IKakaoBook;
   currentReadStatus: IBookReadStatus;
-  hideElements?: HideElements;
+  hideElements?: IHideElements;
 }
 
 export default function SearchBookItem({ kakaoBook, currentReadStatus, hideElements = {} }: Props) {
@@ -29,7 +27,7 @@ export default function SearchBookItem({ kakaoBook, currentReadStatus, hideEleme
   const bookDetailLink = `${BOOK_PATH}/${isbn13}`;
   return (
     <Card sx={sxSearchBookItem} component="li">
-      <NextLink className="book_cover" href={bookDetailLink}>
+      <NextLink className="book_cover" href={kakaoBook.url}>
         <CardMedia component="img" image={thumbnail} alt={`Book cover for ${title}`} />
       </NextLink>
 
