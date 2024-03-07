@@ -7,6 +7,8 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import BookPageHeading from "@/components/BookPageHeading";
 import { DocumentData, DocumentSnapshot, QuerySnapshot } from "firebase/firestore";
 import SearchBookItem from "@/components/SearchBookItem";
+import NextLink from "next/link";
+import { CHALLENGES_PATH } from "@/constants/routes";
 
 interface Props {
   challege: IChallenge & { id: string };
@@ -20,7 +22,7 @@ export default function UserChallengesMain({ challege, thisYearReadBooks }: Prop
   return (
     <Box sx={sxUserChallengesMain}>
       <div className="challenge_summary">
-        <Card>
+        <Card sx={{ boxShadow: 3 }}>
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: "primary" }} aria-label="username" src="https://mui.com/static/images/avatar/2.jpg">
@@ -46,7 +48,9 @@ export default function UserChallengesMain({ challege, thisYearReadBooks }: Prop
             }
           />
           <CardActions disableSpacing>
-            <Button size="small">수정</Button>
+            <Button size="small" component={NextLink} href={CHALLENGES_PATH}>
+              수정
+            </Button>
             <Button size="small">과거 도전 내역</Button>
             <IconButton onClick={handleShareClick} aria-label="share" sx={{ marginLeft: "auto" }}>
               <ShareIcon />
@@ -67,7 +71,12 @@ export default function UserChallengesMain({ challege, thisYearReadBooks }: Prop
           <div className="book_read_list_wrapper">
             <ul>
               {thisYearReadBooks.map((book) => (
-                <SearchBookItem key={book.id} kakaoBook={book.kakaoBook} currentReadStatus="read" />
+                <SearchBookItem
+                  key={book.id}
+                  kakaoBook={book.kakaoBook}
+                  currentReadStatus="read"
+                  hideElements={{ publicationDateEl: false, wtrButtonEl: false }}
+                />
               ))}
             </ul>
           </div>
@@ -100,5 +109,13 @@ const sxUserChallengesMain: SxProps<Theme> = (theme) => ({
 
   ".book_read_heading_wrapper": {
     marginBottom: "32px",
+  },
+
+  ".book_title": {
+    display: "inline-block",
+    width: "100%",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
   },
 });

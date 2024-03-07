@@ -21,3 +21,4 @@ export const API_PROFILE = "/api/profile";
 export const API_PROFILE_BY_ID = (uid: string) => "/api/profile/" + uid;
 export const API_SHELVES = "/api/shelves";
 export const API_CHALLENGE_BY_ID = (uid: string) => "/api/challenge/" + uid;
+export const API_RATING = "/api/rating";

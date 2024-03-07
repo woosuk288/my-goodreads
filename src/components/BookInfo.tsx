@@ -29,12 +29,13 @@ import ShareIcon from "@mui/icons-material/Share";
 import BookPageHeading from "./BookPageHeading";
 import BookRatingStats from "./BookRatingStats";
 import ExpandMoreBar from "./ExpandMoreBar";
-import { API_PROFILE, REVIEW_EDIT_PATH } from "@/constants/routes";
+import { API_PROFILE, API_RATING, REVIEW_EDIT_PATH } from "@/constants/routes";
 import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
 import { getProfile, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
 import { extractISBN, getReadStatus } from "@/lib/utils";
 import useSWRMutation from "swr/mutation";
+import UserRatingButton from "./UserRatingButton";
 
 interface Props {
   kakaoBook: IKakaoBook;
@@ -52,11 +53,11 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
   const { data: userData, isLoading, error } = useSWR(state === "loaded" && isLoggedIn ? API_PROFILE : null, getProfile);
 
   const uid = user?.uid;
-  const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `api/ratings/${bookId}/${uid}` : null, (_) =>
+  const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `${API_RATING}/${bookId}/${uid}` : null, (_) =>
     getReviewByBookAndUser(bookId, uid!)
   );
   const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
-    `api/ratings/${bookId}/${uid}`,
+    `${API_RATING}/${bookId}/${uid}`,
     (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
   );
 
@@ -103,29 +104,16 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           <div className="wtr_button">
             <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)} />
           </div>
-          <div className="user_rating">
-            <Typography component="legend" variant="subtitle2">
-              내 평점
-            </Typography>
-            <div className="user_rating_stars_wrapper">
-              <Rating
-                className="user_rating_stars"
-                name="user-rating"
-                size="large"
-                precision={0.5}
-                value={reviewData?.rating ?? null}
-                onChange={handleRatingChange}
-                disabled={isLoading || isReviewLoading || isMutating}
-              />
-            </div>
-            {reviewData?.reviewText?.trim().length ? (
-              <div>{reviewData.reviewText}</div>
-            ) : (
-              <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink}>
-                리뷰 쓰기
-              </Button>
-            )}
+          <div className="user_rating_wrapper">
+            <UserRatingButton bookId={bookId} />
           </div>
+          {reviewData?.reviewText?.trim().length ? (
+            <div>{reviewData.reviewText}</div>
+          ) : (
+            <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink} disabled={state === "loading"}>
+              리뷰 쓰기
+            </Button>
+          )}
         </div>
         <div className="edit_date_wrapper">
           <Divider />

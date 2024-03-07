@@ -55,6 +55,7 @@ export default function SearchBookList({ query, kakaoBooksResult }: Props) {
             key={doc.isbn + doc.datetime}
             kakaoBook={doc}
             currentReadStatus={getReadStatus(extractISBN(doc.isbn), userData)}
+            hideElements={{ ratingEl: false }}
           />
         ))}
       </ul>

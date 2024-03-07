@@ -23,7 +23,8 @@ import { useAuth } from "./AuthProvider";
 import LoadingProgress from "./LoadingProgress";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
-import { BOOK_PATH } from "@/constants/routes";
+import { API_RATING, BOOK_PATH } from "@/constants/routes";
+import UserRatingButton from "./UserRatingButton";
 
 // TODO: form의 기준
 interface Props {
@@ -41,7 +42,7 @@ export default function Editor({ kakaoBook }: Props) {
   const uid = authState.user?.uid;
 
   const { data: reviewData, isLoading } = useSWR(
-    isbn && uid ? `api/ratings/${bookId}/${uid}` : null,
+    isbn && uid ? `${API_RATING}/${bookId}/${uid}` : null,
     (_) => getReviewByBookAndUser(bookId, uid!),
     {
       onSuccess(data) {
@@ -53,11 +54,11 @@ export default function Editor({ kakaoBook }: Props) {
   );
 
   const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
-    `api/ratings/${bookId}/${uid}`,
+    `${API_RATING}/${bookId}/${uid}`,
     (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
   );
   const { trigger: updateReviewTrigger, isMutating: isReviewMutating } = useSWRMutation(
-    `api/ratings/${bookId}/${uid}`,
+    `${API_RATING}/${bookId}/${uid}`,
     (key: any, { arg }: { arg: { bookId: string; reviewText: string; isSpoiler?: boolean } }) =>
       addReviewToBook(arg.bookId, arg.reviewText, arg.isSpoiler)
   );
@@ -126,17 +127,8 @@ export default function Editor({ kakaoBook }: Props) {
 
       {/* rate */}
       {/* 당신의 평점 (1~5단계 watcha) */}
-      <div className="user_rating">
-        <Typography component="legend">평가하기</Typography>
-        <Rating
-          className="user_rating_stars"
-          name="user-rating"
-          size="large"
-          precision={0.5}
-          value={reviewData?.rating}
-          onChange={handleRatingChange}
-          disabled={isMutating}
-        />
+      <div className="user_rating_wrapper">
+        <UserRatingButton bookId={bookId} />
       </div>
 
       {/* write a review */}
@@ -217,7 +209,7 @@ const sxEditor: SxProps = {
     },
   },
 
-  ".user_rating": {
+  ".user_rating_wrapper": {
     textAlign: "center",
     margin: "20px 0",
   },

@@ -6,17 +6,27 @@ import { READ_STATUS } from "@/constants/values";
 import { AuthState } from "@/types/exportType";
 import { BOOK_PATH } from "@/constants/routes";
 import { extractISBN } from "@/lib/utils";
+import UserRatingButton from "./UserRatingButton";
+
+interface HideElements {
+  authorEl?: boolean;
+  publicationDateEl?: boolean;
+  wtrButtonEl?: boolean;
+  ratingEl?: boolean;
+}
 
 interface Props {
   kakaoBook: IKakaoBook;
   currentReadStatus: IBookReadStatus;
+  hideElements?: HideElements;
 }
 
-export default function SearchBookItem({ kakaoBook, currentReadStatus }: Props) {
+export default function SearchBookItem({ kakaoBook, currentReadStatus, hideElements = {} }: Props) {
+  const { authorEl = true, publicationDateEl = true, wtrButtonEl = true, ratingEl = true } = hideElements;
+
   const { thumbnail, title, authors, datetime, isbn } = kakaoBook;
-
-  const bookDetailLink = `${BOOK_PATH}/${extractISBN(isbn)}`;
-
+  const isbn13 = extractISBN(isbn);
+  const bookDetailLink = `${BOOK_PATH}/${isbn13}`;
   return (
     <Card sx={sxSearchBookItem} component="li">
       <NextLink className="book_cover" href={bookDetailLink}>
@@ -28,9 +38,12 @@ export default function SearchBookItem({ kakaoBook, currentReadStatus }: Props) 
           <Typography className="book_title" component={NextLink} href={bookDetailLink}>
             {title}
           </Typography>
-          <Typography variant="subtitle1" component="div" lineHeight={1.42}>
-            {authors.join(", ")}
-          </Typography>
+          {authorEl && (
+            <Typography variant="subtitle1" component="div" lineHeight={1.42}>
+              {authors.join(", ")}
+            </Typography>
+          )}
+
           <div className="book_meta_info">
             {/* <div className="book_rating">
               <Rating className="static_stars" name="read-only" value={3.95} readOnly precision={0.1} size="small" />
@@ -46,23 +59,33 @@ export default function SearchBookItem({ kakaoBook, currentReadStatus }: Props) 
                 3,430 리뷰
               </Typography>
             </div> */}
-            <div className="book_supplemental_info">
-              <Typography className="book_publication_date" variant="body2" color="text.secondary" component="span" marginRight="12px">
-                {new Date(datetime).toLocaleDateString()}
-              </Typography>
-              {/* <Link
+
+            {publicationDateEl && (
+              <div className="book_supplemental_info">
+                <Typography className="book_publication_date" variant="body2" color="text.secondary" component="span" marginRight="12px">
+                  {new Date(datetime).toLocaleDateString()}
+                </Typography>
+                {/* <Link
                 href="https://www.goodreads.com/work/editions/21998914-give-and-take-a-revolutionary-approach-to-success"
                 component={NextLink}
               >
                 80 Editions
               </Link> */}
-            </div>
+              </div>
+            )}
           </div>
         </CardContent>
         <Box sx={sxBookUserShelfAction}>
-          <div className="wtr_wrapper">
-            <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={currentReadStatus} />
-          </div>
+          {wtrButtonEl && (
+            <div className="wtr_wrapper">
+              <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={currentReadStatus} />
+            </div>
+          )}
+          {ratingEl && (
+            <div className="user_rating_wrapper">
+              <UserRatingButton bookId={isbn13} /* ratingValue={} onRatingChange={} disabled={} */ />
+            </div>
+          )}
           {/* <div className="purchase_wrapper">
             <Button
               variant="contained"
@@ -85,6 +108,9 @@ const sxSearchBookItem: SxProps = {
   ".book_cover": {
     width: "25%",
     alignSelf: "start",
+    img: {
+      boxShadow: 1,
+    },
   },
 
   ".MuiCardMedia-root": {
