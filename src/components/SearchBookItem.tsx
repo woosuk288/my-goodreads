@@ -128,6 +128,7 @@ const sxBookInfoColumn: SxProps = {
   ".book_title": {
     fontSize: "1.125rem",
     fontWeight: "bold",
+    lineHeight: "1.125",
     color: "inherit",
     textDecoration: "none",
     ":hover, :focus": {

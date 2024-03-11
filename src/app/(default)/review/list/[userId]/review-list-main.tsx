@@ -13,7 +13,7 @@ interface Props {
   profile: IUser;
 }
 
-export default function ReviewList({ uid, profile }: Props) {
+export default function ReviewListMain({ uid, profile }: Props) {
   return (
     <Box sx={sxReviewList}>
       <section className="shelf_section">

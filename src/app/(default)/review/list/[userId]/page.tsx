@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { getProfileById } from "@/lib/firebase/firestore";
-import ReviewList from "./review-list";
+import ReviewListMain from "./review-list-main";
 import ReviewBookList from "./review-book-list";
-import { SWRConfig } from "swr";
 import { API_PROFILE } from "@/constants/routes";
 import { SWRProvider } from "@/components/SWRProvider";
+import ReadStatusDrawer from "@/components/ReadStatusDrawer";
 
 export const dynamic = "force-dynamic";
 
@@ -18,9 +18,12 @@ export default async function page({ params, searchParams }: { params: { userId:
   return (
     <SWRProvider value={{ fallback }}>
       {searchParams.shelf ? (
-        <ReviewBookList uid={params.userId} readStatus={searchParams.shelf} profile={profile} />
+        <>
+          <ReviewBookList uid={params.userId} readStatus={searchParams.shelf} profile={profile} />
+          <ReadStatusDrawer />
+        </>
       ) : (
-        <ReviewList uid={params.userId} profile={profile} />
+        <ReviewListMain uid={params.userId} profile={profile} />
       )}
     </SWRProvider>
   );
