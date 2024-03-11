@@ -22,6 +22,7 @@ import {
   Transaction,
   DocumentReference,
   serverTimestamp,
+  DocumentSnapshot,
 } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase/firebase";
@@ -47,6 +48,32 @@ const authUser = () => {
 const createdAt = () => ({ createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
 const updatedAt = () => ({ updatedAt: serverTimestamp() });
 
+interface IReadDoc {
+  updatedAt?: any;
+  createdAt?: any;
+  [x: string]: any;
+}
+export async function getPlainObject<T extends IReadDoc>(docRef: DocumentReference<T, DocumentData>) {
+  const doc = await getDoc(docRef);
+
+  if (doc.exists() && doc.data()) {
+    const docData = doc.data();
+    const updatedAt =
+      typeof docData.updatedAt === "object" && docData.updatedAt?.toDate ? docData.updatedAt.toDate().toISOString() : docData.updatedAt;
+
+    const createdAt = typeof doc.data().createdAt === "object" ? doc.data()?.createdAt?.toDate().toISOString() : doc.data().createdAt;
+
+    return {
+      ...doc.data(),
+      id: doc.id,
+      ...(updatedAt && { updatedAt }),
+      ...(createdAt && { createdAt }),
+    };
+  } else {
+    return undefined;
+  }
+}
+
 /**
  * 로그인시 관리자단 유저 있는지 확인해서 users에 문서 추가
  */
@@ -63,8 +90,7 @@ export async function getProfile(): Promise<IUser | undefined> {
 // TODO: private 분리
 export async function getProfileById(uid: string): Promise<IUser | undefined> {
   const userRef = doc(COL_USERS, uid);
-  const user = await getDoc(userRef);
-  return user.data();
+  return getPlainObject(userRef);
 }
 
 /**
@@ -151,6 +177,8 @@ export async function getReviewByBookAndUser(bookId: string, uid: string): Promi
   const q = query(COL_BOOK_RATINGS(bookId), where("uid", "==", uid), limit(1));
 
   const results = await getDocs(q);
+  const d = getDocs(q);
+
   if (results.empty) {
     return null;
   }
