@@ -101,7 +101,7 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           <BookRatingStats ratingValue={3.95} userRatingCount={348897} userReviewCount={8786} />
         </div>
         <div className="actions_warpper">
-          <div className="wtr_button">
+          <div className="wtr_button_wrapper">
             <WantToReadButton kakaoBook={kakaoBook} currentReadStatus={getReadStatus(extractISBN(kakaoBook.isbn), userData)} />
           </div>
           <div className="user_rating_wrapper">
@@ -253,7 +253,7 @@ const sxBookInfo: SxProps = {
     flexDirection: "column",
     alignItems: "center",
     textAlign: "center",
-    ".wtr_button": {
+    ".wtr_button_wrapper": {
       margin: "12px 0",
     },
     ".user_rating_stars_wrapper": {
