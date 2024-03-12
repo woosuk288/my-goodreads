@@ -69,9 +69,11 @@ function ReadStatusDrawer() {
         <ListItemButton component="li" selected={currentReadStatus === "read"} onClick={handleUpdateReadStatus("read")}>
           읽음
         </ListItemButton>
-        <ListItemButton component="li" onClick={handleUpdateReadStatus("unread")}>
-          책장에서 빼기
-        </ListItemButton>
+        {currentReadStatus !== "unread" && (
+          <ListItemButton component="li" onClick={handleUpdateReadStatus("unread")}>
+            책장에서 빼기
+          </ListItemButton>
+        )}
         <ListItem component="li">
           <Button startIcon={<LibraryBooksIcon />} component={NextLink} href="#">
             전체 책장 보기

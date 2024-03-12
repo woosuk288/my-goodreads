@@ -101,8 +101,6 @@ export async function getBooksFromShelf(uid: string, readStatus: IBookReadStatus
   if (year) {
     const startDate = new Date(`${year}-01-01`);
     const endDate = new Date(`${year}-12-31`);
-    console.log("startDate : ", startDate);
-    console.log("endDate : ", endDate);
     q = query(q, where("updatedAt", ">=", startDate), where("updatedAt", "<=", endDate), orderBy("updatedAt", "desc"));
   }
 
@@ -199,21 +197,28 @@ export async function updateRating(bookId: string, rating: number | null) {
   await runTransaction(db, async (transaction) => {
     const bookSnap = await transaction.get(bookDocRef);
     const ratingSnap = await transaction.get(ratingDocRef);
-
     const bookData = bookSnap.data();
-    let newNumRatings = bookData?.numRatings ? bookData.numRatings + 1 : 1;
-    let newSumRating = (bookData?.sumRating || 0) + Number(rating);
-    // rating이 기존에 있었으면 누적안되도록 이전 평점 빼주기
-    if (ratingSnap.exists()) {
-      const prevRating = ratingSnap.data().rating;
-      if (rating === null) {
-        // 평점 취소 case
-        newNumRatings = newNumRatings - 2;
-      } else if (prevRating !== null) {
-        newNumRatings = newNumRatings - 1;
-      }
-      newSumRating = newSumRating - (prevRating ?? 0);
+    const ratingData = ratingSnap.data();
+
+    let newNumRatings = bookData?.numRatings ?? 0;
+    let newSumRating = bookData?.sumRating ?? 0;
+
+    // 생성 case
+    if ((ratingData?.rating ?? null) === null && rating) {
+      newNumRatings += 1;
+      newSumRating += Number(rating);
     }
+    // 수정 case
+    else if (ratingData?.rating && rating) {
+      newSumRating = newSumRating - Number(ratingData.rating) + Number(rating);
+    }
+    // 삭제 case
+    else if (ratingData?.rating && rating === null) {
+      newNumRatings -= 1;
+      newSumRating = newSumRating - Number(ratingData.rating);
+    } else {
+    }
+
     const newAverage = newNumRatings === 0 ? 0 : newSumRating / newNumRatings;
 
     transaction.set(
