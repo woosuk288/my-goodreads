@@ -52,7 +52,7 @@ export default function ChallengesMain() {
 
   const handleChallengeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!errorGoal) {
+    if (!errorGoal && !isGoalSame) {
       trigger();
     }
   };
@@ -67,6 +67,8 @@ export default function ChallengesMain() {
   if (state === "loading" || isLoading) return <LoadingProgress />;
 
   const errorGoal = !!(readingGoal && !(MIN_READING_GOAL <= Number(readingGoal) && Number(readingGoal) <= MAX_READING_GAOL));
+  const isGoalSame = readingGoal && challengeSnap?.data()?.readingGoal.toString() === readingGoal;
+
   return (
     <Box sx={sxChallengesMain}>
       <div className="challenge_container">
@@ -103,8 +105,14 @@ export default function ChallengesMain() {
             />
           </div>
           <div className="actions">
-            <Button type="submit" className="challenge_action_button" variant="contained" size="large" disabled={isMutating || isDeleting}>
-              {challengeSnap?.exists() ? "도전 수정하기" : "도전 시작하기"}
+            <Button
+              type="submit"
+              className="challenge_action_button"
+              variant="contained"
+              size="large"
+              disabled={isGoalSame || isMutating || isDeleting}
+            >
+              {challengeSnap?.exists() ? "목표 수정하기" : "도전 시작하기"}
             </Button>
           </div>
         </form>
