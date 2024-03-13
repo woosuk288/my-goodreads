@@ -17,12 +17,13 @@ import { BOOK_PATH, CHALLENGES_PATH } from "@/constants/routes";
 const sxHome: SxProps = {};
 
 const sxHomepagePromotionWrapper: SxProps<Theme> = (theme) => ({
+  marginTop: "20px",
   marginLeft: "auto",
   marginRight: "auto",
   marginBottom: "24px",
   padding: "0 0 24px",
 
-  img: { borderRadius: "4px" },
+  img: { borderRadius: "16px" },
   [theme.breakpoints.up("sm")]: {
     img: {
       height: "380px",

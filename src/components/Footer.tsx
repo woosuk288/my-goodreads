@@ -4,6 +4,7 @@ import { Box, Container, Grid, Link, List, ListItem, SxProps, Theme, Typography 
 import NextLink from "next/link";
 
 const sxFooter: SxProps<Theme> = (theme) => ({
+  display: { xs: "none", md: "block" },
   background: theme.palette.primary.light,
   paddingBottom: "32px",
   paddingTop: "32px",

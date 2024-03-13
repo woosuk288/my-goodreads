@@ -6,6 +6,8 @@ import theme from "@/theme";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Main from "@/components/Main";
+import LoadingProgress from "@/components/LoadingProgress";
+import BottomNavbar from "@/components/BottomNavbar";
 //
 // import { getAuthenticatedAppForUser } from "@/lib/firebase/firebase";
 // import { User } from "firebase/auth";
@@ -26,17 +28,20 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <AuthProvider>
-              <Header /* initialUser={currentUser?.toJSON() as User | undefined | null} */ />
-              <Main>{props.children}</Main>
-              <Footer />
-            </AuthProvider>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <React.Suspense fallback={<LoadingProgress circularProgressProps={{ color: "primary" }} />}>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <AuthProvider>
+                <Header /* initialUser={currentUser?.toJSON() as User | undefined | null} */ />
+                <BottomNavbar />
+                <Main>{props.children}</Main>
+                <Footer />
+              </AuthProvider>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </React.Suspense>
       </body>
     </html>
   );

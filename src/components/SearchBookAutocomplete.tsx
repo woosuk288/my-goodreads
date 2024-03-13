@@ -6,19 +6,17 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 
+import SearchIcon from "@mui/icons-material/Search";
+
 import debounce from "lodash/debounce";
 
 import { useRouter } from "next/navigation";
 import { BOOK_PATH, SEARCH_PATH } from "../constants/routes";
-import { Button } from "@mui/material";
-import { LINK_BUTTON_COLOR } from "../theme";
+import { CircularProgress } from "@mui/material";
 import { KAKAO_BOOK_SEARCH_URL } from "@/constants/urls";
 import { extractISBN } from "@/lib/utils";
 
-interface Props {
-  onClose: () => void;
-}
-export default function SearchBookAutocomplete({ onClose }: Props) {
+export default function SearchBookAutocomplete() {
   const [value, setValue] = React.useState<IKakaoBook | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState<readonly IKakaoBook[]>([]);
@@ -78,8 +76,8 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
   return (
     <Autocomplete
       freeSolo
-      sx={{ padding: "5px 8px", backgroundColor: "#F4F1EA" }}
-      slotProps={{ popper: { style: { width: "100%" } } }}
+      sx={{ width: "300px", padding: "5px 8px", backgroundColor: "#F4F1EA" }}
+      // slotProps={{ popper: { style: { width: "100%" } } }}
       id="kakao-book-search"
       getOptionLabel={(option) => (typeof option === "string" ? option : option.title)}
       filterOptions={(x) => x}
@@ -94,7 +92,6 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
         // console.log("onChange ");
         // console.log("newValue : ", newValue);
         // console.log("inputValue : ", inputValue);
-        onClose();
         if (typeof newValue === "string") {
           router.push(`${SEARCH_PATH}?query=${inputValue}`);
         } else {
@@ -124,10 +121,33 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
             autoFocus
             size="small"
             sx={{ "& .MuiOutlinedInput-root": { "&.Mui-focused fieldset": { borderColor: "text.primary" } } }}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {!inputValue && <SearchIcon />}
+                  {inputValue && loading && (
+                    <CircularProgress
+                      color="inherit"
+                      size={24}
+                      sx={{ position: "absolute", right: 9, zIndex: 100, backgroundColor: "#FFF" }}
+                    />
+                  )}
+                  {params.InputProps.endAdornment}
+                  {/* {!inputValue ? (
+                    <SearchIcon />
+                  ) : loading ? (
+                    <CircularProgress color="inherit" size={24} sx={{ position: "absolute", right: 9 }} />
+                  ) : (
+                    params.InputProps.endAdornment
+                  )} */}
+                </>
+              ),
+            }}
           />
-          <Button sx={{ color: LINK_BUTTON_COLOR }} onClick={onClose}>
+          {/* <Button sx={{ color: LINK_BUTTON_COLOR }} onClick={onClose}>
             취소
-          </Button>
+          </Button> */}
         </Box>
       )}
       open={!!inputValue}

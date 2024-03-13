@@ -38,7 +38,6 @@ export default function Header({}: /* initialUser */ IHeader) {
   const pathname = usePathname();
   const authState = useAuth();
 
-  const [openAutoComplete, setOpenAutoComplete] = React.useState(false);
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   React.useEffect(() => {
@@ -69,61 +68,49 @@ export default function Header({}: /* initialUser */ IHeader) {
     signInWithGoogle();
   };
 
-  const handleSearchIconClick = () => {
-    setOpenAutoComplete(!openAutoComplete);
-  };
-
-  const handleAutoCompleteClose = () => {
-    setOpenAutoComplete(false);
-  };
-
   return (
     <AppBar sx={sxHeader}>
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="lg" disableGutters className="desktop_container">
         <Toolbar sx={sxToolbar} variant="dense">
-          <IconButton onClick={handleSearchIconClick}>
-            <SearchIcon aria-label="search" />
-          </IconButton>
-
           <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          {authState.state === "loading" ? (
-            <CircularProgress size={32} />
-          ) : authState.state === "loaded" && !authState.user ? (
-            <Button variant="contained" size="small" component={NextLink} href={LOGIN_PATH} onClick={handleSignInWithGoogle}>
-              Sign in
-            </Button>
-          ) : (
-            <HeaderNavDrawer />
-          )}
+          <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
+            <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} component={Button} />
+            <Tab
+              label="둘러보기"
+              value={TAB_CODES.BROWSE}
+              component={Button}
+              endIcon={<ArrowDropDownIcon />}
+              onClick={handleTabClick(TAB_CODES.BROWSE)}
+            />
+            <Tab
+              label="커뮤니티"
+              value={TAB_CODES.COMMUNITY}
+              component={Button}
+              endIcon={<ArrowDropDownIcon />}
+              onClick={handleTabClick(TAB_CODES.COMMUNITY)}
+            />
+          </Tabs>
+
+          <Box sx={sxAutoCompleteWrapper}>
+            <SearchBookAutocomplete />
+          </Box>
+
+          <Box sx={sxUtils}>
+            {authState.state === "loading" ? (
+              <CircularProgress size={32} />
+            ) : authState.state === "loaded" && !authState.user ? (
+              <Button variant="contained" size="small" component={NextLink} href={LOGIN_PATH} onClick={handleSignInWithGoogle}>
+                Sign in
+              </Button>
+            ) : (
+              <HeaderNavDrawer />
+            )}
+          </Box>
         </Toolbar>
 
-        {openAutoComplete && (
-          <Box sx={sxAutoCompleteWrapper}>
-            <SearchBookAutocomplete onClose={handleAutoCompleteClose} />
-          </Box>
-        )}
-
-        <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
-          <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} />
-          <Tab
-            label="둘러보기"
-            value={TAB_CODES.BROWSE}
-            component={Button}
-            endIcon={<ArrowDropDownIcon />}
-            onClick={handleTabClick(TAB_CODES.BROWSE)}
-          />
-          <Tab
-            label="커뮤니티"
-            value={TAB_CODES.COMMUNITY}
-            component={Button}
-            endIcon={<ArrowDropDownIcon />}
-            onClick={handleTabClick(TAB_CODES.COMMUNITY)}
-          />
-        </Tabs>
-
         {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
-          <MenuList dense>
+          <MenuList dense sx={sxList(tabCode)}>
             {tabCode === TAB_CODES.BROWSE &&
               BROWSE_MENUS.map((menu) => (
                 <MenuItem key={menu.link} onClick={handleClose}>
@@ -139,16 +126,33 @@ export default function Header({}: /* initialUser */ IHeader) {
           </MenuList>
         )}
       </Container>
+
+      <Container maxWidth="md" disableGutters className="mobile_container">
+        <Toolbar sx={sxToolbar} variant="dense">
+          <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
+
+          <Box sx={sxAutoCompleteWrapper}>
+            <SearchBookAutocomplete />
+          </Box>
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 }
 
 const sxHeader: SxProps<Theme> = (theme) => ({
   backgroundColor: "primary.light",
+  ".desktop_container": {
+    display: { xs: "none", md: "block" },
+  },
+  ".mobile_container": {
+    display: { xs: "block", md: "none" },
+  },
 
   "a[aria-label='Goodreads Home']": {
     backgroundImage: "url(/images/logo-goodreads.svg)",
     backgroundSize: "100%",
+    backgroundRepeat: "no-repeat",
 
     width: "140px",
     height: "30px",
@@ -163,12 +167,6 @@ const sxHeader: SxProps<Theme> = (theme) => ({
   //   backgroundColor: theme.palette.secondary.main,
   //   color: '#FFFFFF'
   // },
-
-  ".MuiList-root": {
-    backgroundColor: "#FFFFFF",
-    color: "#333333",
-    boxShadow: "0 5px 10px rgba(0,0,0,0.15)",
-  },
 });
 
 const sxToolbar: SxProps = {
@@ -182,23 +180,41 @@ const sxToolbar: SxProps = {
   },
 };
 
+const sxList = (tabCode: string | boolean): SxProps => ({
+  position: "absolute",
+  left: tabCode === TAB_CODES.COMMUNITY ? "372px" : "272px",
+  // left: "272px",
+  backgroundColor: "#FFFFFF",
+  color: "#333333",
+  boxShadow: "0 5px 10px rgba(0,0,0,0.15)",
+});
+
 const sxTabs: SxProps = {
-  // width: '100%',
   height: "50px",
-  boxShadow: "0 1px 2px rgba(0,0,0,0.15)",
+  marginLeft: "8px",
 
   ".MuiButton-endIcon": {
     position: "absolute",
-    right: 16,
+    right: 8,
+  },
+
+  ".MuiTab-root": {
+    width: "100px",
+    // padding: "12px 24px 12px 8px",
   },
 };
 
-const sxAutoCompleteWrapper: SxProps<Theme> = (theme) => ({
-  position: "absolute",
-  width: "100%",
-  maxWidth: theme.breakpoints.values.lg,
-  zIndex: "800",
-});
+const sxUtils: SxProps = {
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  marginLeft: "12px",
+  marginRight: "-8px",
+};
+
+const sxAutoCompleteWrapper = {
+  marginLeft: "auto",
+};
 
 const BROWSE_MENUS = [
   {

@@ -13,6 +13,8 @@ export const REVIEW_LIST_PATH = "/review/list";
 export const CHALLENGES_PATH = "/challenges";
 export const USER_CHALLENGES_PATH = "/user_challenges";
 
+export const EXPLORE_PATH = "/explore";
+
 /**
  * SERVER ???
  */
