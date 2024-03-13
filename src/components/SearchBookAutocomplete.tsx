@@ -121,7 +121,7 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
             placeholder="책 검색"
             variant="outlined"
             fullWidth
-            // autoFocus
+            autoFocus
             size="small"
             sx={{ "& .MuiOutlinedInput-root": { "&.Mui-focused fieldset": { borderColor: "text.primary" } } }}
           />
