@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import NextLink from "next/link";
 
 import {
@@ -12,7 +14,6 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  Typography,
   styled,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,6 +23,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { signOut } from "@/lib/firebase/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const ANCHOR = "right";
 
@@ -42,14 +44,31 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function HeaderNavDrawer() {
+  const searchParams = useSearchParams();
+
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      searchParams.get("user-info-drawer") ? handleDrawerOpen() : setOpen(false);
+    }
+  }, [mounted, searchParams]);
+
   const handleDrawerClose = () => {
     setOpen(false);
+    router.back();
   };
 
   const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -58,93 +77,83 @@ export default function HeaderNavDrawer() {
   };
 
   return (
-    <div>
-      <IconButton
-        onClick={handleDrawerOpen}
-        size="small"
-        sx={{ marginRight: "3px", backgroundColor: "#EFEEE0", border: "1px solid #DBD3BF" }}
-      >
-        <LocalLibraryIcon sx={{ fontSize: "1.5rem" }} />
-      </IconButton>
+    <Drawer
+      anchor={ANCHOR}
+      open={open}
+      onClose={handleDrawerClose}
+      PaperProps={{ sx: { width: "85%", paddingLeft: "8px", paddingRight: "8px" } }}
+      slotProps={{
+        backdrop: {
+          sx: { backgroundColor: "rgba(0,0,0,0.7)" },
+          children: (
+            <IconButton onClick={handleDrawerClose} sx={{ position: "absolute", left: 0, top: 0, color: "#FFFFFF" }}>
+              <CloseIcon sx={{ fontSize: "2.5rem" }} />
+            </IconButton>
+          ),
+        },
+      }}
+    >
+      <DrawerHeader>
+        <IconButton onClick={handleDrawerClose}>
+          <NotificationsIcon />
+        </IconButton>
+        <IconButton onClick={handleDrawerClose}>
+          <TopicIcon />
+        </IconButton>
+        <IconButton onClick={handleDrawerClose}>
+          <MailIcon />
+        </IconButton>
+        <IconButton onClick={handleDrawerClose}>
+          <GroupsIcon />
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
 
-      <Drawer
-        anchor={ANCHOR}
-        open={open}
-        onClose={handleDrawerClose}
-        PaperProps={{ sx: { width: "85%", paddingLeft: "8px", paddingRight: "8px" } }}
-        slotProps={{
-          backdrop: {
-            sx: { backgroundColor: "rgba(0,0,0,0.7)" },
-            children: (
-              <IconButton onClick={handleDrawerClose} sx={{ position: "absolute", left: 0, top: 0, color: "#FFFFFF" }}>
-                <CloseIcon sx={{ fontSize: "2.5rem" }} />
-              </IconButton>
-            ),
-          },
-        }}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            <NotificationsIcon />
-          </IconButton>
-          <IconButton onClick={handleDrawerClose}>
-            <TopicIcon />
-          </IconButton>
-          <IconButton onClick={handleDrawerClose}>
-            <MailIcon />
-          </IconButton>
-          <IconButton onClick={handleDrawerClose}>
-            <GroupsIcon />
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-
-        <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-          <ListItem>
-            <ListItemAvatar>
-              {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-              <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }}>
-                <Link href="/user/123" component={NextLink}>
-                  <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: "3.5rem" }} />
-                </Link>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <Link href="/user/123" color="#333333" variant="subtitle2" fontWeight="bold" component={NextLink}>
-                  WOOSEOK
-                </Link>
-              }
-              secondary={
-                <Link href="/user/123" color="#000000" component={NextLink}>
-                  View profile
-                </Link>
-              }
-            />
+      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        <ListItem>
+          <ListItemAvatar>
+            {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
+            <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }}>
+              <Link href="/user/123" component={NextLink}>
+                <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: "3.5rem" }} />
+              </Link>
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <Link href="/user/123" color="#333333" variant="subtitle2" fontWeight="bold" component={NextLink}>
+                WOOSEOK
+              </Link>
+            }
+            secondary={
+              <Link href="/user/123" color="#000000" component={NextLink}>
+                View profile
+              </Link>
+            }
+          />
+        </ListItem>
+      </List>
+      <Divider />
+      <List dense>
+        {NAV_DRAWER_MENUS_01.map(({ link, text }, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton component={NextLink} href={link}>
+              <ListItemText primary={text} />
+            </ListItemButton>
           </ListItem>
-        </List>
-        <Divider />
-        <List dense>
-          {NAV_DRAWER_MENUS_01.map(({ link, text }, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton component={NextLink} href={link}>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List dense>
-          {NAV_DRAWER_MENUS_02.map(({ link, text, onClick }, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton component={NextLink} href={link} onClick={onClick && handleSignOut}>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </div>
+        ))}
+      </List>
+      <Divider />
+      <List dense>
+        {NAV_DRAWER_MENUS_02.map(({ link, text, onClick }, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton component={NextLink} href={link} onClick={onClick && handleSignOut}>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
   );
 }
 

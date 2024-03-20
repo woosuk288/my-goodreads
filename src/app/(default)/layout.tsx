@@ -13,6 +13,7 @@ import BottomNavbar from "@/components/BottomNavbar";
 // import { User } from "firebase/auth";
 // import { getCurrentUser } from "@/lib/firebase/firebase-admin";
 import { AuthProvider } from "@/components/AuthProvider";
+import HeaderNavDrawer from "@/components/HeaderNavDrawer";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
               <CssBaseline />
               <AuthProvider>
                 <Header /* initialUser={currentUser?.toJSON() as User | undefined | null} */ />
+                <HeaderNavDrawer />
                 <BottomNavbar />
                 <Main>{props.children}</Main>
                 <Footer />

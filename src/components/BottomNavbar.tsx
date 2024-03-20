@@ -13,37 +13,41 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { useAuth } from "./AuthProvider";
-import { EXPLORE_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
+import { EXPLORE_PATH, HOME_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
 import NextLink from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function BottomNavbar() {
-  const { state, user } = useAuth();
-  const [value, setValue] = React.useState(-1);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const openDrawer = searchParams.get("user-info-drawer");
+  const { user } = useAuth();
+  // const [value, setValue] = React.useState(-1);
 
   return (
     <Box sx={sxBottomNavbar}>
       <BottomNavigation
         showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
+        // value={value}
+        // onChange={(event, newValue) => {
+        //   setValue(newValue);
+        // }}
       >
         <BottomNavigationAction
           label="내 서재"
-          icon={value === 0 ? <CollectionsBookmarkIcon /> : <CollectionsBookmarkOutlinedIcon />}
+          icon={pathname === REVIEW_LIST_PATH + `/${user?.uid}` ? <CollectionsBookmarkIcon /> : <CollectionsBookmarkOutlinedIcon />}
           href={REVIEW_LIST_PATH + `/${user?.uid}`}
           component={NextLink}
         />
         <BottomNavigationAction
           label="둘러보기"
-          icon={value === 1 ? <ExploreIcon /> : <ExploreOutlinedIcon />}
-          href={EXPLORE_PATH}
+          icon={pathname === HOME_PATH ? <ExploreIcon /> : <ExploreOutlinedIcon />}
+          href={HOME_PATH}
           component={NextLink}
         />
         <BottomNavigationAction
           label="내 정보"
-          icon={value === 2 ? <LocalLibraryIcon /> : <LocalLibraryOutlinedIcon />}
+          icon={openDrawer ? <LocalLibraryIcon /> : <LocalLibraryOutlinedIcon />}
           href={{ query: "user-info-drawer=true" }}
           component={NextLink}
         />

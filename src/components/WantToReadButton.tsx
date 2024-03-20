@@ -27,8 +27,6 @@ const WantToReadButton = ({ kakaoBook, currentReadStatus }: Props) => {
   React.useEffect(() => {
     setCurrentUrl(window.location.href);
   }, []);
-  const readStatusdrawerUrl =
-    currentUrl + `${currentUrl?.includes("?") ? "&" : "?"}isbn=${isbn}&currentReadStatus=${currentReadStatus}&read-status-drawer=true`;
 
   const { trigger: updateBookStatusTrigger, isMutating } = useSWRMutation(API_PROFILE, (key, { arg }) =>
     updateBookFromShelf(isbn, "want", kakaoBook, currentReadStatus)

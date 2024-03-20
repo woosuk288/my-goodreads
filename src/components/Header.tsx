@@ -23,11 +23,13 @@ import {
 
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+
 import HeaderNavDrawer from "./HeaderNavDrawer";
 import { signInWithGoogle } from "@/lib/firebase/auth";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
 import { useAuth } from "./AuthProvider";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { LOGIN_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
 
 interface IHeader {
@@ -36,11 +38,24 @@ interface IHeader {
 export default function Header({}: /* initialUser */ IHeader) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const authState = useAuth();
 
   const [openSearchbar, setOpenSearchbar] = React.useState(false);
 
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
+
+  // Get a new searchParams string by merging the current
+  // searchParams with a provided key/value pair
+  const createQueryString = React.useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   React.useEffect(() => {
     if (TAB_CODES.MY_BOOKS === tabCode && pathname !== REVIEW_LIST_PATH + `/${authState.user?.uid}`) {
@@ -75,6 +90,10 @@ export default function Header({}: /* initialUser */ IHeader) {
   };
   const handleCloseSearchbar = () => {
     setOpenSearchbar(false);
+  };
+
+  const handleDrawerOpen = () => {
+    router.push(pathname + "?" + createQueryString("user-info-drawer", "true"));
   };
 
   return (
@@ -113,7 +132,15 @@ export default function Header({}: /* initialUser */ IHeader) {
                 Sign in
               </Button>
             ) : (
-              <HeaderNavDrawer />
+              <IconButton
+                onClick={handleDrawerOpen}
+                size="small"
+                sx={{ marginRight: "3px", backgroundColor: "#EFEEE0", border: "1px solid #DBD3BF" }}
+                aria-label="open-drawer-my-info"
+              >
+                <LocalLibraryIcon sx={{ fontSize: "1.5rem" }} />
+              </IconButton>
+              // <HeaderNavDrawer />
             )}
           </Box>
         </Toolbar>
