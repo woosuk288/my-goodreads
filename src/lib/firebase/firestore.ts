@@ -23,6 +23,7 @@ import {
   DocumentReference,
   serverTimestamp,
   DocumentSnapshot,
+  increment,
 } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase/firebase";
@@ -38,11 +39,12 @@ const COL_BOOKS = createCollection<IBook>("books");
 // const COL_REVIEWS = createCollection<IRating>("reviews");
 const COL_SHELF_BOOKS = (shelfId: string) => createCollection<IShelfBook>("shelves/" + shelfId + "/books");
 const COL_BOOK_RATINGS = (bookId: string) => createCollection<IRating>("books/" + bookId + "/ratings");
+
 const COL_CHALLENGES = createCollection<IChallenge>("challenges");
 
 // auth middleware?
 const authUser = () => {
-  if (!auth.currentUser) throw Error("로그인이 필요합니다.");
+  if (!auth.currentUser) throw new Error("로그인이 필요합니다.");
   return auth.currentUser;
 };
 const createdAt = () => ({ createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
@@ -250,7 +252,7 @@ export async function updateRating(bookId: string, rating: number | null) {
  * 리뷰 작성하기
  *
  */
-export async function addReviewToBook(bookId: string, reviewText: string, isSpoiler?: boolean) {
+export async function updateReviewFromBook(bookId: string, reviewText: string, isSpoiler?: boolean) {
   const uid = auth.currentUser?.uid;
   if (!uid) {
     throw new Error("No user ID has been provided.");
@@ -259,26 +261,84 @@ export async function addReviewToBook(bookId: string, reviewText: string, isSpoi
     throw new Error("No restaurant ID has been provided.");
   }
 
-  if (!reviewText) {
+  const hasLike = false; // TODO: like, comment 있으면 경고 or 삭제 불가
+
+  if (!reviewText && hasLike) {
     throw new Error("A valid review has not been provided.");
   }
 
   try {
+    const bookDocRef = doc(COL_BOOKS, bookId);
     const ratingDocRef = doc(COL_BOOK_RATINGS(bookId), uid);
-    await setDoc(
-      ratingDocRef,
-      {
-        bookId,
-        reviewText,
-        isSpoiler,
-        uid,
-        ...updatedAt(),
-      },
-      { merge: true }
-    );
+
+    await runTransaction(db, async (transaction) => {
+      const bookSnap = await transaction.get(bookDocRef);
+      const ratingSnap = await transaction.get(ratingDocRef);
+      const bookData = bookSnap.data();
+      const ratingData = ratingSnap.data();
+
+      const previousReviewCount = bookData?.numReviews;
+
+      const previousReviewText = ratingData?.reviewText?.trim();
+      const currentReviewText = reviewText.trim();
+
+      // 생성
+      if (!previousReviewText && currentReviewText) {
+        transaction.update(bookDocRef, {
+          numReviews: increment(1),
+          ...(bookSnap.exists() ? createdAt() : updatedAt()),
+        });
+
+        transaction.set(
+          ratingDocRef,
+          {
+            bookId,
+            reviewText,
+            isSpoiler,
+            uid,
+            ...(ratingSnap.exists() ? createdAt() : updatedAt()),
+          },
+          { merge: true }
+        );
+      }
+      // 수정
+      else if (previousReviewText && currentReviewText) {
+        transaction.set(
+          ratingDocRef,
+          {
+            bookId,
+            reviewText,
+            isSpoiler,
+            uid,
+            ...updatedAt(),
+          },
+          { merge: true }
+        );
+      }
+      // 삭제
+      else if (previousReviewText && !currentReviewText) {
+        transaction.update(bookDocRef, {
+          numReviews: increment(-1),
+          ...updatedAt(),
+        });
+        transaction.set(
+          ratingDocRef,
+          {
+            bookId,
+            reviewText,
+            isSpoiler,
+            uid,
+            ...updatedAt(),
+          },
+          { merge: true }
+        );
+      } else {
+        throw new Error("else case");
+      }
+    });
   } catch (error) {
-    console.error("There was an error adding the rating to the restaurant", error);
-    throw error;
+    console.error("There was an error adding the rating to the book", error);
+    throw new Error("There was an error adding the rating to the book");
   }
 }
 
@@ -314,60 +374,6 @@ export async function deleteChallege(year: string) {
   const challegeRef = doc(COL_CHALLENGES, authUser().uid + year);
   return deleteDoc(challegeRef);
 }
-
-// export async function getChallenge(uid: string, year: string) {
-//   const q = query(COL_CHALLENGES, where('uid', '==', uid), where('year', '==', year), limit(1))
-//   const result = await getDocs(q)
-
-//   return result.docs[0]
-
-// }
-
-// const updateWithRating = async (
-//   transaction: Transaction,
-//   docRef: DocumentReference,
-//   newRatingDocument: DocumentReference,
-//   review: IRating
-// ) => {
-//   const restaurant = await transaction.get(docRef);
-//   const data = restaurant.data();
-//   const newNumRatings = data?.numRatings ? data.numRatings + 1 : 1;
-//   const newSumRating = (data?.sumRating || 0) + Number(review.rating);
-//   const newAverage = newSumRating / newNumRatings;
-
-//   transaction.update(docRef, {
-//     numRatings: newNumRatings,
-//     sumRating: newSumRating,
-//     avgRating: newAverage,
-//   });
-
-//   transaction.set(newRatingDocument, {
-//     ...review,
-//     timestamp: Timestamp.fromDate(new Date()),
-//   });
-// };
-
-// export async function addReviewToBook(bookId: string, review: IRating) {
-//   // 현재는 일단 안씀
-//   if (!bookId) {
-//     throw new Error("No restaurant ID has been provided.");
-//   }
-
-//   if (!review) {
-//     throw new Error("A valid review has not been provided.");
-//   }
-
-//   try {
-//     const docRef = doc(COL_BOOKS, bookId);
-//     const newRatingDocument = doc(COL_BOOK_RATINGS(bookId));
-
-//     // corrected line
-//     await runTransaction(db, (transaction) => updateWithRating(transaction, docRef, newRatingDocument, review));
-//   } catch (error) {
-//     console.error("There was an error adding the rating to the restaurant", error);
-//     throw error;
-//   }
-// }
 
 // export async function getRestaurants(filters = {}) {
 //   let q = query(collection(db, "restaurants"));

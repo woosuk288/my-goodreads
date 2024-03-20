@@ -108,9 +108,20 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
             <UserRatingButton bookId={bookId} />
           </div>
           {reviewData?.reviewText?.trim().length ? (
-            <div>{reviewData.reviewText}</div>
+            <div className="user_review_wrapper">
+              <Typography className="user_review_text">{reviewData.reviewText}</Typography>
+              <Button
+                className="user_review_button"
+                variant="outlined"
+                href={bookDetailLink}
+                component={NextLink}
+                disabled={state === "loading"}
+              >
+                리뷰 수정
+              </Button>
+            </div>
           ) : (
-            <Button variant="outlined" sx={{ width: "160px" }} href={bookDetailLink} component={NextLink} disabled={state === "loading"}>
+            <Button variant="outlined" href={bookDetailLink} component={NextLink} disabled={state === "loading"}>
               리뷰 쓰기
             </Button>
           )}
@@ -256,8 +267,12 @@ const sxBookInfo: SxProps = {
     ".wtr_button_wrapper": {
       margin: "12px 0",
     },
-    ".user_rating_stars_wrapper": {
+    ".user_rating_wrapper": {
       margin: "8px 0 12px",
+    },
+    ".user_review_button": {
+      width: "160px",
+      marginTop: "16px",
     },
   },
   ".edit_date_wrapper": {

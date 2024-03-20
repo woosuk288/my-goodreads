@@ -1,6 +1,6 @@
 "use client";
 
-import { addReviewToBook, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
+import { updateReviewFromBook, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
 import { extractISBN } from "@/lib/utils";
 import {
   Box,
@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import { useAuth } from "./AuthProvider";
 import LoadingProgress from "./LoadingProgress";
@@ -41,17 +41,15 @@ export default function Editor({ kakaoBook }: Props) {
   const bookId = extractISBN(isbn);
   const uid = authState.user?.uid;
 
-  const { data: reviewData, isLoading } = useSWR(
-    isbn && uid ? `${API_RATING}/${bookId}/${uid}` : null,
-    (_) => getReviewByBookAndUser(bookId, uid!),
-    {
-      onSuccess(data) {
-        if (data) {
-          setFormReview({ reviewText: data.reviewText ?? "", isSpoiler: data.isSpoiler ?? false });
-        }
-      },
-    }
+  const { data: reviewData, isLoading } = useSWR(isbn && uid ? `${API_RATING}/${bookId}/${uid}` : null, (_) =>
+    getReviewByBookAndUser(bookId, uid!)
   );
+
+  useEffect(() => {
+    if (reviewData) {
+      setFormReview({ reviewText: reviewData.reviewText ?? "", isSpoiler: reviewData.isSpoiler ?? false });
+    }
+  }, [reviewData]);
 
   const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
     `${API_RATING}/${bookId}/${uid}`,
@@ -60,7 +58,7 @@ export default function Editor({ kakaoBook }: Props) {
   const { trigger: updateReviewTrigger, isMutating: isReviewMutating } = useSWRMutation(
     `${API_RATING}/${bookId}/${uid}`,
     (key: any, { arg }: { arg: { bookId: string; reviewText: string; isSpoiler?: boolean } }) =>
-      addReviewToBook(arg.bookId, arg.reviewText, arg.isSpoiler)
+      updateReviewFromBook(arg.bookId, arg.reviewText, arg.isSpoiler)
   );
 
   const handleRatingChange = (_: any, newValue: number | null) => {
@@ -154,12 +152,17 @@ export default function Editor({ kakaoBook }: Props) {
                 label={<Typography variant="subtitle2">스포일러?</Typography>}
               />
             </FormGroup>
-            <Typography variant="body2" color="text.secondary">
+            {/* <Typography variant="body2" color="text.secondary">
               1분전에 마지막으로 수정
-            </Typography>
+            </Typography> */}
           </div>
 
-          <Button color="secondary" variant="contained" type="submit">
+          <Button
+            color="secondary"
+            variant="contained"
+            type="submit"
+            disabled={reviewData?.reviewText === formReview.reviewText && reviewData.isSpoiler === formReview.isSpoiler}
+          >
             게시하기
           </Button>
         </form>

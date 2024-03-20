@@ -4,4 +4,5 @@ interface IBook {
   numRatings: number;
   sumRating: number;
   avgRating: number;
+  numReviews: number;
 }
