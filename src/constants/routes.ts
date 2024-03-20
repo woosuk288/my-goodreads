@@ -14,6 +14,7 @@ export const CHALLENGES_PATH = "/challenges";
 export const USER_CHALLENGES_PATH = "/user_challenges";
 
 export const EXPLORE_PATH = "/explore";
+export const PROFILE_PATH = "/profile";
 
 /**
  * SERVER ???
