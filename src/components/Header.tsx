@@ -38,6 +38,8 @@ export default function Header({}: /* initialUser */ IHeader) {
   const pathname = usePathname();
   const authState = useAuth();
 
+  const [openSearchbar, setOpenSearchbar] = React.useState(false);
+
   const [tabCode, setTabCode] = React.useState<string | boolean>(false);
 
   React.useEffect(() => {
@@ -66,6 +68,13 @@ export default function Header({}: /* initialUser */ IHeader) {
   const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     signInWithGoogle();
+  };
+
+  const handleOpenSearchbar = () => {
+    setOpenSearchbar(true);
+  };
+  const handleCloseSearchbar = () => {
+    setOpenSearchbar(false);
   };
 
   return (
@@ -129,11 +138,22 @@ export default function Header({}: /* initialUser */ IHeader) {
 
       <Container maxWidth="md" disableGutters className="mobile_container">
         <Toolbar sx={sxToolbar} variant="dense">
+          <div style={{ width: "40px" }}></div>
+
           <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          <Box sx={sxAutoCompleteWrapper}>
-            <SearchBookAutocomplete />
-          </Box>
+          <IconButton edge="end" onClick={handleOpenSearchbar}>
+            <SearchIcon sx={{ fontSize: "1.8rem" }} />
+          </IconButton>
+
+          {openSearchbar && (
+            <Box sx={sxMobileAutoCompleteWrapper}>
+              <SearchBookAutocomplete onClose={handleCloseSearchbar} />
+              <Button color="secondary" onClick={handleCloseSearchbar}>
+                취소
+              </Button>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
@@ -212,8 +232,16 @@ const sxUtils: SxProps = {
   marginRight: "-8px",
 };
 
-const sxAutoCompleteWrapper = {
+const sxAutoCompleteWrapper: SxProps = {
   marginLeft: "auto",
+};
+const sxMobileAutoCompleteWrapper: SxProps = {
+  display: "flex",
+  backgroundColor: "primary.light",
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
 };
 
 const BROWSE_MENUS = [

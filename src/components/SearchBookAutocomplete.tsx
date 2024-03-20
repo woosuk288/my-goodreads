@@ -16,7 +16,10 @@ import { CircularProgress } from "@mui/material";
 import { KAKAO_BOOK_SEARCH_URL } from "@/constants/urls";
 import { extractISBN } from "@/lib/utils";
 
-export default function SearchBookAutocomplete() {
+interface Props {
+  onClose?: () => void;
+}
+export default function SearchBookAutocomplete({ onClose }: Props) {
   const [value, setValue] = React.useState<IKakaoBook | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState<readonly IKakaoBook[]>([]);
@@ -92,6 +95,7 @@ export default function SearchBookAutocomplete() {
         // console.log("onChange ");
         // console.log("newValue : ", newValue);
         // console.log("inputValue : ", inputValue);
+        onClose && onClose();
         if (typeof newValue === "string") {
           router.push(`${SEARCH_PATH}?query=${inputValue}`);
         } else {

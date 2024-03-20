@@ -8,6 +8,7 @@ const sxMain: SxProps<Theme> = (theme) => ({
   paddingTop: HEADER_HEIGHT,
   maxWidth: theme.breakpoints.values.sm,
   margin: "0 auto",
+  paddingBottom: { xs: "56px", md: "0" },
 });
 
 interface IMain {
