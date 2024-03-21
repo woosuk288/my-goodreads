@@ -27,6 +27,7 @@ import {
 } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase/firebase";
+import { updateProfile } from "firebase/auth";
 
 // This is just a helper to add the type to the db responses
 const createCollection = <T = DocumentData>(collectionName: string) => {
@@ -43,7 +44,7 @@ const COL_BOOK_RATINGS = (bookId: string) => createCollection<IRating>("books/" 
 const COL_CHALLENGES = createCollection<IChallenge>("challenges");
 
 // auth middleware?
-const authUser = () => {
+export const authUser = () => {
   if (!auth.currentUser) throw new Error("로그인이 필요합니다.");
   return auth.currentUser;
 };
@@ -93,6 +94,23 @@ export async function getProfile(): Promise<IUser | undefined> {
 export async function getProfileById(uid: string): Promise<IUser | undefined> {
   const userRef = doc(COL_USERS, uid);
   return getPlainObject(userRef);
+}
+
+export async function updateProfileInfo(key: string, value: string) {
+  const properties = ["username", "photoURL"];
+
+  if (!properties.includes(key)) {
+    throw new Error("Wrong properties have been provided.");
+  }
+
+  const userRef = doc(COL_USERS, authUser().uid);
+
+  await updateDoc(userRef, { [key]: value });
+
+  // await updateProfile(authUser(), {
+  //   ...(username && { username }),
+  //   ...(photoURL && { photoURL }),
+  // });
 }
 
 /**

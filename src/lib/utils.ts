@@ -74,3 +74,13 @@ export const getReadStatus = (bookId: string, userData?: IUser) => {
     : READ_STATUS.unread;
   return readStatus;
 };
+
+export const extractStoragePath = (inputString: string) => {
+  const startIndex = inputString.indexOf(".appspot.com/o/") + ".appspot.com/o/".length;
+  const endIndex = inputString.indexOf("?alt=media");
+  if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+    return decodeURIComponent(inputString.substring(startIndex, endIndex));
+  } else {
+    return ""; // 해당 문자열이 없는 경우 빈 문자열을 반환합니다.
+  }
+};
