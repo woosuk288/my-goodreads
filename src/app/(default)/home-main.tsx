@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Box, CardHeader, Container, InputAdornment, Link, SxProps, TextField, Theme, Typography } from "@mui/material";
+import { Avatar, Box, CardHeader, Container, InputAdornment, Link, Skeleton, SxProps, TextField, Theme, Typography } from "@mui/material";
 import LoginButtonGroup from "../../components/LoginButtonGroup";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,8 +11,8 @@ import HomeImageList from "../../components/HomeImageList";
 import HomeTextList from "../../components/HomeTextList";
 import Heading from "../../components/Heading";
 import NextLink from "next/link";
-import useUserSession from "@/hooks/useUserSession";
 import { BOOK_PATH, CHALLENGES_PATH } from "@/constants/routes";
+import { useAuth } from "@/components/AuthProvider";
 
 const sxHome: SxProps = {};
 
@@ -23,7 +23,7 @@ const sxHomepagePromotionWrapper: SxProps<Theme> = (theme) => ({
   marginBottom: "24px",
   padding: "0 0 24px",
 
-  img: { borderRadius: "16px" },
+  img: { borderRadius: "8px" },
   [theme.breakpoints.up("sm")]: {
     img: {
       height: "380px",
@@ -90,7 +90,7 @@ export default function HomeMain({
   bloggerBestSellerResponse,
 }: // hotTrendBooksResponse,
 Props) {
-  const user = useUserSession();
+  const { state, user } = useAuth();
 
   const popularBooksForImageList = popularBooksResponse.docs.map((item) => ({
     id: item.doc.isbn13,
@@ -123,18 +123,25 @@ Props) {
       </Box>
 
       <Container>
-        {!user && (
-          <Box sx={sxAuthSignInWrapper}>
-            <Typography component="h2" fontSize="22px" fontWeight="bold" lineHeight={1} sx={{ marginBottom: "10px" }}>
-              Meet your next favorite book.
-              {/* 다음으로 사랑하게 될 책을 만나보세요 */}
-            </Typography>
-            <Typography variant="body2" sx={{ margin: "15px 10px 24px" }}>
-              Find and read more books you’ll love. Be part of Goodreads, the world’s largest community for readers like you.
-              {/* 더 많은 책을 찾아보고, 새로운 이야기에 빠져보세요. 세계 최대 독서 커뮤니티인 Goodreads에서 같은 책을 사랑하는 독자들과 함께하세요. */}
-            </Typography>
-            <LoginButtonGroup />
-          </Box>
+        {state === "loading" ? (
+          <>
+            <Skeleton variant="text" width={"70%"} sx={{ fontSize: "1.25rem" }} />
+            <Skeleton variant="rounded" height={200} />
+          </>
+        ) : (
+          !user && (
+            <Box sx={sxAuthSignInWrapper}>
+              <Typography component="h2" fontSize="22px" fontWeight="bold" lineHeight={1} sx={{ marginBottom: "10px" }}>
+                Meet your next favorite book.
+                {/* 다음으로 사랑하게 될 책을 만나보세요 */}
+              </Typography>
+              <Typography variant="body2" sx={{ margin: "15px 10px 24px" }}>
+                Find and read more books you’ll love. Be part of Goodreads, the world’s largest community for readers like you.
+                {/* 더 많은 책을 찾아보고, 새로운 이야기에 빠져보세요. 세계 최대 독서 커뮤니티인 Goodreads에서 같은 책을 사랑하는 독자들과 함께하세요. */}
+              </Typography>
+              <LoginButtonGroup />
+            </Box>
+          )
         )}
 
         {/* <Box className="serachBar" sx={{ margin: "10px" }}>

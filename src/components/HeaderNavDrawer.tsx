@@ -23,8 +23,11 @@ import MailIcon from "@mui/icons-material/Mail";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { signOut } from "@/lib/firebase/auth";
-import { useRouter, useSearchParams } from "next/navigation";
-import { PROFILE_PATH } from "@/constants/routes";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { API_PROFILE, HOME_PATH, LOGIN_PATH, PROFILE_PATH } from "@/constants/routes";
+import { useAuth } from "./AuthProvider";
+import useSWR from "swr";
+import { getProfile } from "@/lib/firebase/firestore";
 
 const ANCHOR = "right";
 
@@ -46,8 +49,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function HeaderNavDrawer() {
   const searchParams = useSearchParams();
-
   const router = useRouter();
+
+  const { state, user } = useAuth();
+  const { data: profileData } = useSWR(user ? API_PROFILE : null, getProfile);
 
   const [open, setOpen] = useState(false);
 
@@ -75,9 +80,11 @@ export default function HeaderNavDrawer() {
   const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     if (confirm("Are you sure?")) {
-      signOut();
+      signOut().then(() => router.replace(HOME_PATH));
     }
   };
+
+  if (state === "loaded" && !user && open) redirect(LOGIN_PATH);
 
   return (
     <Drawer
@@ -114,9 +121,9 @@ export default function HeaderNavDrawer() {
 
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         <ListItem>
-          <ListItemAvatar>
+          <ListItemAvatar sx={{ marginRight: "8px" }}>
             {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-            <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }}>
+            <Avatar sx={{ width: "75px", height: "75px", marginRight: "8px", backgroundColor: "#EFEEE0" }} src={profileData?.photoURL}>
               <Link href={PROFILE_PATH} component={NextLink}>
                 <LocalLibraryIcon sx={{ color: "#DBD3BF", fontSize: "3.5rem" }} />
               </Link>
@@ -125,7 +132,7 @@ export default function HeaderNavDrawer() {
           <ListItemText
             primary={
               <Link href={PROFILE_PATH} color="#333333" variant="subtitle2" fontWeight="bold" component={NextLink}>
-                WOOSEOK
+                {profileData?.displayName}
               </Link>
             }
             secondary={

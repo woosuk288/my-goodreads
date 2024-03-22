@@ -2,13 +2,16 @@
 
 import { Box, Container, SxProps, Typography } from "@mui/material";
 import LoginButtonGroup from "../../../components/LoginButtonGroup";
+import Link from "next/link";
+import { HOME_PATH } from "@/constants/routes";
 
 const sxLogin: SxProps = {};
 
 const sxLogoWrapper: SxProps = {
-  textAlign: "center",
+  maxWidth: "180px",
   margin: "50px auto 15px auto",
   paddingBottom: "10px",
+  textAlign: "center",
 
   "> img": {
     backgroundSize: "100% 100%",
@@ -29,13 +32,19 @@ const sxAppLinkWrapper: SxProps = {
   "> .text": {
     paddingBottom: "8px",
   },
+
+  ".img_app_link": {
+    maxWidth: "160px",
+  },
 };
 
 export default function LoginPage() {
   return (
     <Container className="Login" sx={sxLogin}>
       <Box component={"header"} className="logo_wrapper" sx={sxLogoWrapper}>
-        <img src="/images/logo-goodreads.svg" alt="goodreads" />
+        <Link href={HOME_PATH}>
+          <img src="/images/logo-goodreads.svg" alt="goodreads" />
+        </Link>
       </Box>
 
       <Box sx={authExternalProviders}>
@@ -47,9 +56,9 @@ export default function LoginPage() {
           </Typography>
           <a href="#" rel="noopener noreferrer">
             <img
+              className="img_app_link"
               src="https://s.gr-assets.com/assets/app/badge-android-highres-e46912ad93a09553adffc67550d3b562.png"
               alt="Download app for Android"
-              width={160}
             />
           </a>
         </Box>

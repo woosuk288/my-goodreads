@@ -51,7 +51,7 @@ export default function BottomNavbar() {
           disabled={state === "loading"}
           label="내 정보"
           icon={openDrawer ? <LocalLibraryIcon /> : <LocalLibraryOutlinedIcon />}
-          href={{ query: "user-info-drawer=true" }}
+          href={user?.uid ? { query: "user-info-drawer=true" } : LOGIN_PATH}
           component={NextLink}
         />
       </BottomNavigation>
