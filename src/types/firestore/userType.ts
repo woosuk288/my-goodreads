@@ -1,5 +1,5 @@
 interface IUser {
-  username: string;
+  displayName: string;
   email: string;
   photoURL: string;
   booksWant?: Array<string>;

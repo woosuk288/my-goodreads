@@ -97,7 +97,7 @@ export async function getProfileById(uid: string): Promise<IUser | undefined> {
 }
 
 export async function updateProfileInfo(key: string, value: string) {
-  const properties = ["username", "photoURL"];
+  const properties = ["displayName", "photoURL"];
 
   if (!properties.includes(key)) {
     throw new Error("Wrong properties have been provided.");
@@ -108,7 +108,7 @@ export async function updateProfileInfo(key: string, value: string) {
   await updateDoc(userRef, { [key]: value });
 
   // await updateProfile(authUser(), {
-  //   ...(username && { username }),
+  //   ...(displayName && { displayName }),
   //   ...(photoURL && { photoURL }),
   // });
 }

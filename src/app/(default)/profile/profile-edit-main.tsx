@@ -16,6 +16,7 @@ import LoadingProgress from "@/components/LoadingProgress";
 // import useSWRMutation from "swr/mutation";
 import { useAuth } from "@/components/AuthProvider";
 import { redirect } from "next/navigation";
+import ProfileEditDrawer from "./ProfileEditDrawer";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -36,7 +37,6 @@ function ProfileEditMain() {
 
   const { data: profileData, mutate, isLoading } = useSWR(user ? API_PROFILE : null, getProfile);
   const [isPending, startTransition] = useTransition();
-  // const {trigger:photoSvaeTrigger, isMutating} = useSWRMutation(API_PROFILE, () => );
 
   const encodeFileToBase64 = (fileBlob: Blob) => {
     const reader = new FileReader();
@@ -98,11 +98,12 @@ function ProfileEditMain() {
 
   if (state === "loading" || isLoading) return <LoadingProgress />;
   if (!user) redirect(LOGIN_PATH);
+  if (!profileData) return <div>오류: 사용자 데이터가 존재하지 않습니다!</div>;
 
   return (
     <Box sx={sxProfileEditMain}>
       <div className="profile_header_section">
-        <Typography component="h1" fontSize={"1.6rem"} fontWeight={500}>
+        <Typography component="h1" fontSize={"1.25rem"} fontWeight={500}>
           프로필
         </Typography>
       </div>
@@ -161,13 +162,15 @@ function ProfileEditMain() {
       <div className="profile_list_section">
         <List>
           <Divider />
-          <ListItemButton component={NextLink} href="?edit=displayname">
-            <ListItemText primary="별명 or 이름" secondary={profileData?.username || "아직 없어요~"} />
+          <ListItemButton component={NextLink} href="?profile-info-drawer=true&edit=displayName">
+            <ListItemText primary="닉네임" secondary={profileData?.displayName || "아직 없어요~"} />
             <NavigateNextIcon />
           </ListItemButton>
           <Divider />
         </List>
       </div>
+
+      <ProfileEditDrawer profile={profileData} />
     </Box>
   );
 }

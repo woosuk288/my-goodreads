@@ -24,7 +24,7 @@ export default function UserChallengesMain({ challege, thisYearReadBooks }: Prop
         <Card sx={{ boxShadow: 3 }}>
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: "primary" }} aria-label="username" src="https://mui.com/static/images/avatar/2.jpg">
+              <Avatar sx={{ bgcolor: "primary" }} aria-label="displayName's avatar" src="https://mui.com/static/images/avatar/2.jpg">
                 <LocalLibraryIcon />
               </Avatar>
             }
