@@ -6,12 +6,13 @@ import { createNewProfileInfo, createSessionCookie } from "@/lib/firebase/fireba
 
 export async function POST(request: NextRequest) {
   const reqBody = await request.json();
-  console.log("reqBody : ", reqBody);
+  // console.log("reqBody : ", reqBody);
   const idToken = reqBody.idToken;
   const isNew = reqBody.isNew;
+  const displayName = reqBody.displayName;
 
   if (isNew) {
-    await createNewProfileInfo(idToken);
+    await createNewProfileInfo(idToken, displayName);
   }
 
   const expiresIn = 60 * 60 * 3 * 1000; // 3 hour

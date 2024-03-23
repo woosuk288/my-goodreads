@@ -73,7 +73,7 @@ export async function revokeAllSessions(session: string) {
 /**
  * 신규 회원 가입 시 기본 정보 DB 생성해 주기
  */
-export async function createNewProfileInfo(idToken: string) {
+export async function createNewProfileInfo(idToken: string, displayName?: string) {
   const decodedToken = await adminAuth.verifyIdToken(idToken);
   const userInfo = await adminAuth.getUser(decodedToken.uid);
 
@@ -87,7 +87,7 @@ export async function createNewProfileInfo(idToken: string) {
 
     const now = Timestamp.now();
     batch.set(userRef, {
-      displayName: userInfo.displayName,
+      displayName: displayName ?? userInfo.displayName ?? "",
       photoURL: "",
       booksWant: [],
       booksReading: [],

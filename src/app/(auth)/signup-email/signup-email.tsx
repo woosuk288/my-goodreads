@@ -19,88 +19,64 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-import { HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
-import { useState } from "react";
-
-const sxLogoSection: SxProps = {
-  display: "flex",
-  justifyContent: "center",
-  marginTop: "16px",
-  padding: "16px",
-  img: {
-    width: "205px",
-  },
-};
-
-const sxFormSection: SxProps = {
-  padding: "16px",
-  ".MuiTextField-root": {
-    width: "100%",
-    marginTop: "8px",
-    marginBottom: "4px",
-    ".MuiInputBase-root": {},
-    ".MuiInputBase-input": {
-      padding: "8.5px 14px",
-    },
-
-    fieldset: { borderRadius: "24px" },
-  },
-  ".password_info_wrapper": {
-    display: "flex",
-    gap: "4px",
-    alignItems: "center",
-    marginTop: "8px",
-    ".MuiSvgIcon-root": {
-      fontSize: "1.25rem",
-      color: "text.secondary",
-    },
-    ".MuiTypography-root": {
-      color: "text.secondary",
-      lineHeight: 1,
-    },
-  },
-  ".checkbox_wrapper": {
-    marginBlock: "12px",
-    marginBottom: "24px",
-  },
-
-  ".legal_text_wrapper": {
-    marginTop: "16px",
-    marginBottom: "12px",
-    a: {
-      color: "#1E1915",
-      textDecoration: "underline",
-    },
-  },
-};
-
-const sxFooterSection: SxProps = {
-  marginTop: "32px",
-  marginBottom: "32px",
-  ".terms_wrapper": {
-    display: "flex",
-    gap: "16px",
-    justifyContent: "center",
-    marginBottom: "8px",
-    a: {
-      color: "primary.dark",
-    },
-  },
-};
+import { API_PROFILE, HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
+import { FormEvent, useState } from "react";
+import useSWRMutation from "swr/mutation";
+import { signUpWithEmail } from "@/lib/firebase/auth";
+import { useRouter } from "next/navigation";
+import { sxFooterSection, sxFormSection, sxLogoSection } from "../signin-email/signin-email";
 
 interface Props {}
 
+const defaultUserCredential = {
+  displayName: "",
+  email: "",
+  password: "",
+};
 export default function SignUpEmailPage({}: Props) {
-  const [userCredentials, setUserCredentials] = useState<IUserCredentials>({
-    displayName: "",
-    email: "",
-    password: "",
+  const router = useRouter();
+  const [userCredentials, setUserCredentials] = useState<IUserCredentials>(defaultUserCredential);
+  const { email, password, displayName } = userCredentials;
+
+  const [checkboxes, setCheckboxes] = useState({
+    showPassword: false,
   });
+  const [errorMessage, setErrorMessage] = useState<string>();
+
+  const { trigger: submitTrigger, isMutating } = useSWRMutation(API_PROFILE, () => signUpWithEmail(email, password, displayName), {
+    onSuccess() {
+      console.log("onSuccess");
+      router.replace(HOME_PATH);
+    },
+    onError(err, key, config) {
+      console.table(err);
+      if (err.message === "auth/email-already-in-use") {
+        setErrorMessage("이미 생성된 계정입니다.");
+      } else {
+        setErrorMessage("계정 생성 중 문제가 생겼습니다.");
+      }
+    },
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    console.log(userCredentials);
+    submitTrigger();
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserCredentials({
       ...userCredentials,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckboxes({
+      ...checkboxes,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -134,6 +110,9 @@ export default function SignUpEmailPage({}: Props) {
         }
       : undefined;
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const submitValidation = !!displayName && email.search(emailRegex) !== -1 && password.length > 6;
+
   return (
     <Box className="SignUpEmail">
       <Box sx={sxLogoSection}>
@@ -142,9 +121,15 @@ export default function SignUpEmailPage({}: Props) {
         </Link>
       </Box>
 
-      <Box sx={sxFormSection} component="form">
+      {errorMessage && (
+        <Typography color="error" align="center">
+          {errorMessage}
+        </Typography>
+      )}
+
+      <Box sx={sxFormSection} component="form" onSubmit={handleSubmit}>
         <Typography component="h1" fontSize="1.5rem" fontWeight={600} gutterBottom textAlign="center">
-          이메일 가입
+          계정 생성
         </Typography>
         {/* <Button component={Link} href={SIGNIN_  PATH}>비밀번호를 잃어버렸나요?</Button> */}
 
@@ -155,6 +140,7 @@ export default function SignUpEmailPage({}: Props) {
           InputProps={textFiledClearIcon("displayName")}
           value={userCredentials.displayName}
           onChange={handleChange}
+          disabled={isMutating}
         ></TextField>
         <TextField
           type="email"
@@ -163,14 +149,17 @@ export default function SignUpEmailPage({}: Props) {
           InputProps={textFiledClearIcon("email")}
           value={userCredentials.email}
           onChange={handleChange}
+          disabled={isMutating}
         />
         <TextField
-          type="password"
+          type={checkboxes.showPassword ? "text" : "password"}
           name="password"
-          placeholder="비밀번호"
+          placeholder="비밀번호 생성"
+          autoComplete="on"
           InputProps={textFiledClearIcon("password")}
           value={userCredentials.password}
           onChange={handleChange}
+          disabled={isMutating}
         />
 
         <div className="password_info_wrapper">
@@ -179,12 +168,21 @@ export default function SignUpEmailPage({}: Props) {
         </div>
 
         <div className="checkbox_wrapper">
-          <FormControlLabel label="비밀번호 보이기" control={<Checkbox checked={false} onChange={handleChange} />} />
+          <FormControlLabel
+            label="비밀번호 보이기"
+            control={<Checkbox checked={checkboxes.showPassword} name="showPassword" onChange={handleCheckboxChange} />}
+          />
         </div>
 
         <div className="submit_wrapper">
-          <Button variant="contained" fullWidth sx={{ padding: "8px 16px", borderRadius: "24px", bgcolor: "primary.dark" }}>
-            생성하기
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ padding: "8px 16px", borderRadius: "24px", bgcolor: "primary.dark" }}
+            disabled={!submitValidation || isMutating}
+            type="submit"
+          >
+            {isMutating ? "생성하는 중..." : "생성하기"}
           </Button>
         </div>
 
@@ -205,7 +203,14 @@ export default function SignUpEmailPage({}: Props) {
           <Typography align="center">이미 계정이 있으신가요?</Typography>
         </Divider>
 
-        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_EMAIL_PATH}>
+        <Button
+          variant="outlined"
+          fullWidth
+          sx={{ padding: "7px 15px", borderRadius: "24px" }}
+          component={Link}
+          href={SIGNIN_EMAIL_PATH}
+          disabled={isMutating}
+        >
           바로 시작하기
         </Button>
       </Box>

@@ -18,78 +18,8 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
+import { HOME_PATH, SIGNUP_EMAIL_PATH } from "../../../constants/routes";
 import { useState } from "react";
-
-const sxLogoSection: SxProps = {
-  display: "flex",
-  justifyContent: "center",
-  marginTop: "16px",
-  padding: "16px",
-  img: {
-    width: "205px",
-  },
-};
-
-const sxFormSection: SxProps = {
-  padding: "16px",
-  ".forgot_password_wrapper": {
-    marginBottom: "12px",
-    textAlign: "right",
-  },
-  ".MuiTextField-root": {
-    width: "100%",
-    marginTop: "8px",
-    marginBottom: "4px",
-    ".MuiInputBase-root": {},
-    ".MuiInputBase-input": {
-      padding: "8.5px 14px",
-    },
-
-    fieldset: { borderRadius: "24px" },
-  },
-  ".password_info_wrapper": {
-    display: "flex",
-    gap: "4px",
-    alignItems: "center",
-    marginTop: "8px",
-    ".MuiSvgIcon-root": {
-      fontSize: "1.25rem",
-      color: "text.secondary",
-    },
-    ".MuiTypography-root": {
-      color: "text.secondary",
-      lineHeight: 1,
-    },
-  },
-  ".checkbox_wrapper": {
-    marginBlock: "12px",
-    marginBottom: "24px",
-  },
-
-  ".legal_text_wrapper": {
-    marginTop: "16px",
-    marginBottom: "12px",
-    a: {
-      color: "#1E1915",
-      textDecoration: "underline",
-    },
-  },
-};
-
-const sxFooterSection: SxProps = {
-  marginTop: "32px",
-  marginBottom: "32px",
-  ".terms_wrapper": {
-    display: "flex",
-    gap: "16px",
-    justifyContent: "center",
-    marginBottom: "8px",
-    a: {
-      color: "primary.dark",
-    },
-  },
-};
 
 interface Props {}
 
@@ -147,7 +77,7 @@ export default function SignInEmailPage({}: Props) {
 
       <Box sx={sxFormSection} component="form">
         <Typography component="h1" fontSize="1.5rem" fontWeight={600} gutterBottom>
-          이메일 가입
+          이메일 로그인
         </Typography>
         <div className="forgot_password_wrapper">
           <Link href="/forgotpassword" sx={{ textDecoration: "underline", color: "primary.dark" }} component={NextLink}>
@@ -204,7 +134,7 @@ export default function SignInEmailPage({}: Props) {
           <Typography align="center">Goodreads가 처음이신가요?</Typography>
         </Divider>
 
-        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNIN_EMAIL_PATH}>
+        <Button variant="outlined" fullWidth sx={{ padding: "7px 15px", borderRadius: "24px" }} component={Link} href={SIGNUP_EMAIL_PATH}>
           가입하기
         </Button>
       </Box>
@@ -229,3 +159,73 @@ export default function SignInEmailPage({}: Props) {
     </Box>
   );
 }
+
+export const sxLogoSection: SxProps = {
+  display: "flex",
+  justifyContent: "center",
+  marginTop: "16px",
+  padding: "16px",
+  img: {
+    width: "205px",
+  },
+};
+
+export const sxFormSection: SxProps = {
+  padding: "16px",
+  ".forgot_password_wrapper": {
+    marginBottom: "12px",
+    textAlign: "right",
+  },
+  ".MuiTextField-root": {
+    width: "100%",
+    marginTop: "8px",
+    marginBottom: "4px",
+    ".MuiInputBase-root": {},
+    ".MuiInputBase-input": {
+      padding: "8.5px 14px",
+    },
+
+    fieldset: { borderRadius: "24px" },
+  },
+  ".password_info_wrapper": {
+    display: "flex",
+    gap: "4px",
+    alignItems: "center",
+    marginTop: "8px",
+    ".MuiSvgIcon-root": {
+      fontSize: "1.25rem",
+      color: "text.secondary",
+    },
+    ".MuiTypography-root": {
+      color: "text.secondary",
+      lineHeight: 1,
+    },
+  },
+  ".checkbox_wrapper": {
+    marginBlock: "12px",
+    marginBottom: "24px",
+  },
+
+  ".legal_text_wrapper": {
+    marginTop: "16px",
+    marginBottom: "12px",
+    a: {
+      color: "#1E1915",
+      textDecoration: "underline",
+    },
+  },
+};
+
+export const sxFooterSection: SxProps = {
+  marginTop: "32px",
+  marginBottom: "32px",
+  ".terms_wrapper": {
+    display: "flex",
+    gap: "16px",
+    justifyContent: "center",
+    marginBottom: "8px",
+    a: {
+      color: "primary.dark",
+    },
+  },
+};
