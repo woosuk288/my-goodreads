@@ -1,4 +1,11 @@
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged as _onAuthStateChanged, NextOrObserver, User } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged as _onAuthStateChanged,
+  NextOrObserver,
+  User,
+  getAdditionalUserInfo,
+} from "firebase/auth";
 
 import { auth } from "@/lib/firebase/firebase";
 
@@ -12,16 +19,16 @@ export async function signInWithGoogle() {
 
   try {
     const userCredential = await signInWithPopup(auth, provider);
-    const idToken = await userCredential.user.getIdToken();
+    const addtionalUserInfo = getAdditionalUserInfo(userCredential);
 
-    // TODO: users에 document 추가
+    const idToken = await userCredential.user.getIdToken();
 
     const response = await fetch("/api/auth/sign-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({ idToken, isNew: addtionalUserInfo?.isNewUser }),
     });
 
     const result = await response.json();
