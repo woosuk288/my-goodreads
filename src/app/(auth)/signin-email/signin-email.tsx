@@ -2,7 +2,6 @@
 
 import { FormEvent, useState } from "react";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 
 import {
@@ -21,7 +20,7 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { signInWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
+import { signInWithEmail } from "@/lib/firebase/auth";
 import { API_PROFILE, HOME_PATH, SIGNUP_EMAIL_PATH } from "../../../constants/routes";
 
 interface Props {}
@@ -33,7 +32,6 @@ const defaultUserCredential = {
 };
 
 export default function SignInEmailPage({}: Props) {
-  const router = useRouter();
   const [userCredentials, setUserCredentials] = useState<IUserCredentials>(defaultUserCredential);
   const { email, password, displayName } = userCredentials;
 
@@ -43,10 +41,6 @@ export default function SignInEmailPage({}: Props) {
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const { trigger: submitTrigger, isMutating } = useSWRMutation(API_PROFILE, () => signInWithEmail(email, password), {
-    onSuccess() {
-      console.log("onSuccess");
-      router.replace(HOME_PATH);
-    },
     onError(err) {
       setErrorMessage(err.message);
     },
