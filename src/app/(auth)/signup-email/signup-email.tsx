@@ -1,6 +1,9 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import useSWRMutation from "swr/mutation";
 
 import {
   Box,
@@ -20,10 +23,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import { API_PROFILE, HOME_PATH, SIGNIN_EMAIL_PATH } from "../../../constants/routes";
-import { FormEvent, useState } from "react";
-import useSWRMutation from "swr/mutation";
+
 import { signUpWithEmail } from "@/lib/firebase/auth";
-import { useRouter } from "next/navigation";
 import { sxFooterSection, sxFormSection, sxLogoSection } from "../signin-email/signin-email";
 
 interface Props {}
@@ -45,16 +46,10 @@ export default function SignUpEmailPage({}: Props) {
 
   const { trigger: submitTrigger, isMutating } = useSWRMutation(API_PROFILE, () => signUpWithEmail(email, password, displayName), {
     onSuccess() {
-      console.log("onSuccess");
       router.replace(HOME_PATH);
     },
     onError(err, key, config) {
-      console.table(err);
-      if (err.message === "auth/email-already-in-use") {
-        setErrorMessage("이미 생성된 계정입니다.");
-      } else {
-        setErrorMessage("계정 생성 중 문제가 생겼습니다.");
-      }
+      setErrorMessage(err.message);
     },
   });
 
@@ -62,7 +57,6 @@ export default function SignUpEmailPage({}: Props) {
     e.preventDefault();
     setErrorMessage("");
 
-    console.log(userCredentials);
     submitTrigger();
   };
 
@@ -122,7 +116,7 @@ export default function SignUpEmailPage({}: Props) {
       </Box>
 
       {errorMessage && (
-        <Typography color="error" align="center">
+        <Typography color="error" align="center" whiteSpace="pre-wrap">
           {errorMessage}
         </Typography>
       )}

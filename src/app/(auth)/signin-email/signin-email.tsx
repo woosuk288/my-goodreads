@@ -1,6 +1,9 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import useSWRMutation from "swr/mutation";
 
 import {
   Box,
@@ -18,22 +21,55 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { HOME_PATH, SIGNUP_EMAIL_PATH } from "../../../constants/routes";
-import { useState } from "react";
+import { signInWithEmail, signInWithGoogle } from "@/lib/firebase/auth";
+import { API_PROFILE, HOME_PATH, SIGNUP_EMAIL_PATH } from "../../../constants/routes";
 
 interface Props {}
 
+const defaultUserCredential = {
+  displayName: "",
+  email: "",
+  password: "",
+};
+
 export default function SignInEmailPage({}: Props) {
-  const [userCredentials, setUserCredentials] = useState<IUserCredentials>({
-    displayName: "",
-    email: "",
-    password: "",
+  const router = useRouter();
+  const [userCredentials, setUserCredentials] = useState<IUserCredentials>(defaultUserCredential);
+  const { email, password, displayName } = userCredentials;
+
+  const [checkboxes, setCheckboxes] = useState({
+    showPassword: false,
   });
+  const [errorMessage, setErrorMessage] = useState<string>();
+
+  const { trigger: submitTrigger, isMutating } = useSWRMutation(API_PROFILE, () => signInWithEmail(email, password), {
+    onSuccess() {
+      console.log("onSuccess");
+      router.replace(HOME_PATH);
+    },
+    onError(err) {
+      setErrorMessage(err.message);
+    },
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    submitTrigger();
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserCredentials({
       ...userCredentials,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckboxes({
+      ...checkboxes,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -67,6 +103,9 @@ export default function SignInEmailPage({}: Props) {
         }
       : undefined;
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const submitValidation = email.search(emailRegex) !== -1 && password.length > 1;
+
   return (
     <Box className="SignInEmail">
       <Box sx={sxLogoSection}>
@@ -75,7 +114,13 @@ export default function SignInEmailPage({}: Props) {
         </Link>
       </Box>
 
-      <Box sx={sxFormSection} component="form">
+      {errorMessage && (
+        <Typography color="error" align="center" whiteSpace="pre-wrap">
+          {errorMessage}
+        </Typography>
+      )}
+
+      <Box sx={sxFormSection} component="form" onSubmit={handleSubmit}>
         <Typography component="h1" fontSize="1.5rem" fontWeight={600} gutterBottom>
           이메일 로그인
         </Typography>
@@ -92,28 +137,40 @@ export default function SignInEmailPage({}: Props) {
           InputProps={textFiledClearIcon("email")}
           value={userCredentials.email}
           onChange={handleChange}
+          disabled={isMutating}
         />
         <TextField
-          type="password"
+          type={checkboxes.showPassword ? "text" : "password"}
           name="password"
           placeholder="비밀번호"
+          autoComplete="on"
           InputProps={textFiledClearIcon("password")}
           value={userCredentials.password}
           onChange={handleChange}
+          disabled={isMutating}
         />
 
         <div className="checkbox_wrapper">
           <div className="checkbox_row">
-            <FormControlLabel label="비밀번호 보이기" control={<Checkbox checked={true} onChange={handleChange} />} />
+            <FormControlLabel
+              label="비밀번호 보이기"
+              control={<Checkbox checked={checkboxes.showPassword} name="showPassword" onChange={handleCheckboxChange} />}
+            />
           </div>
-          <div className="checkbox_row">
+          {/* <div className="checkbox_row">
             <FormControlLabel label="로그인 유지하기" control={<Checkbox checked={false} onChange={handleChange} />} />
-          </div>
+          </div> */}
         </div>
 
         <div className="submit_wrapper">
-          <Button variant="contained" fullWidth sx={{ padding: "8px 16px", borderRadius: "24px", bgcolor: "primary.dark" }}>
-            로그인
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ padding: "8px 16px", borderRadius: "24px", bgcolor: "primary.dark" }}
+            disabled={!submitValidation || isMutating}
+            type="submit"
+          >
+            {isMutating ? "로그인 중..." : "로그인"}
           </Button>
         </div>
 
