@@ -79,6 +79,15 @@ const EmailButton: SxProps = {
 
 export default function LoginForm() {
   const navigation = useRouter();
+
+  const handleSignInWithKakao = () => {
+    const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+    const REDIRECT_URI = `${window.location.origin}/oauth/kakao`;
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+    navigation.push(KAKAO_AUTH_URL);
+  };
+
   const handleSignInWithGoogle = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     await signInWithGoogle();
@@ -88,7 +97,7 @@ export default function LoginForm() {
 
   return (
     <Box className="LoginForm" sx={signin_wrapper}>
-      <Button variant="contained" sx={KakaoButton}>
+      <Button variant="contained" sx={KakaoButton} onClick={handleSignInWithKakao}>
         카카오로 시작하기
       </Button>
       <Button variant="contained" sx={NaverButton}>
