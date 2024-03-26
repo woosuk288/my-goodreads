@@ -5,17 +5,16 @@ import { cookies } from "next/headers";
 import { credential } from "firebase-admin";
 import { initializeApp as initializeAdminApp, getApps as getAdminApps } from "firebase-admin/app";
 import { CreateRequest, SessionCookieOptions, getAuth as getAdminAuth } from "firebase-admin/auth";
-
 import { Timestamp, getFirestore as getAdminFirestore } from "firebase-admin/firestore";
 
-const serviceAccount = require("../../../service_account.json");
+import serviceAccount from "./service-account";
 
 const ADMIN_APP_NAME = "storyteller";
 const adminApp =
   getAdminApps().find((it) => it.name === ADMIN_APP_NAME) ||
   initializeAdminApp(
     {
-      credential: credential.cert(serviceAccount),
+      credential: credential.cert(serviceAccount as any),
     },
     ADMIN_APP_NAME
   );
