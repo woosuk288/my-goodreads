@@ -35,6 +35,7 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 const COL_USERS = createCollection<IUser>("users");
+const COL_USER_PRIVACIES = <T>(uid: string) => createCollection<T>("users/" + uid + "/privacies");
 const COL_BOOKS = createCollection<IBook>("books");
 // const COL_SHELVS = createCollection<IShelf>("shelves");
 // const COL_REVIEWS = createCollection<IRating>("reviews");
@@ -94,6 +95,12 @@ export async function getProfile(): Promise<IUser | undefined> {
 export async function getProfileById(uid: string): Promise<IUser | undefined> {
   const userRef = doc(COL_USERS, uid);
   return getPlainObject(userRef);
+}
+
+export async function getProfilePrivacy() {
+  const personalInfoRef = doc(COL_USER_PRIVACIES<IPersonalInfo>(authUser().uid), "personal_info");
+  const personalInfoSnap = await getDoc(personalInfoRef);
+  return personalInfoSnap.data();
 }
 
 export async function updateProfileInfo(key: string, value: string) {

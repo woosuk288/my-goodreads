@@ -1,6 +1,7 @@
 export const HOME_PATH = "/";
 
 export const LOGIN_PATH = "/login";
+export const LOGOUT_PATH = "/logout";
 export const SIGNIN_EMAIL_PATH = "/signin-email";
 export const SIGNUP_EMAIL_PATH = "/signup-email";
 

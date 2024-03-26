@@ -24,7 +24,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import { signOut } from "@/lib/firebase/auth";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { API_PROFILE, HOME_PATH, LOGIN_PATH, PROFILE_PATH } from "@/constants/routes";
+import { API_PROFILE, HOME_PATH, LOGIN_PATH, LOGOUT_PATH, PROFILE_PATH } from "@/constants/routes";
 import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
 import { getProfile } from "@/lib/firebase/firestore";
@@ -52,7 +52,7 @@ export default function HeaderNavDrawer() {
   const router = useRouter();
 
   const { state, user } = useAuth();
-  const { data: profileData } = useSWR(user ? API_PROFILE : null, getProfile);
+  const { data: profileData, isLoading } = useSWR(user ? API_PROFILE : null, getProfile);
 
   const [open, setOpen] = useState(false);
 
@@ -80,11 +80,12 @@ export default function HeaderNavDrawer() {
   const handleSignOut = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     if (confirm("Are you sure?")) {
-      signOut().then(() => router.replace(HOME_PATH));
+      router.replace(LOGOUT_PATH, { scroll: false });
     }
   };
 
-  if (state === "loaded" && !user && open) redirect(LOGIN_PATH);
+  if (isLoading || state === "loading") return null;
+  if (state === "loaded" && !user && open) redirect(LOGIN_PATH); // logout 후에도 먹히니 주의!
 
   return (
     <Drawer

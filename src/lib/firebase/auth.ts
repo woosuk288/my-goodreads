@@ -13,7 +13,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from "@/lib/firebase/firebase";
-import { updateProfileInfo } from "./firestore";
+import { getProfilePrivacy, updateProfileInfo } from "./firestore";
 import { FirebaseError } from "firebase/app";
 import getKakaoCustomToken from "@/actions/getKakaoCustomToken";
 
@@ -162,7 +162,22 @@ export async function signInWithEmail(email: string, password: string) {
 
 export async function signOut() {
   try {
-    await auth.signOut();
+    // TODO: firestore client personal info check
+
+    const privacyInfo = await getProfilePrivacy();
+
+    if (privacyInfo?.kakaoUID) {
+      // 카카오 로그아웃시 쿠키 삭제?
+      document.cookie = "authorize-access-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      // /api/auth/sign-out or serverAction
+      await fetch("/api/auth/sign-out-kakao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ kakaoUID: "3406645196" }),
+      }).then((res) => res.json());
+    }
 
     const response = await fetch("/api/auth/sign-out", {
       headers: {
@@ -170,7 +185,8 @@ export async function signOut() {
       },
     });
     const result = await response.json();
-    console.log({ signOut: result });
+
+    await auth.signOut();
 
     return result;
   } catch (error) {
