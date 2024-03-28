@@ -1,7 +1,8 @@
 import { getBooksFromShelf, getChallenge } from "@/lib/firebase/firestore";
 import UserChallengesMain from "./user_challenges-main";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { CHALLENGES_PATH } from "@/constants/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,8 @@ export default async function page({ params }: { params: { slug: Array<string> }
   const challegeSnap = await getChallenge(uid, year);
   const thisYearReadBooksSnap = await getBooksFromShelf(uid, "read", year);
 
-  if (!uid || !year || !challegeSnap.exists()) notFound();
+  if (!uid || !year) notFound();
+  if (!challegeSnap.exists()) redirect(CHALLENGES_PATH);
 
   return (
     <>
