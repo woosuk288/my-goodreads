@@ -88,6 +88,15 @@ export default function LoginForm() {
     navigation.push(KAKAO_AUTH_URL);
   };
 
+  const handleSignInWithNaver = async () => {
+    const client_id = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+    const state = "RANDOM_STATE";
+    const redirectURI = encodeURI(`${window.location.origin}/oauth/naver`);
+    const api_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${client_id}&&redirect_uri=${redirectURI}&state=${state}`;
+
+    navigation.push(api_url);
+  };
+
   const handleSignInWithGoogle = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
     await signInWithGoogle();
@@ -100,7 +109,7 @@ export default function LoginForm() {
       <Button variant="contained" sx={KakaoButton} onClick={handleSignInWithKakao}>
         카카오로 시작하기
       </Button>
-      <Button variant="contained" sx={NaverButton}>
+      <Button variant="contained" sx={NaverButton} onClick={handleSignInWithNaver}>
         네이버로 시작하기
       </Button>
       <Button variant="contained" sx={GoogleButton} onClick={handleSignInWithGoogle} component={NextLink} href="#">

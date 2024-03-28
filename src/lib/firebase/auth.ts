@@ -76,7 +76,28 @@ export async function signInWithKakao(code: string) {
   }
 }
 
-export async function signInWithNaver() {}
+export async function signInSocialWithCustomToken(customToken: string) {
+  try {
+    const userCredential = await signInWithCustomToken(auth, customToken);
+    const idToken = await userCredential.user.getIdToken();
+
+    const response = await fetch("/api/auth/sign-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idToken }),
+    });
+
+    const result = await response.json();
+    console.log("result : ", result);
+
+    return result;
+  } catch (e) {
+    console.log(e);
+    throw new Error("로그인 중 오류가 발생했습니다!");
+  }
+}
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();

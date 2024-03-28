@@ -101,6 +101,10 @@ export async function createNewProfileInfo(idToken: string, displayName?: string
 }
 
 /**
+ * TODO: naver, kakao 통합
+ */
+
+/**
  * updateOrCreateUser - Update Firebase user with the give email, create if
  * none exists.
  *
@@ -186,6 +190,105 @@ export async function updateOrCreateUserFromKakao(
         ...(phoneNumber && { phoneNumber }),
         provider: KAKAO,
         kakaoUID,
+      });
+      await batch.commit();
+
+      return userRecord;
+    }
+  } catch (error) {
+    console.log(error);
+
+    throw new Error("계정 생성 중 오류가 발생했습니다!");
+  }
+}
+
+interface updateOrCreateUserFromNaverParams {
+  provider: string;
+  providerId: string;
+  email?: string;
+  emailVerified: boolean;
+  displayName?: string;
+  photoURL?: string;
+  phoneNumber?: string;
+}
+
+export async function updateOrCreateUserFromNaver({
+  provider,
+  providerId,
+  email,
+  emailVerified,
+  displayName,
+  photoURL,
+  phoneNumber,
+}: updateOrCreateUserFromNaverParams) {
+  try {
+    const q = await adminFirestore
+      .collectionGroup(PRIVACIES)
+      .where("provider", "==", provider)
+      .where("providerId", "==", providerId)
+      .limit(1)
+      .get();
+
+    const createParams: CreateRequest = {
+      displayName,
+      photoURL,
+    };
+
+    if (email) {
+      createParams["email"] = email;
+    }
+    if (emailVerified) {
+      createParams["emailVerified"] = emailVerified;
+    }
+    if (phoneNumber) {
+      createParams["phoneNumber"] = phoneNumber;
+    }
+
+    if (q.size) {
+      // console.log("updating user...");
+
+      const uid = q.docs[0].data().uid;
+
+      // const userRecord = await adminAuth.updateUser(uid, {
+      //   email,
+      //   phoneNumber,
+      //   // providerToLink: createParams.providerToLink,
+      // });
+
+      const userRecord = await adminAuth.getUser(uid);
+
+      return userRecord;
+    } else {
+      console.log("creating user...");
+
+      // createParams.providerToLink = {
+      //   ...createParams,
+      //   providerId: KAKAO,
+      // };
+
+      const userRecord = await adminAuth.createUser(createParams);
+
+      const batch = adminFirestore.batch();
+      const userRef = adminFirestore.collection(USERS).doc(userRecord.uid);
+      const userPrivacyRef = adminFirestore.collection(USERS).doc(userRecord.uid).collection(PRIVACIES).doc(PERSONAL_INFO);
+
+      const now = Timestamp.now();
+      batch.set(userRef, {
+        displayName: displayName ?? "",
+        photoURL: photoURL ?? "",
+        booksWant: [],
+        booksReading: [],
+        booksRead: [],
+        reviews: [],
+        createdAt: now,
+        updatedAt: now,
+      });
+      batch.set(userPrivacyRef, {
+        uid: userRecord.uid,
+        email,
+        ...(phoneNumber && { phoneNumber }),
+        provider,
+        providerId,
       });
       await batch.commit();
 
