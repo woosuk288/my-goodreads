@@ -6,7 +6,10 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemText, SxProps, Ty
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 import BookPageHeading from "@/components/BookPageHeading";
-import { USER_CHALLENGES_PATH, REVIEW_LIST_PATH } from "@/constants/routes";
+import { USER_CHALLENGES_PATH, REVIEW_LIST_PATH, API_PROFILE } from "@/constants/routes";
+import useSWR from "swr";
+import { getProfile } from "@/lib/firebase/firestore";
+import LoadingProgress from "@/components/LoadingProgress";
 
 interface Props {
   uid: string;
@@ -14,6 +17,10 @@ interface Props {
 }
 
 export default function ReviewListMain({ uid, profile }: Props) {
+  const { data: profileData, isLoading } = useSWR(API_PROFILE, getProfile);
+
+  if (isLoading) return <LoadingProgress />;
+
   return (
     <Box sx={sxReviewList}>
       <section className="shelf_section">
@@ -21,17 +28,17 @@ export default function ReviewListMain({ uid, profile }: Props) {
 
         <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=read`}>
           <ListItemText primary="읽음" />
-          <Typography color="grey">{profile.booksRead?.length}</Typography>
+          <Typography color="grey">{profileData?.booksRead?.length}</Typography>
         </ListItemButton>
         <Divider />
         <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=reading`}>
           <ListItemText primary="읽는 중" />
-          <Typography color="grey">{profile.booksReading?.length}</Typography>
+          <Typography color="grey">{profileData?.booksReading?.length}</Typography>
         </ListItemButton>
         <Divider />
         <ListItemButton component={NextLink} href={`${REVIEW_LIST_PATH}/${uid}` + `?shelf=want`}>
           <ListItemText primary="읽고싶어요" />
-          <Typography color="grey">{profile.booksWant?.length}</Typography>
+          <Typography color="grey">{profileData?.booksWant?.length}</Typography>
         </ListItemButton>
         <Divider />
       </section>

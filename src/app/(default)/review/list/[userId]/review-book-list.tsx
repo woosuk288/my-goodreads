@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@/components/AuthProvider";
 import BookPageHeading from "@/components/BookPageHeading";
 import LoadingProgress from "@/components/LoadingProgress";
 import SearchBookItem from "@/components/SearchBookItem";
@@ -17,7 +16,6 @@ interface Props {
   profile: IUser;
 }
 function ReviewBookList({ uid, readStatus }: Props) {
-  const { state, isLoggedIn } = useAuth();
   const { data: profileData } = useSWR(API_PROFILE, getProfile);
   const { data: booksData, isLoading } = useSWR(`${API_SHELVES}/${uid}?shelf=${readStatus}`, () => getBooksFromShelf(uid, readStatus));
 
