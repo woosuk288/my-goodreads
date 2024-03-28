@@ -114,7 +114,7 @@ export async function signInWithGoogle() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idToken, isNew: addtionalUserInfo?.isNewUser }),
+      body: JSON.stringify({ idToken, isNew: addtionalUserInfo?.isNewUser, provider: "google" }),
     });
 
     const result = await response.json();
@@ -137,7 +137,7 @@ export async function signUpWithEmail(email: string, password: string, displayNa
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idToken, isNew: addtionalUserInfo?.isNewUser, displayName }),
+      body: JSON.stringify({ idToken, isNew: addtionalUserInfo?.isNewUser, provider: "email", displayName }),
     });
 
     const result = await response.json();
@@ -207,10 +207,11 @@ export async function signOut() {
     });
     const result = await response.json();
 
-    await auth.signOut();
-
     return result;
   } catch (error) {
     console.error("Error signing out with Google", error);
+  } finally {
+    // client signOut
+    await auth.signOut();
   }
 }

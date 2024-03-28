@@ -74,10 +74,9 @@ const USERS = "users";
 const PRIVACIES = "privacies";
 const PERSONAL_INFO = "personal_info";
 
-export async function createNewProfileInfo(idToken: string, displayName?: string) {
+export async function createNewProfileInfo(idToken: string, provider?: string, displayName?: string) {
   const decodedToken = await adminAuth.verifyIdToken(idToken);
   const userInfo = await adminAuth.getUser(decodedToken.uid);
-
   const userRef = adminFirestore.collection(USERS).doc(decodedToken.uid);
   const userPrivacyRef = adminFirestore.collection(USERS).doc(decodedToken.uid).collection(PRIVACIES).doc(PERSONAL_INFO);
   const userSnap = await userRef.get();
@@ -95,7 +94,8 @@ export async function createNewProfileInfo(idToken: string, displayName?: string
       createdAt: now,
       updatedAt: now,
     });
-    batch.set(userPrivacyRef, { email: userInfo.email });
+
+    batch.set(userPrivacyRef, { email: userInfo.email, emailVerified: userInfo.emailVerified, provider, uid: decodedToken.uid });
     await batch.commit();
   }
 }
