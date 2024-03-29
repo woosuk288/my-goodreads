@@ -19,7 +19,7 @@ const sxImageWrapper: SxProps = {
 };
 const sxLoginWrapper: SxProps = {
   width: { xs: "100%", md: "500px" },
-  padding: { md: "30px 50px" },
+  padding: { xs: "16px", md: "30px 50px" },
 };
 
 const sxLogoWrapper: SxProps = {
