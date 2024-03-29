@@ -16,6 +16,7 @@ import { auth } from "@/lib/firebase/firebase";
 import { getProfilePrivacy, updateProfileInfo } from "./firestore";
 import { FirebaseError } from "firebase/app";
 import getKakaoCustomToken from "@/actions/getKakaoCustomToken";
+import { mutate } from "swr";
 
 export function onAuthStateChanged(cb: NextOrObserver<User>) {
   return _onAuthStateChanged(auth, cb);
@@ -211,7 +212,10 @@ export async function signOut() {
   } catch (error) {
     console.error("Error signing out with Google", error);
   } finally {
+    clearCache();
     // client signOut
     await auth.signOut();
   }
 }
+
+const clearCache = () => mutate(() => true, undefined, { revalidate: false });
