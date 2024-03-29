@@ -12,12 +12,12 @@ import { fetchHotTrendBooks, fetchPopularBooks } from "@/lib/data4library";
 import { getCurrentDate, getFormattedPreviousDate } from "@/lib/utils";
 import { fetchAladinItemList } from "@/lib/aladin";
 
-async function getPosts() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
-  console.log("posts : ", posts.length);
-  return posts;
-}
+// async function getPosts() {
+//   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+//   const posts = await res.json();
+//   console.log("posts : ", posts.length);
+//   return posts;
+// }
 
 export default async function Page() {
   // Fetch data directly in a Server Component

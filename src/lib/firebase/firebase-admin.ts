@@ -18,8 +18,8 @@ const adminApp =
     },
     ADMIN_APP_NAME
   );
-const adminAuth = getAdminAuth(adminApp);
-const adminFirestore = getAdminFirestore(adminApp);
+export const adminAuth = getAdminAuth(adminApp);
+export const adminFirestore = getAdminFirestore(adminApp);
 
 export async function isUserAuthenticated(session: string | undefined = undefined) {
   const _session = session ?? (await getSession());
@@ -202,7 +202,7 @@ export async function updateOrCreateUserFromKakao(
   }
 }
 
-interface updateOrCreateUserFromNaverParams {
+interface updateOrCreateUserParams {
   provider: string;
   providerId: string;
   email?: string;
@@ -212,7 +212,7 @@ interface updateOrCreateUserFromNaverParams {
   phoneNumber?: string;
 }
 
-export async function updateOrCreateUserFromNaver({
+export async function updateOrCreateUser({
   provider,
   providerId,
   email,
@@ -220,7 +220,7 @@ export async function updateOrCreateUserFromNaver({
   displayName,
   photoURL,
   phoneNumber,
-}: updateOrCreateUserFromNaverParams) {
+}: updateOrCreateUserParams) {
   try {
     const q = await adminFirestore
       .collectionGroup(PRIVACIES)
