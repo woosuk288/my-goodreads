@@ -34,7 +34,8 @@ export default function LogoutPage() {
 
 const sxLogout: SxProps = {
   position: "fixed",
-  top: "0",
+  top: 0,
+  left: 0,
   zIndex: "1300",
   height: "100%",
   width: "100%",
