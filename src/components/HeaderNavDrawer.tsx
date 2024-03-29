@@ -92,12 +92,15 @@ export default function HeaderNavDrawer() {
       anchor={ANCHOR}
       open={open}
       onClose={handleDrawerClose}
-      PaperProps={{ sx: { width: "85%", paddingLeft: "8px", paddingRight: "8px" } }}
+      PaperProps={{ sx: { width: { xs: "85%", md: "300px" }, paddingLeft: "8px", paddingRight: "8px" } }}
       slotProps={{
         backdrop: {
           sx: { backgroundColor: "rgba(0,0,0,0.7)" },
           children: (
-            <IconButton onClick={handleDrawerClose} sx={{ position: "absolute", left: 0, top: 0, color: "#FFFFFF" }}>
+            <IconButton
+              onClick={handleDrawerClose}
+              sx={{ display: { sm: "none" }, position: "absolute", left: 0, top: 0, color: "#FFFFFF" }}
+            >
               <CloseIcon sx={{ fontSize: "2.5rem" }} />
             </IconButton>
           ),
