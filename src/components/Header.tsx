@@ -1,32 +1,13 @@
 "use client";
 
 import * as React from "react";
-
 import NextLink from "next/link";
 
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import {
-  AppBar,
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  IconButton,
-  ListItemText,
-  MenuItem,
-  MenuList,
-  SxProps,
-  Theme,
-  Toolbar,
-} from "@mui/material";
+import { AppBar, Box, Button, CircularProgress, Container, IconButton, Menu, MenuItem, SxProps, Theme, Toolbar } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 
-import HeaderNavDrawer from "./HeaderNavDrawer";
-import { signInWithGoogle } from "@/lib/firebase/auth";
 import SearchBookAutocomplete from "./SearchBookAutocomplete";
 import { useAuth } from "./AuthProvider";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -43,7 +24,14 @@ export default function Header({}: /* initialUser */ IHeader) {
 
   const [openSearchbar, setOpenSearchbar] = React.useState(false);
 
-  const [tabCode, setTabCode] = React.useState<string | boolean>(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    console.log("event.currentTarget.id : ", event.currentTarget.id);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // Get a new searchParams string by merging the current
   // searchParams with a provided key/value pair
@@ -56,34 +44,6 @@ export default function Header({}: /* initialUser */ IHeader) {
     },
     [searchParams]
   );
-
-  React.useEffect(() => {
-    if (TAB_CODES.MY_BOOKS === tabCode && pathname !== REVIEW_LIST_PATH + `/${authState.user?.uid}`) {
-      setTabCode(false);
-    }
-  }, [pathname]);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setTabCode(newValue);
-    if (newValue === TAB_CODES.MY_BOOKS) {
-      authState.state === "loaded" && authState.isLoggedIn && router.push(REVIEW_LIST_PATH + `/${authState.user?.uid}`);
-    }
-  };
-
-  const handleTabClick = (newValue: string) => () => {
-    if (tabCode === newValue) {
-      setTabCode(false);
-    }
-  };
-
-  const handleClose = () => {
-    setTabCode(false);
-  };
-
-  const handleSignInWithGoogle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    signInWithGoogle();
-  };
 
   const handleOpenSearchbar = () => {
     setOpenSearchbar(true);
@@ -102,23 +62,49 @@ export default function Header({}: /* initialUser */ IHeader) {
         <Toolbar sx={sxToolbar} variant="dense">
           <NextLink href="/" aria-label="Goodreads Home" title="Goodreads Home"></NextLink>
 
-          <Tabs sx={sxTabs} value={tabCode} onChange={handleChange} variant="fullWidth">
-            <Tab label="내 서재" value={TAB_CODES.MY_BOOKS} component={Button} />
-            <Tab
-              label="둘러보기"
-              value={TAB_CODES.BROWSE}
-              component={Button}
-              endIcon={<ArrowDropDownIcon />}
-              onClick={handleTabClick(TAB_CODES.BROWSE)}
-            />
-            <Tab
-              label="커뮤니티"
-              value={TAB_CODES.COMMUNITY}
-              component={Button}
-              endIcon={<ArrowDropDownIcon />}
-              onClick={handleTabClick(TAB_CODES.COMMUNITY)}
-            />
-          </Tabs>
+          <Box sx={sxHeaderMenus}>
+            <div>
+              <Button
+                className="menu_button"
+                component={NextLink}
+                href={authState.user ? `${REVIEW_LIST_PATH}/${authState.user.uid}` : LOGIN_PATH}
+                disabled={authState.state === "loading"}
+              >
+                내 서재
+              </Button>
+            </div>
+            {HEDAER_MENUS.map((item) => (
+              <div key={item.id}>
+                <Button
+                  id={item.id}
+                  aria-controls={anchorEl?.id === item.id ? item.id.replace("-button", "") : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={anchorEl?.id === item.id ? "true" : undefined}
+                  className="menu_button"
+                  onClick={handleClick}
+                  disabled={authState.state === "loading"}
+                >
+                  {item.text}
+                </Button>
+                <Menu
+                  className="menu_list"
+                  id={item.id.replace("-button", "")}
+                  anchorEl={anchorEl}
+                  open={anchorEl?.id === item.id}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": item.id,
+                  }}
+                >
+                  {item.menus.map((menu) => (
+                    <MenuItem key={menu.link} onClick={handleClose} component={NextLink} href={menu.link} disabled={menu.disabled}>
+                      {menu.text}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </div>
+            ))}
+          </Box>
 
           <Box sx={sxAutoCompleteWrapper}>
             <SearchBookAutocomplete />
@@ -128,7 +114,7 @@ export default function Header({}: /* initialUser */ IHeader) {
             {authState.state === "loading" ? (
               <CircularProgress size={32} />
             ) : authState.state === "loaded" && !authState.user ? (
-              <Button variant="contained" size="small" component={NextLink} href={LOGIN_PATH} onClick={handleSignInWithGoogle}>
+              <Button variant="contained" size="small" component={NextLink} href={LOGIN_PATH}>
                 Sign in
               </Button>
             ) : (
@@ -140,27 +126,9 @@ export default function Header({}: /* initialUser */ IHeader) {
               >
                 <LocalLibraryIcon sx={{ fontSize: "1.5rem" }} />
               </IconButton>
-              // <HeaderNavDrawer />
             )}
           </Box>
         </Toolbar>
-
-        {tabCode && tabCode !== TAB_CODES.MY_BOOKS && (
-          <MenuList dense sx={sxList(tabCode)}>
-            {tabCode === TAB_CODES.BROWSE &&
-              BROWSE_MENUS.map((menu) => (
-                <MenuItem key={menu.link} onClick={handleClose}>
-                  <ListItemText>{menu.text}</ListItemText>
-                </MenuItem>
-              ))}
-            {tabCode === TAB_CODES.COMMUNITY &&
-              COMMUNITY_MENUS.map((menu) => (
-                <MenuItem key={menu.link} onClick={handleClose}>
-                  <ListItemText>{menu.text}</ListItemText>
-                </MenuItem>
-              ))}
-          </MenuList>
-        )}
       </Container>
 
       <Container maxWidth="md" disableGutters className="mobile_container">
@@ -206,14 +174,6 @@ const sxHeader: SxProps<Theme> = (theme) => ({
   },
 
   boxShadow: 0,
-
-  // "button.MuiTab-root": {
-  //   color: theme.palette.secondary.main,
-  // },
-  // ".MuiTab-root.Mui-selected": {
-  //   backgroundColor: theme.palette.secondary.main,
-  //   color: '#FFFFFF'
-  // },
 });
 
 const sxToolbar: SxProps = {
@@ -227,27 +187,17 @@ const sxToolbar: SxProps = {
   },
 };
 
-const sxList = (tabCode: string | boolean): SxProps => ({
-  position: "absolute",
-  left: tabCode === TAB_CODES.COMMUNITY ? "372px" : "272px",
-  // left: "272px",
-  backgroundColor: "#FFFFFF",
-  color: "#333333",
-  boxShadow: "0 5px 10px rgba(0,0,0,0.15)",
-});
-
-const sxTabs: SxProps = {
-  height: "50px",
+const sxHeaderMenus: SxProps = {
+  display: "flex",
   marginLeft: "8px",
 
-  ".MuiButton-endIcon": {
-    position: "absolute",
-    right: 8,
-  },
-
-  ".MuiTab-root": {
+  ".menu_button": {
+    height: "50px",
     width: "100px",
-    // padding: "12px 24px 12px 8px",
+  },
+  ".menu_list": {
+    paddingLeft: "8px",
+    paddingRight: "8px",
   },
 };
 
@@ -273,34 +223,42 @@ const sxMobileAutoCompleteWrapper: SxProps = {
 
 const BROWSE_MENUS = [
   {
+    disabled: false,
     text: "추천",
     link: "/recommendations",
   },
   {
+    disabled: true,
     text: "Choice Awards",
     link: "/choiceawards",
   },
   {
+    disabled: false,
     text: "장르",
     link: "/genres",
   },
   {
+    disabled: true,
     text: "혜택",
     link: "/giveaways",
   },
   {
+    disabled: false,
     text: "인기",
     link: "/book/pupular-by-date/2024/1",
   },
   {
+    disabled: true,
     text: "Lists",
     link: "/list",
   },
   {
+    disabled: true,
     text: "Explore",
     link: "/explore",
   },
   {
+    disabled: true,
     text: "News & Interviews",
     link: "/news",
   },
@@ -308,21 +266,38 @@ const BROWSE_MENUS = [
 
 const COMMUNITY_MENUS = [
   {
+    disabled: true,
     text: "그룹",
     link: "/group",
   },
   {
+    disabled: false,
     text: "어록",
     link: "/quotes",
   },
   {
+    disabled: true,
     text: "저자에게 묻기",
     link: "/ask-the-author",
   },
 ];
 
-const TAB_CODES = {
-  MY_BOOKS: "MY_BOOKS",
-  BROWSE: "BROWSE",
-  COMMUNITY: "COMMUNITY",
-};
+const HEDAER_MENUS = [
+  // {
+  //   id: "menu-button-shelves",
+  //   disabled: true,
+  //   text: "내 서재",
+  // },
+  {
+    id: "menu-button-explore",
+    disabled: true,
+    text: "둘러보기",
+    menus: BROWSE_MENUS,
+  },
+  {
+    id: "menu-button-community",
+    disabled: true,
+    text: "커뮤니티",
+    menus: COMMUNITY_MENUS,
+  },
+];
