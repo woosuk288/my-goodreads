@@ -5,7 +5,22 @@ import LoginButtonGroup from "../../../components/LoginButtonGroup";
 import Link from "next/link";
 import { HOME_PATH } from "@/constants/routes";
 
-const sxLogin: SxProps = {};
+const sxLogin: SxProps = {
+  display: "flex",
+  height: "100vh",
+};
+
+const sxImageWrapper: SxProps = {
+  flex: 1,
+  display: { xs: "none", md: "block" },
+  backgroundImage: `url("https://cdn.pixabay.com/photo/2016/11/29/02/56/blonde-1866951_1280.jpg")`,
+  backgroundSize: "cover",
+  backgroundPosition: "right",
+};
+const sxLoginWrapper: SxProps = {
+  width: { xs: "100%", md: "500px" },
+  padding: { md: "30px 50px" },
+};
 
 const sxLogoWrapper: SxProps = {
   maxWidth: "180px",
@@ -40,29 +55,33 @@ const sxAppLinkWrapper: SxProps = {
 
 export default function LoginPage() {
   return (
-    <Container className="Login" sx={sxLogin}>
-      <Box component={"header"} className="logo_wrapper" sx={sxLogoWrapper}>
-        <Link href={HOME_PATH}>
-          <img src="/images/logo-goodreads.svg" alt="goodreads" />
-        </Link>
-      </Box>
+    <Box className="Login" sx={sxLogin}>
+      <Box sx={sxImageWrapper}></Box>
 
-      <Box sx={authExternalProviders}>
-        <LoginButtonGroup />
+      <Box sx={sxLoginWrapper}>
+        <Box component={"header"} className="logo_wrapper" sx={sxLogoWrapper}>
+          <Link href={HOME_PATH}>
+            <img src="/images/logo-goodreads.svg" alt="goodreads" />
+          </Link>
+        </Box>
 
-        <Box className="app_link_wrapper" sx={sxAppLinkWrapper}>
-          <Typography textAlign="center" sx={{ marginBottom: "8px" }}>
-            앱 다운로드 받기
-          </Typography>
-          <a href="#" rel="noopener noreferrer">
-            <img
-              className="img_app_link"
-              src="https://s.gr-assets.com/assets/app/badge-android-highres-e46912ad93a09553adffc67550d3b562.png"
-              alt="Download app for Android"
-            />
-          </a>
+        <Box sx={authExternalProviders}>
+          <LoginButtonGroup />
+
+          <Box className="app_link_wrapper" sx={sxAppLinkWrapper}>
+            <Typography textAlign="center" sx={{ marginBottom: "8px" }}>
+              앱 다운로드 받기
+            </Typography>
+            <a href="#" rel="noopener noreferrer">
+              <img
+                className="img_app_link"
+                src="https://s.gr-assets.com/assets/app/badge-android-highres-e46912ad93a09553adffc67550d3b562.png"
+                alt="Download app for Android"
+              />
+            </a>
+          </Box>
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 }
