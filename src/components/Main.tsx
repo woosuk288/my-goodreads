@@ -9,6 +9,7 @@ const sxMain: SxProps<Theme> = (theme) => ({
   maxWidth: theme.breakpoints.values.sm,
   margin: "0 auto",
   paddingBottom: { xs: "56px", md: "0" },
+  minHeight: { md: "100vh" },
 });
 
 interface IMain {
