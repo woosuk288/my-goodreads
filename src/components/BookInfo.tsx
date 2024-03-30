@@ -17,7 +17,6 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Rating,
   SxProps,
   Typography,
 } from "@mui/material";
@@ -34,7 +33,6 @@ import { useAuth } from "./AuthProvider";
 import useSWR from "swr";
 import { getProfile, getReviewByBookAndUser, updateRating } from "@/lib/firebase/firestore";
 import { extractISBN, getReadStatus } from "@/lib/utils";
-import useSWRMutation from "swr/mutation";
 import UserRatingButton from "./UserRatingButton";
 
 interface Props {
@@ -56,19 +54,11 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
   const { data: reviewData, isLoading: isReviewLoading } = useSWR(isbn && uid ? `${API_RATING}/${bookId}/${uid}` : null, (_) =>
     getReviewByBookAndUser(bookId, uid!)
   );
-  const { trigger: updateRatingTrigger, isMutating } = useSWRMutation(
-    `${API_RATING}/${bookId}/${uid}`,
-    (key: any, { arg }: { arg: { bookId: string; rating: number | null } }) => updateRating(arg.bookId, arg.rating)
-  );
 
   const [show, setShow] = useState(false);
 
   const handleShowMore = () => {
     setShow(!show);
-  };
-
-  const handleRatingChange = (_: any, newValue: number | null) => {
-    updateRatingTrigger({ bookId, rating: newValue });
   };
 
   return (

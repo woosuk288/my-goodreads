@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import useSWRMutation from "swr/mutation";
 import { updateBookFromShelf } from "@/lib/firebase/firestore";
-import { API_PROFILE } from "@/constants/routes";
+import { API_PROFILE, API_RATING } from "@/constants/routes";
 import { fetchKakaoBooks } from "@/lib/kakaobook";
 import { mutate } from "swr";
 
@@ -46,6 +46,9 @@ function ReadStatusDrawer() {
     await updateBookStatusTrigger({ nextReadStatus, kakaoBook: kakaoBookResponse.documents[0] });
     // udpate   후 캐싱처리
     mutate((key) => typeof key === "string" && key.startsWith(API_PROFILE), undefined, { revalidate: true });
+    if (nextReadStatus === "unread") {
+      mutate((key) => typeof key === "string" && key.startsWith(`${API_RATING}/${isbn}`), undefined, { revalidate: true });
+    }
 
     router.back();
   };
