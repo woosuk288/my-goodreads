@@ -154,10 +154,6 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
           </Button> */}
         </Box>
       )}
-      open={!!inputValue}
-      loading={loading}
-      loadingText="검색 중 ..."
-      noOptionsText={"결과 없음"}
       renderOption={(props, option) => {
         return (
           <li {...props} key={option.isbn}>
