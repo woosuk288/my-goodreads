@@ -214,6 +214,7 @@ const sxAutoCompleteWrapper: SxProps = {
 };
 const sxMobileAutoCompleteWrapper: SxProps = {
   display: "flex",
+  justifyContent: "flex-end",
   backgroundColor: "primary.light",
   position: "absolute",
   top: 0,

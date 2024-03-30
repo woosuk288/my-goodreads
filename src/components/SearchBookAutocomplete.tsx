@@ -79,7 +79,7 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
   return (
     <Autocomplete
       freeSolo
-      sx={{ width: "300px", padding: "5px 8px", backgroundColor: "#F4F1EA" }}
+      sx={{ width: "100%", maxWidth: "350px", minWidth: "240px", padding: "5px 8px", backgroundColor: "#F4F1EA" }}
       // slotProps={{ popper: { style: { width: "100%" } } }}
       id="kakao-book-search"
       getOptionLabel={(option) => (typeof option === "string" ? option : option.title)}
