@@ -34,6 +34,7 @@ const sxHomepagePromotionWrapper: SxProps<Theme> = (theme) => ({
 });
 
 const sxAuthSignInWrapper: SxProps = {
+  display: { sm: "none" },
   textAlign: "center",
   margin: "24px 0 24px",
 };
