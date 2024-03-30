@@ -1,9 +1,10 @@
+import Main from "@/components/Main";
 import SignUpEmailPage from "./signup-email";
 
 export default function Page() {
   return (
-    <div>
+    <Main>
       <SignUpEmailPage />
-    </div>
+    </Main>
   );
 }
