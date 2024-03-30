@@ -1,6 +1,6 @@
 "use client";
 
-import { signInSocialWithCustomToken, signInWithKakao } from "@/lib/firebase/auth";
+import { signInSocialWithCustomToken } from "@/lib/firebase/auth";
 import { LinearProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
