@@ -26,14 +26,10 @@ const sxFooter: SxProps<Theme> = (theme) => ({
   ".footer_linklist a": {
     color: theme.palette.primary.main,
   },
-  ".footer_social_link_wrapper": {
-    display: "inline-block",
-    paddingLeft: "16px",
-  },
-  ".footer_social_link": {
-    display: "inline-block",
-    marginRight: "8px",
-    marginBottom: "8px",
+  ".footer_social_list": {
+    display: "flex",
+    gap: "8px",
+    paddingLeft: "12px",
   },
 
   ".footer_app_links": {
@@ -132,29 +128,34 @@ export default function Footer() {
                   Connect
                 </Typography>
 
-                <List>
-                  <li className="footer_social_link_wrapper">
-                    <a className="footer_social_link" rel="noopener noreferrer" href="https://www.facebook.com/Goodreads/">
+                <List className="footer_social_list">
+                  <li>
+                    <a rel="noopener noreferrer" href="https://www.facebook.com/Goodreads/">
                       <img
                         alt="Goodreads on Facebook"
                         src="https://s.gr-assets.com/assets/site_footer/footer_facebook-ea4ab848f8e86c5f5c98311bc9495a1b.svg"
                       />
                     </a>
-                    <a className="footer_social_link" rel="noopener noreferrer" href="https://twitter.com/goodreads">
+                  </li>
+                  <li>
+                    <a rel="noopener noreferrer" href="https://twitter.com/goodreads">
                       <img
                         alt="Goodreads on Twitter"
                         src="https://s.gr-assets.com/assets/site_footer/footer_twitter-126b3ee80481a763f7fccb06ca03053c.svg"
                       />
                     </a>
                   </li>
-                  <li className="footer_social_link_wrapper">
-                    <a className="footer_social_link" rel="noopener noreferrer" href="https://www.instagram.com/goodreads/">
+
+                  <li>
+                    <a rel="noopener noreferrer" href="https://www.instagram.com/goodreads/">
                       <img
                         alt="Goodreads on Instagram"
                         src="https://s.gr-assets.com/assets/site_footer/footer_instagram-d59e3887020f12bcdb12e6c539579d85.svg"
                       />
                     </a>
-                    <a className="footer_social_link" rel="noopener noreferrer" href="https://www.linkedin.com/company/goodreads-com/">
+                  </li>
+                  <li>
+                    <a rel="noopener noreferrer" href="https://www.linkedin.com/company/goodreads-com/">
                       <img
                         alt="Goodreads on LinkedIn"
                         src="https://s.gr-assets.com/assets/site_footer/footer_linkedin-5b820f4703eff965672594ef4d10e33c.svg"
