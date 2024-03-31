@@ -161,6 +161,12 @@ const sxChallengesMain: SxProps<Theme> = (theme) => ({
     input: {
       textAlign: "center",
     },
+    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+      display: "none",
+    },
+    "& input[type=number]": {
+      MozAppearance: "textfield",
+    },
   },
   ".challenge_action_button": {
     width: "100%",
