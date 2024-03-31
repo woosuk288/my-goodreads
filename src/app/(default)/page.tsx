@@ -1,9 +1,12 @@
 import { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-cache";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Goodreads | Meet your next favorite book",
+  description:
+    "Find and read more books you’ll love, and keep track of the books you want to read. Be part of the world’s largest community of book lovers on Goodreads.",
 };
 
 // Import your Client Component
