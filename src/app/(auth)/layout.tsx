@@ -13,8 +13,6 @@ export const metadata = {
   description: "카카오, 네이버, 이메일 로그인",
 };
 
-export const dynamic = "force-dynamic";
-
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="ko">

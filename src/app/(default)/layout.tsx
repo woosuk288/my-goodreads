@@ -15,7 +15,7 @@ import BottomNavbar from "@/components/BottomNavbar";
 import { AuthProvider } from "@/components/AuthProvider";
 import HeaderNavDrawer from "@/components/HeaderNavDrawer";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Goodreads clone",
