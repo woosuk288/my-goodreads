@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-export const dynamic = "force-cache";
+export const dynamic = "force-static";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
