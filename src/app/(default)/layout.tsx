@@ -20,6 +20,9 @@ import HeaderNavDrawer from "@/components/HeaderNavDrawer";
 export const metadata = {
   title: "Goodreads clone",
   description: "Goodreads clone is a book review website built with Next.js and Firebase.",
+  icons: {
+    icon: "/images/goodreads-clone-logo-gpt-140.jpg",
+  },
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
