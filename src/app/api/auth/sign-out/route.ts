@@ -7,7 +7,7 @@ import { revokeAllSessions } from "@/lib/firebase/firebase-admin";
 export async function GET() {
   const sessionCookie = cookies().get("__session")?.value;
 
-  console.log("signout sessionCookie : ", sessionCookie);
+  console.log("signout sessionCookie : ", sessionCookie?.length);
 
   if (!sessionCookie) return NextResponse.json({ success: false, error: "Session not found." }, { status: 400 });
 

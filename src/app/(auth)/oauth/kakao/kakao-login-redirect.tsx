@@ -1,5 +1,6 @@
 "use client";
 
+import { HOME_PATH } from "@/constants/routes";
 import { signInSocialWithCustomToken } from "@/lib/firebase/auth";
 import { LinearProgress } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,11 +18,16 @@ function KakaoLoginRedirect({ customToken }: Props) {
     if (!didInit) {
       didInit = true;
       // ✅ app 로드시 한번만 실행된다.
-      signInSocialWithCustomToken(customToken).catch((error) => {
-        console.log(error);
-        alert("로그인 처리 중 오류가 발생했습니다.");
-        router.back();
-      });
+      signInSocialWithCustomToken(customToken)
+        .then(() => {
+          console.info("로그인 성공!");
+          router.replace(HOME_PATH);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("로그인 처리 중 오류가 발생했습니다.");
+          router.back();
+        });
     }
   }, []);
 

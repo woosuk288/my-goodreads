@@ -141,7 +141,7 @@ export async function signOut() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ kakaoUID: "3406645196" }),
+        body: JSON.stringify({ kakaoUID: privacyInfo.kakaoUID }),
       }).then((res) => res.json());
     }
 

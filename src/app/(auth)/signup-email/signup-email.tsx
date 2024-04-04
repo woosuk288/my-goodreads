@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 
 import {
@@ -34,6 +35,7 @@ const defaultUserCredential = {
   password: "",
 };
 export default function SignUpEmailPage({}: Props) {
+  const router = useRouter();
   const [userCredentials, setUserCredentials] = useState<IUserCredentials>(defaultUserCredential);
   const { email, password, displayName } = userCredentials;
 
@@ -45,6 +47,9 @@ export default function SignUpEmailPage({}: Props) {
   const { trigger: submitTrigger, isMutating } = useSWRMutation(API_PROFILE, () => signUpWithEmail(email, password, displayName), {
     onError(err) {
       setErrorMessage(err.message);
+    },
+    onSuccess() {
+      router.replace(HOME_PATH);
     },
   });
 
