@@ -31,8 +31,7 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ success: true, data: { customToken } });
 }
-
-export async function getNaverAccessToken(code: string, state: string, origin: string) {
+async function getNaverAccessToken(code: string, state: string, origin: string) {
   const client_id = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
   const client_secret = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET;
   if (!client_id || !client_secret) {

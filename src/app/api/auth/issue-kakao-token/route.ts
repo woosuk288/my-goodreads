@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ success: true, data: { customToken } });
 }
 
-export async function getKakaoAccessToken(code: string, state: string, origin: string) {
+async function getKakaoAccessToken(code: string, state: string, origin: string) {
   const client_id = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
   const client_secret = process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET;
   if (!client_id || !client_secret) {
