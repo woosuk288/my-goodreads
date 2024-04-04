@@ -79,7 +79,7 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
   return (
     <Autocomplete
       freeSolo
-      sx={{ width: "100%", maxWidth: "350px", minWidth: "240px", padding: "5px 8px", backgroundColor: "#F4F1EA" }}
+      sx={{ width: "100%" /*  maxWidth: "350px", */ }}
       // slotProps={{ popper: { style: { width: "100%" } } }}
       id="kakao-book-search"
       getOptionLabel={(option) => (typeof option === "string" ? option : option.title)}
@@ -154,17 +154,34 @@ export default function SearchBookAutocomplete({ onClose }: Props) {
           </Button> */}
         </Box>
       )}
+      // componentsProps={{ popper: { style: { width: "280px" }, placement: "bottom-start" } }}
       renderOption={(props, option) => {
         return (
           <li {...props} key={option.isbn}>
-            <Grid container alignItems="center">
-              <Grid item>
-                <Box sx={{ color: "text.secondary", mr: 2 }}>
-                  <Avatar variant="square" src={option.thumbnail} alt={option.title} sx={{ width: 48, height: 48 }} />
+            <Grid container alignItems="center" spacing={1} sx={{ alignItems: "flex-start", marginBottom: "8px" }}>
+              <Grid item xs={4}>
+                <Box sx={{ color: "text.secondary" }}>
+                  <Avatar
+                    variant="square"
+                    src={option.thumbnail}
+                    alt={option.title}
+                    sx={{ width: "100%", height: "100%", maxWidth: "64px", margin: "0 auto" }}
+                  />
                 </Box>
               </Grid>
-              <Grid item xs>
-                <Typography variant="body2" color="text.primary" gutterBottom>
+              <Grid item xs={8}>
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  gutterBottom
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: "3",
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
                   {option.title}
                 </Typography>
 

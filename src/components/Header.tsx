@@ -210,15 +210,21 @@ const sxUtils: SxProps = {
 };
 
 const sxAutoCompleteWrapper: SxProps = {
+  width: "100%",
+  maxWidth: "300px",
   marginLeft: "auto",
 };
 const sxMobileAutoCompleteWrapper: SxProps = {
   display: "flex",
   justifyContent: "flex-end",
+  width: "100%",
+  maxWidth: "600px",
   backgroundColor: "primary.light",
+  padding: "5px 8px",
+  //  backgroundColor: "#F4F1EA"
   position: "absolute",
   top: 0,
-  left: 0,
+  // left: 0,
   right: 0,
 };
 
