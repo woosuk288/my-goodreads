@@ -166,6 +166,10 @@ function ProfileEditMain() {
             <ListItemText primary="닉네임" secondary={profileData?.displayName || "아직 없어요~"} />
             <NavigateNextIcon />
           </ListItemButton>
+          <ListItemButton>
+            <ListItemText primary="이메일" secondary={user.email} />
+            {/* <NavigateNextIcon /> */}
+          </ListItemButton>
           <Divider />
         </List>
       </div>
