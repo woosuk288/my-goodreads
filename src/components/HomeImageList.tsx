@@ -20,7 +20,7 @@ export default function HomeImageList({ images }: Props) {
   return (
     <Box sx={sxHomeImageList}>
       <Swiper
-        spaceBetween={20}
+        // spaceBetween={20}
         slidesPerView={"auto"}
         // onSlideChange={() => console.log('slide change')}
         // onSwiper={(swiper) => console.log(swiper)}
@@ -45,6 +45,7 @@ const sxHomeImageList: SxProps = {
 
   ".swiper-slide": {
     width: "140px",
+    marginRight: "20px",
     // backgroundColor: "#999999",
 
     img: {
