@@ -24,14 +24,14 @@ import { fetchAladinItemList } from "@/lib/aladin";
 
 export default async function Page() {
   // Fetch data directly in a Server Component
-  const popularBooksReponse = await fetchPopularBooks({
+  const popularBooksPromise = fetchPopularBooks({
     from_age: 20,
     to_age: 40,
     pageNo: 1,
     pageSize: 30,
     startDt: getFormattedPreviousDate("month"),
   });
-  const newSepcialBooksResponse = await fetchAladinItemList({
+  const newSepcialBooksPromise = fetchAladinItemList({
     QueryType: "ItemNewSpecial",
     MaxResults: 30,
     Start: 1,
@@ -39,7 +39,7 @@ export default async function Page() {
     Version: "20131101",
     Cover: "Big",
   });
-  const bloggerBestSellerResponse = await fetchAladinItemList({
+  const bloggerBestSellerPromise = fetchAladinItemList({
     QueryType: "Bestseller",
     MaxResults: 30,
     Start: 1,
@@ -47,11 +47,17 @@ export default async function Page() {
     Version: "20131101",
     Cover: "Big",
   });
+  const [popularBooksResponse, newSepcialBooksResponse, bloggerBestSellerResponse] = await Promise.all([
+    popularBooksPromise,
+    newSepcialBooksPromise,
+    bloggerBestSellerPromise,
+  ]);
+
   // const hotTrendBooksResponse = await fetchHotTrendBooks({ startDt: getCurrentDate() });
   // Forward fetched data to your Client Component
   return (
     <HomeMain
-      popularBooksResponse={popularBooksReponse}
+      popularBooksResponse={popularBooksResponse}
       newSepcialBooksResponse={newSepcialBooksResponse}
       bloggerBestSellerResponse={bloggerBestSellerResponse}
       // hotTrendBooksResponse={hotTrendBooksResponse}
