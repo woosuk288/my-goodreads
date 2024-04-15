@@ -1,4 +1,4 @@
-const DATA_4_LIBRARY_API_URL = "http://data4library.kr/api";
+const DATA_4_LIBRARY_API_URL = "https://data4library.kr/api";
 
 const DEFAULT_PARAMS = {
   authKey: process.env.NEXT_PUBLIC_DATA_4_LIBRARY_API_KEY!,
