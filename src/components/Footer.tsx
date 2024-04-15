@@ -120,6 +120,11 @@ export default function Footer() {
                       API
                     </Link>
                   </ListItem>
+                  <ListItem className="footer_linklist_item">
+                    <Link color="secondary" href="/api-providers" component={NextLink}>
+                      API Providers
+                    </Link>
+                  </ListItem>
                 </List>
               </Grid>
 
