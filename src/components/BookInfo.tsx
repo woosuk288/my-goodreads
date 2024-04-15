@@ -36,14 +36,24 @@ import { extractISBN, getReadStatus } from "@/lib/utils";
 import UserRatingButton from "./UserRatingButton";
 
 interface Props {
+  aladinBook: AladinItemBook;
   kakaoBook: IKakaoBook;
   // analysisBook: ILibAnalysisByBookResponse
   keywordList: ILibKeywordListResponse | null;
 }
 
-export default function BookInfo({ kakaoBook, keywordList }: Props) {
+interface IRatingInfo {
+  commentReviewCount: number;
+  myReviewCount: number;
+  ratingCount: number;
+  ratingScore: number;
+}
+
+export default function BookInfo({ aladinBook, kakaoBook, keywordList }: Props) {
   const { title, thumbnail, authors, contents, isbn } = kakaoBook;
   const bookId = extractISBN(isbn);
+
+  const ratingInfo = aladinBook.subInfo.ratingInfo as IRatingInfo;
 
   const bookDetailLink = `${REVIEW_EDIT_PATH}/${bookId}`;
 
@@ -88,7 +98,11 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
           </Typography>
         </div>
         <div className="rating_stats_wrapper">
-          <BookRatingStats ratingValue={3.95} userRatingCount={348897} userReviewCount={8786} />
+          <BookRatingStats
+            ratingValue={ratingInfo.ratingScore}
+            userRatingCount={ratingInfo.ratingCount}
+            userReviewCount={ratingInfo.commentReviewCount}
+          />
         </div>
         <div className="actions_warpper">
           <div className="wtr_button_wrapper">
@@ -152,12 +166,14 @@ export default function BookInfo({ kakaoBook, keywordList }: Props) {
               </Link>
             </ListItem>
             <ListItem>
-              <Link href="#" className="external_book_link" component={NextLink}>
+              <Link className="external_book_link" rel="noopener noreferrer" href={aladinBook.link} target="_blank">
                 <Avatar sx={{ bgcolor: "#000" }}>
                   <StoreIcon />
+                  {/* src="/images/ex_aladin_logo_square.png" */}
                 </Avatar>
                 <Typography color="#333" fontSize="0.875rem">
-                  Other Stores
+                  구매하기
+                  {/* Other Stores */}
                 </Typography>
               </Link>
             </ListItem>

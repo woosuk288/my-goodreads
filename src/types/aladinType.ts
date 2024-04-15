@@ -19,6 +19,43 @@ interface IAladinItemListRequest {
   OptResult?: string[]; // 부가 정보
 }
 
+interface IAladinItemLookUpRequest {
+  TTBKey?: string;
+  ItemId: string | number;
+  ItemIdType?: "ISBN" | "ISBN13";
+  Cover?: "Big" | "MidBig" | "Mid" | "Small" | "Mini" | "None";
+  Output?: "XML" | "JS";
+  Partner?: string;
+  Version?: "20131101"; // 검색API의 Version
+  includeKey?: number;
+  offCode?: string;
+  OptResult?: IAladinItemLookUpOptResult;
+}
+
+interface IAladinItemLookUpOptResult {
+  ebookList?: boolean;
+  usedList?: boolean;
+  fileFormatList?: boolean;
+  c2binfo?: boolean;
+  packing?: boolean;
+  b2bSupply?: boolean;
+  subbarcode?: boolean;
+  cardReviewImgList?: boolean;
+  ratingInfo?: boolean;
+  bestSellerRank?: boolean;
+  previewImgList?: boolean;
+  eventList?: boolean;
+  authors?: boolean;
+  reviewList?: boolean;
+  fulldescription?: boolean;
+  fulldescription2?: boolean;
+  Toc?: boolean;
+  Story?: boolean;
+  categoryIdList?: boolean;
+  mdrecommend?: boolean;
+  phraseList?: boolean;
+}
+
 interface IAladinItemListResponse {
   version: string; // API 버전
   logo: string; // 로고 이미지 URL
@@ -32,6 +69,11 @@ interface IAladinItemListResponse {
   searchCategoryId: number; // 검색 카테고리 ID
   searchCategoryName: string; // 검색 카테고리 이름
   item: AladinItemBook[]; // 도서 목록
+
+  error?: {
+    errorCode: number;
+    errorMessage: string;
+  };
 }
 
 interface AladinItemBook {
