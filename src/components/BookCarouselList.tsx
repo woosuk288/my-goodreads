@@ -31,31 +31,34 @@ export default function BookCarouselList({ isbn }: Props) {
     triggerOnce: true,
   });
 
-  const { data: recommandBooksResult, isLoading } = useSWR(inView ? "api/recommand-books" : null, () =>
-    Promise.all([
+  const { data, isLoading, error } = useSWR(inView ? `api/recommand-books/${isbn}` : null, async () => {
+    const [maniaData, readerData] = await Promise.all([
       fetchRecommandBooks({ isbn13: Number(isbn), type: "mania" }),
       fetchRecommandBooks({ isbn13: Number(isbn), type: "reader" }),
-    ])
-  );
+    ]);
+    return { maniaData, readerData };
+  });
 
   return (
     <Box sx={sxBookCarouselList} ref={ref}>
-      {isLoading ? (
+      {error ? (
+        <div>데이터를 가져오는 중에 오류가 발생했습니다!</div>
+      ) : isLoading ? (
         <div>Loading...</div>
       ) : (
-        recommandBooksResult && (
+        data && (
           <>
             <div className="heading_wrapper">
               <BookPageHeading title="비슷한 분야의 다른 책들" /> {/* OTHER BOOKS BY THIS AUTHOR */}
             </div>
-            {recommandBooksResult[0].resultNum === 0 ? (
+            {data.maniaData.resultNum === 0 ? (
               <Typography variant="body2" align="center" color="text.secondary">
                 죄송합니다. 아직 추천도서가 없습니다.
               </Typography>
             ) : (
               <>
                 <div className="author_books_wrapper">
-                  <BookCarouselVerticalList libBooks={recommandBooksResult[0]} />
+                  <BookCarouselVerticalList libBooks={data.maniaData} />
                   {/* recommandBookByMania */}
                 </div>
                 <div className="show_more_button_wrapper">
@@ -69,14 +72,14 @@ export default function BookCarouselList({ isbn }: Props) {
             <div className="heading_wrapper">
               <BookPageHeading title="이 책의 독자들이 좋아해요" /> {/* READERS ALSO ENJOYED" */}
             </div>
-            {recommandBooksResult[1].resultNum === 0 ? (
+            {data.readerData.resultNum === 0 ? (
               <Typography variant="body2" align="center" color="text.secondary">
                 죄송합니다. 아직 추천도서가 없습니다.
               </Typography>
             ) : (
               <>
                 <div className="reader_realted_list">
-                  <BookCarouselVerticalList libBooks={recommandBooksResult[1]} /> {/* recommandBookByReader */}
+                  <BookCarouselVerticalList libBooks={data.readerData} /> {/* recommandBookByReader */}
                 </div>
                 <div className="show_more_button_wrapper">
                   <Button variant="outlined" href="#">
