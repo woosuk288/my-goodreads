@@ -75,7 +75,7 @@ export default function BookInfo({ aladinBook, kakaoBook, keywordList }: Props) 
     <Box sx={sxBookInfo}>
       <div className="book_cover_section">
         <div className="book_cover_wrapper">
-          <img className="book_cover_image" src={thumbnail} alt={title + "book_cover"} />
+          <img className="book_cover_image" src={thumbnail || aladinBook.cover} alt={title + "book_cover"} />
         </div>
         <div className="book_share_wrapper">
           <IconButton>
